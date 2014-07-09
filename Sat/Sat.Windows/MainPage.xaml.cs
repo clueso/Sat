@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
+using Windows.UI.Xaml.Media.Imaging;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -30,7 +31,7 @@ namespace Sat
         List<string> Files = new List<string>(6);
         private static int CurrImgIndex = -1;
         private static int EndIndex = 0;
-
+        private static WriteableBitmap ImgSource;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -117,14 +118,16 @@ namespace Sat
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
                 CurrImgIndex = ++CurrImgIndex % Files.Count;
-                ImgBox.Source = await GenericCodeClass.GetBitmapImage(Files[CurrImgIndex]);
+                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(Files[CurrImgIndex]);
+                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(Files[CurrImgIndex]);
+                //ImgBox.Source = ImgSource;
                 //ImgBox.Source = await GenericCodeClass.GetBitmapImage("2014186_1730vis.jpg");
                 //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
                 StatusBox.Text = "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
             }
             StatusBox.Text = "You clicked Next Button";
 
-            GenericCodeClass.OverlayFiles("test.jpg", "overlay.jpg");
+            //GenericCodeClass.OverlayFileInImage((WriteableBitmap)ImgBox.Source, "OverlayTest.jpg");
         }
 
         private async void PrevButton_Click(object sender, RoutedEventArgs e)
@@ -132,7 +135,8 @@ namespace Sat
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
                 CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
-                ImgBox.Source = await GenericCodeClass.GetBitmapImage(Files[CurrImgIndex]);
+                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(Files[CurrImgIndex]);
+                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(Files[CurrImgIndex]);
                 //ImgBox.Source = await GenericCodeClass.GetBitmapImage("2014186_1700vis.jpg");
                 //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
             }

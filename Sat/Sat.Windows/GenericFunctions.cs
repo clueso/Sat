@@ -7,6 +7,7 @@ using Windows.Graphics.Imaging;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 static class GenericCodeClass
 {
@@ -80,22 +81,49 @@ static class GenericCodeClass
     {
         StorageFolder ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
         StorageFile ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
+        BitmapImage Image;
 
-        BitmapImage Image = new BitmapImage();
-
-        Image = await LoadImage(ImageFile);
+        Image = await LoadBitmapImage(ImageFile);
 
         return Image;
     }
 
-    private static async Task<BitmapImage> LoadImage(StorageFile file)
+    private static async Task<BitmapImage> LoadBitmapImage(StorageFile file)
     {
-        BitmapImage bitmapImage = new BitmapImage();
+        BitmapImage Image = new BitmapImage();
         FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
 
-        bitmapImage.SetSource(stream);
+        Image.SetSource(stream);
 
-        return bitmapImage;
+        return Image;
+
+    }
+
+    public static async Task<WriteableBitmap> GetWriteableBitmap(string FileName)
+    {
+        StorageFolder ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+        StorageFile ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
+        WriteableBitmap ImageBitmap;
+        //BitmapImage Image = new BitmapImage();
+
+        ImageBitmap = await LoadWriteableBitmap(ImageFile);
+
+        return ImageBitmap;
+    }
+
+    private static async Task<WriteableBitmap> LoadWriteableBitmap(StorageFile file)
+    {
+        WriteableBitmap ImageBitmap;
+        //BitmapImage Image = new BitmapImage();
+        FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
+
+        //Image.SetSource(stream);
+
+        ImageBitmap = new WriteableBitmap(720, 480);//Image.PixelWidth,Image.PixelHeight);
+        //stream.Position = 0;
+        ImageBitmap.SetSource(stream);
+
+        return ImageBitmap;
 
     }
 
@@ -156,7 +184,7 @@ static class GenericCodeClass
         {
             for (j = 0; j < width; j++)
             {
-                if (OverlayPixel[(i * width + j) * 4 + 0] > 0)
+                if (OverlayPixel[(i * width + j) * 4 + 0] > 250)
                 {
                     BasePixel[(i * width + j) * 4 + 0] = OverlayPixel[(i * width + j) * 4 + 0];
                     BasePixel[(i * width + j) * 4 + 1] = OverlayPixel[(i * width + j) * 4 + 1];
@@ -170,6 +198,39 @@ static class GenericCodeClass
         var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, BaseImageStream);
         encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Straight, width, height, BaseImageDecoder.DpiX, BaseImageDecoder.DpiY, BasePixel);
         await encoder.FlushAsync();
+    }
+
+    public static async void OverlayFileInImage(WriteableBitmap CurrentImage, string OverlayFile)
+    {
+        StorageFolder ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+        StorageFile Overlay = await ImageFolder.CreateFileAsync(OverlayFile, CreationCollisionOption.OpenIfExists);
+        var OverlayImageStream = await Overlay.OpenAsync(Windows.Storage.FileAccessMode.Read);
+        var OverlayImageDecoder = await BitmapDecoder.CreateAsync(OverlayImageStream);
+        var OverlayPixelData = await OverlayImageDecoder.GetPixelDataAsync();
+        var OverlayPixel = OverlayPixelData.DetachPixelData();
+        int i, j;
+        int height = CurrentImage.PixelHeight, width = CurrentImage.PixelWidth;
+        var BaseImageStream = CurrentImage.PixelBuffer.AsStream();
+        Byte[] BasePixel = new Byte[4 * width * height];
+
+        BaseImageStream.Read(BasePixel, 0, BasePixel.Length);
+
+        for (i = 0; i < height; i++)
+        {
+            for (j = 0; j < width; j++)
+            {
+                if (OverlayPixel[(i * width + j) * 4 + 0] > 250)
+                {
+                    BasePixel[(i * width + j) * 4 + 0] = OverlayPixel[(i * width + j) * 4 + 0];
+                    BasePixel[(i * width + j) * 4 + 1] = OverlayPixel[(i * width + j) * 4 + 1];
+                    BasePixel[(i * width + j) * 4 + 2] = OverlayPixel[(i * width + j) * 4 + 2];
+                    BasePixel[(i * width + j) * 4 + 3] = OverlayPixel[(i * width + j) * 4 + 3];
+                }
+            }
+        }
+
+        BaseImageStream.Position = 0;
+        BaseImageStream.Write(BasePixel, 0, BasePixel.Length);
     }
 
     public static bool IsError(string s)
