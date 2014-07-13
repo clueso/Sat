@@ -33,6 +33,8 @@ namespace Sat
         private static int EndIndex = 0;
         private static WriteableBitmap ImgSource;
         private StorageFolder ImageFolder;
+        private DispatcherTimer LoopTimer;
+        private DispatcherTimer DownloadTimer;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -57,6 +59,17 @@ namespace Sat
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
+            LoopTimer = new DispatcherTimer();
+            DownloadTimer = new DispatcherTimer();
+            LoopTimer.Tick += Timer_Handler;
+            DownloadTimer.Tick += Timer_Handler;
+            LoopTimer.Interval = new TimeSpan(0, 0, 1); //Create a timer that trigger every 1 s
+            DownloadTimer.Interval = new TimeSpan(0, 30, 0); //Create a timer that triggers every 30 min
+            DownloadFiles();
+            LoopTimer.Start();
+            DownloadTimer.Start();
+
         }
 
         /// <summary>
@@ -116,56 +129,41 @@ namespace Sat
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            //WriteableBitmap tmpBitmap;
-
-            if (ImageFolder == null)
-                ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-
-            if (CurrImgIndex != -1 && Files.Count != 0)
-            {
-                CurrImgIndex = ++CurrImgIndex % Files.Count;
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
-                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
-                //ImgBox.Source = ImgSource;
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "2014186_1730vis.jpg");
-                //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
-                StatusBox.Text = "Next Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
-            }
-            else
-            {
-                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
-            }
-
-            //tmpBitmap = (WriteableBitmap)ImgBox.Source;
-            //GenericCodeClass.OverlayFileInImage(ImageFolder, tmpBitmap, "Overlay.jpg");
-            //tmpBitmap.Invalidate();
-            //GenericCodeClass.OverlayFiles(ImageFolder, "test.jpg", "CWA.gif");
-
+            ChangeImage(true);
         }
 
         private async void PrevButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ImageFolder == null)
-                ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+            //if (ImageFolder == null)
+            //    ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
-            if (CurrImgIndex != -1 && Files.Count != 0)
-            {
-                CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
-                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "2014186_1700vis.jpg");
-                //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
-                StatusBox.Text = "Prev Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
-            }
-            else
-            {
-                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
-            }
-
-            
+            //if (CurrImgIndex != -1 && Files.Count != 0)
+            //{
+            //    CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
+            //    //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
+            //    ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
+            //    //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "2014186_1700vis.jpg");
+            //    //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
+            //    StatusBox.Text = "Prev Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
+            //}
+            //else
+            //{
+            //    ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
+            //}
+            ChangeImage(false);
         }
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DownloadFiles();    
+        }
+
+        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        {
+            App.Current.Exit();
+        }
+
+        private async void DownloadFiles()
         {
             //StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
             int i;
@@ -194,9 +192,56 @@ namespace Sat
             //StatusBox.Text = "You clicked Download Button";
         }
 
-        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        private async void ChangeImage(bool ShowNextImage)
         {
-            App.Current.Exit();
+            //WriteableBitmap tmpBitmap;
+
+            if (ImageFolder == null)
+                ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+
+            if (CurrImgIndex != -1 && Files.Count != 0)
+            {
+                if (ShowNextImage)
+                {
+                    CurrImgIndex = ++CurrImgIndex % Files.Count;
+                }
+                else
+                {
+                    CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
+                }
+                
+                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
+                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
+                //ImgBox.Source = ImgSource;
+                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "2014186_1730vis.jpg");
+                //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
+                StatusBox.Text = "Next Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
+            }
+            else
+            {
+                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
+            }
+
+            //tmpBitmap = (WriteableBitmap)ImgBox.Source;
+            //GenericCodeClass.OverlayFileInImage(ImageFolder, tmpBitmap, "Overlay.jpg");
+            //tmpBitmap.Invalidate();
+            //GenericCodeClass.OverlayFiles(ImageFolder, "test.jpg", "CWA.gif");
+        }
+
+        private void Timer_Handler(object sender, object e)
+        {
+            DispatcherTimer tmpTimer = (DispatcherTimer)sender;
+
+            tmpTimer.Stop();
+            if (tmpTimer == LoopTimer)
+            {
+                ChangeImage(true);
+            }
+            else if (tmpTimer == DownloadTimer)
+            {
+                DownloadFiles();
+            }
+            tmpTimer.Start();
         }
     }
 }

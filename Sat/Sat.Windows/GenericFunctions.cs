@@ -65,7 +65,7 @@ static class GenericCodeClass
                 Filenames[i] = "Error.jpg";
             }
         }
-        //Filenames.RemoveAll(IsError);
+        Filenames.RemoveAll(IsError);
     }
 
     public static async Task<int> GetFileUsingHttp(string URL, StorageFolder Folder, string FileName)
@@ -274,6 +274,6 @@ static class GenericCodeClass
 
     public static bool IsError(string s)
     {
-        return s.Equals("Error");
+        return s.Equals("Error.jpg");
     }
 }
