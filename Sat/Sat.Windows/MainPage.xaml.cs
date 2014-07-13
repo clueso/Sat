@@ -32,6 +32,7 @@ namespace Sat
         private static int CurrImgIndex = -1;
         private static int EndIndex = 0;
         private static WriteableBitmap ImgSource;
+        private StorageFolder ImageFolder;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -115,19 +116,24 @@ namespace Sat
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
+            WriteableBitmap tmpBitmap;
+
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
                 CurrImgIndex = ++CurrImgIndex % Files.Count;
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(Files[CurrImgIndex]);
-                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(Files[CurrImgIndex]);
+                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
+                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
                 //ImgBox.Source = ImgSource;
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage("2014186_1730vis.jpg");
+                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "2014186_1730vis.jpg");
                 //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
-                StatusBox.Text = "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
+                StatusBox.Text = "Next Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
             }
-            StatusBox.Text = "You clicked Next Button";
 
-            //GenericCodeClass.OverlayFileInImage((WriteableBitmap)ImgBox.Source, "OverlayTest.jpg");
+            //tmpBitmap = (WriteableBitmap)ImgBox.Source;
+            //GenericCodeClass.OverlayFileInImage(ImageFolder, tmpBitmap, "Overlay.jpg");
+            //tmpBitmap.Invalidate();
+            //GenericCodeClass.OverlayFiles(ImageFolder, "test.jpg", "CWA.gif");
+
         }
 
         private async void PrevButton_Click(object sender, RoutedEventArgs e)
@@ -135,13 +141,13 @@ namespace Sat
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
                 CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(Files[CurrImgIndex]);
-                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(Files[CurrImgIndex]);
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage("2014186_1700vis.jpg");
+                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
+                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
+                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "2014186_1700vis.jpg");
                 //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
             }
 
-            StatusBox.Text = "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
+            StatusBox.Text = "Prev Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
         }
 
         private void DownloadButton_Click(object sender, RoutedEventArgs e)
@@ -157,7 +163,7 @@ namespace Sat
                 StatusBox.Text = string.Concat(StatusBox.Text, Environment.NewLine);
             }
 
-            GenericCodeClass.DownloadFiles(Files, 6);
+            GenericCodeClass.DownloadFiles(ImageFolder, Files, 6);
 
             if (Files.Count > 1)
             {
