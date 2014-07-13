@@ -116,7 +116,10 @@ namespace Sat
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            WriteableBitmap tmpBitmap;
+            //WriteableBitmap tmpBitmap;
+
+            if (ImageFolder == null)
+                ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
@@ -128,6 +131,10 @@ namespace Sat
                 //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
                 StatusBox.Text = "Next Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
             }
+            else
+            {
+                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
+            }
 
             //tmpBitmap = (WriteableBitmap)ImgBox.Source;
             //GenericCodeClass.OverlayFileInImage(ImageFolder, tmpBitmap, "Overlay.jpg");
@@ -138,6 +145,9 @@ namespace Sat
 
         private async void PrevButton_Click(object sender, RoutedEventArgs e)
         {
+            if (ImageFolder == null)
+                ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
                 CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
@@ -145,15 +155,23 @@ namespace Sat
                 ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
                 //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "2014186_1700vis.jpg");
                 //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
+                StatusBox.Text = "Prev Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
+            }
+            else
+            {
+                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             }
 
-            StatusBox.Text = "Prev Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
+            
         }
 
-        private void DownloadButton_Click(object sender, RoutedEventArgs e)
+        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
             //StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
             int i;
+
+            if (ImageFolder == null)
+                ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
             GenericCodeClass.GetListOfURLs(Files, 6);
 
