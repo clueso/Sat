@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Threading.Tasks;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -28,10 +29,9 @@ namespace Sat
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        List<string> Files = new List<string>(6);
+        List<string> Files = new List<string>();
         private static int CurrImgIndex = -1;
-        private static int EndIndex = 0;
-        private static WriteableBitmap ImgSource;
+        //private static WriteableBitmap ImgSource;
         private StorageFolder ImageFolder;
         private DispatcherTimer LoopTimer;
         private DispatcherTimer DownloadTimer;
@@ -66,10 +66,8 @@ namespace Sat
             DownloadTimer.Tick += Timer_Handler;
             LoopTimer.Interval = new TimeSpan(0, 0, 1); //Create a timer that trigger every 1 s
             DownloadTimer.Interval = new TimeSpan(0, 30, 0); //Create a timer that triggers every 30 min
+            
             DownloadFiles();
-            LoopTimer.Start();
-            DownloadTimer.Start();
-
         }
 
         /// <summary>
@@ -85,6 +83,8 @@ namespace Sat
         /// session. The state will be null the first time a page is visited.</param>
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            //LoopTimer.Start();
+            //DownloadTimer.Start();
         }
 
         /// <summary>
@@ -97,6 +97,8 @@ namespace Sat
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            //LoopTimer.Stop();
+            //DownloadTimer.Stop();
         }
 
         #region NavigationHelper registration
@@ -129,7 +131,7 @@ namespace Sat
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            ChangeImage(true);
+            await ChangeImage(true);
         }
 
         private async void PrevButton_Click(object sender, RoutedEventArgs e)
@@ -150,12 +152,12 @@ namespace Sat
             //{
             //    ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             //}
-            ChangeImage(false);
+            await ChangeImage(false);
         }
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            DownloadFiles();    
+            await DownloadFiles();    
         }
 
         private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -163,7 +165,7 @@ namespace Sat
             App.Current.Exit();
         }
 
-        private async void DownloadFiles()
+        private async Task DownloadFiles()
         {
             //StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
             int i;
@@ -171,15 +173,18 @@ namespace Sat
             if (ImageFolder == null)
                 ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
-            GenericCodeClass.GetListOfURLs(Files, 6);
-
+            Files.Clear(); //Get rid of the old list
+            
+            await GenericCodeClass.GetListOfLatestFiles(Files, 3);
+            //GenericCodeClass.GetListOfURLs(Files, 6);
+            
             for (i = 0; i < Files.Count; i++)
             {
                 StatusBox.Text = string.Concat(StatusBox.Text, Files[i]);
                 StatusBox.Text = string.Concat(StatusBox.Text, Environment.NewLine);
             }
 
-            GenericCodeClass.DownloadFiles(ImageFolder, Files, 6);
+            await GenericCodeClass.DownloadFiles(ImageFolder, Files, Files.Count);
 
             if (Files.Count > 1)
             {
@@ -190,11 +195,14 @@ namespace Sat
             else
                 CurrImgIndex = -1;
             //StatusBox.Text = "You clicked Download Button";
+            DownloadTimer.Start();
+            LoopTimer.Start();
         }
 
-        private async void ChangeImage(bool ShowNextImage)
+        private async Task ChangeImage(bool ShowNextImage)
         {
             //WriteableBitmap tmpBitmap;
+            LoopTimer.Stop();   //Stop the loop timer to allow enough time to change image
 
             if (ImageFolder == null)
                 ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
@@ -210,8 +218,8 @@ namespace Sat
                     CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
                 }
                 
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
-                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
+                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
+                //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
                 //ImgBox.Source = ImgSource;
                 //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "2014186_1730vis.jpg");
                 //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
@@ -219,27 +227,31 @@ namespace Sat
             }
             else
             {
-                ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
+                //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
+                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "Error.jpg");
             }
 
+            LoopTimer.Start();
             //tmpBitmap = (WriteableBitmap)ImgBox.Source;
             //GenericCodeClass.OverlayFileInImage(ImageFolder, tmpBitmap, "Overlay.jpg");
             //tmpBitmap.Invalidate();
             //GenericCodeClass.OverlayFiles(ImageFolder, "test.jpg", "CWA.gif");
         }
 
-        private void Timer_Handler(object sender, object e)
+        private async void Timer_Handler(object sender, object e)
         {
             DispatcherTimer tmpTimer = (DispatcherTimer)sender;
 
             tmpTimer.Stop();
             if (tmpTimer == LoopTimer)
             {
-                ChangeImage(true);
+                await ChangeImage(true);
             }
             else if (tmpTimer == DownloadTimer)
             {
-                DownloadFiles();
+                LoopTimer.Stop();
+                await DownloadFiles();
+                LoopTimer.Start();
             }
             tmpTimer.Start();
         }

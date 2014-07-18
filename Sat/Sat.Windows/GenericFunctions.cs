@@ -8,35 +8,93 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 
 static class GenericCodeClass
 {
-    public static void GetListOfURLs(List<string> FileNames, int NoOfFiles)
+    public static async Task GetListOfLatestFiles(List<string> FileNames, int NoOfHours)
     {
-            DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
-            DateTime StartOfYearDate = new DateTime(CurrDateTime.Year-1, 12, 31);
-            TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
-            int i;
-         
+        string URLPath = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
+        string RegExpString = ">\\s*";
+        int i;
 
-            FileNames.Clear();
+        DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
+        DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
+        DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(NoOfHours, 0, 0));    //Subtract 3 hours from the Current Time
+        TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
+        
+        RegExpString = RegExpString + CurrDateTime.Year.ToString() + NoOfDays.Days.ToString() + "_(";
 
-            if (CurrDateTime.Minute < 30)
-                CurrDateTime = CurrDateTime.AddMinutes(0.0 - CurrDateTime.Minute);
-            else
-                CurrDateTime = CurrDateTime.AddMinutes(30.0 - CurrDateTime.Minute);
+        if (StartDateTime.Hour > CurrDateTime.Hour)  //When the start and current time are on either side of midnight
+        {
+            for(i = StartDateTime.Hour; i <= 23; i++)
+                RegExpString = RegExpString + i.ToString("D2") + "|";
+        
+            for(i = 0; i < CurrDateTime.Hour; i++)
+                RegExpString = RegExpString + i.ToString("D2") + "|";
+        }
+        else
+        {
+            for(i = StartDateTime.Hour; i < CurrDateTime.Hour; i++)
+                RegExpString = RegExpString + i.ToString("D2") + "|"; 
+        }
 
-            for (i = 0; i < NoOfFiles; i++)
+        RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
+
+        HttpClient Client = new HttpClient();
+        var URI = new Uri(URLPath);
+        HttpResponseMessage message = await Client.GetAsync(URI);
+
+        if (message.IsSuccessStatusCode)
+        {
+            Regex RegExp = new Regex(RegExpString);
+	        MatchCollection Matches = RegExp.Matches(message.Content.ToString());
+
+            if(Matches.Count > 0)
             {
-                FileNames.Add(CurrDateTime.Year.ToString() + NoOfDays.Days.ToString() + "_" + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + "vis.jpg");
-                CurrDateTime = CurrDateTime.AddMinutes(-30.0);
-                NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
+                foreach (Match match in Matches)
+                {
+                    if (match.Success)
+                    {
+			            string tmp = match.ToString();	//The regular expression matches the "<" and ">" signs around the filename. These signs have to be removed before adding the filename to the list
+                        FileNames.Add(tmp.Substring(1, tmp.Length-2));
+                    }
+                }
             }
+        }
+        else
+        {
 
-            FileNames.Reverse();
+        }
+
     }
 
-    public static async void DownloadFiles(StorageFolder ImageFolder, List<string> Filenames, int NoOfFiles)
+    public static void GetListOfURLs(List<string> FileNames, int NoOfFiles)
+    {
+        DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
+        DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
+        TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
+        int i;
+
+
+        FileNames.Clear();
+
+        if (CurrDateTime.Minute < 30)
+            CurrDateTime = CurrDateTime.AddMinutes(0.0 - CurrDateTime.Minute);
+        else
+            CurrDateTime = CurrDateTime.AddMinutes(30.0 - CurrDateTime.Minute);
+
+        for (i = 0; i < NoOfFiles; i++)
+        {
+            FileNames.Add(CurrDateTime.Year.ToString() + NoOfDays.Days.ToString() + "_" + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + "vis.jpg");
+            CurrDateTime = CurrDateTime.AddMinutes(-30.0);
+            NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
+        }
+
+        FileNames.Reverse();
+    }
+
+    public static async Task DownloadFiles(StorageFolder ImageFolder, List<string> Filenames, int NoOfFiles)
     {
         string URLPath = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
         string FilePath;
