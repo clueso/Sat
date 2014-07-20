@@ -12,12 +12,59 @@ using System.Text.RegularExpressions;
 
 static class GenericCodeClass
 {
+    private static int LoopTimerInterval = 1; //Loop timer interval in seconds
+    private static int DownloadTimerInterval = 1800; //Download time interval in seconds
+    private static string HomeWeatherStation = "west/wfo/sew";
+    private static bool IsHomeStationChanged = false;
+    //private HttpClient Client;
+    //private HttpResponseMessage Message;
+
+    //Provide access to private property specifying Loop timer Interval
+    public static int LoopInterval
+    {
+        get { return LoopTimerInterval; }
+        set { LoopTimerInterval = value; }
+    }
+
+    //Provide access to private property specifying Download timer Interval
+    public static int DownloadInterval
+    {
+        get { return DownloadTimerInterval; }
+        set { DownloadTimerInterval = value; }
+    }
+
+    //Provide access to private property specifying whether home station has changed
+    public static bool HomeStationChanged
+    {
+        get { return IsHomeStationChanged; }
+        set { IsHomeStationChanged = value; }
+    }
+
+    //Provide access to private property specifying Home Weather Station
+    public static string HomeStation
+    {
+        get { return HomeWeatherStation; }
+        set 
+        {
+            if (HomeWeatherStation != value)
+                IsHomeStationChanged = true;
+            
+            HomeWeatherStation = value;
+        }
+    }
+
     public static async Task GetListOfLatestFiles(List<string> FileNames, int NoOfHours)
     {
-        string URLPath = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
+        string URLPath = "http://www.ssd.noaa.gov/goes/" + HomeWeatherStation + "/img/";
+        
+
+        HttpClient Client = new HttpClient();
+        var URI = new Uri(URLPath);
+        //Task<HttpResponseMessage> HttpClientTask = Client.GetAsync(URI);
+        HttpResponseMessage Message = await Client.GetAsync(URI); ;
+
         string RegExpString = ">\\s*";
         int i;
-
         DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
         DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
         DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(NoOfHours, 0, 0));    //Subtract 3 hours from the Current Time
@@ -41,14 +88,12 @@ static class GenericCodeClass
 
         RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
 
-        HttpClient Client = new HttpClient();
-        var URI = new Uri(URLPath);
-        HttpResponseMessage message = await Client.GetAsync(URI);
+        //message = await HttpClientTask;
 
-        if (message.IsSuccessStatusCode)
+        if (Message.IsSuccessStatusCode)
         {
             Regex RegExp = new Regex(RegExpString);
-	        MatchCollection Matches = RegExp.Matches(message.Content.ToString());
+            MatchCollection Matches = RegExp.Matches(Message.Content.ToString());
 
             if(Matches.Count > 0)
             {
@@ -96,9 +141,8 @@ static class GenericCodeClass
 
     public static async Task DownloadFiles(StorageFolder ImageFolder, List<string> Filenames, int NoOfFiles)
     {
-        string URLPath = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
+        string URLPath = "http://www.ssd.noaa.gov/goes/" + HomeWeatherStation + "/img/";
         string FilePath;
-        //var URI = new Uri("http://www.ssd.noaa.gov/goes/west/wfo/sew/img/2014186_2030vis.jpg");
         int i;
         int RetCode; //Error code to check whether file was downloaded successfully
         
@@ -111,7 +155,7 @@ static class GenericCodeClass
         for (i = 0; i < NoOfFiles; i++)
         {
             //Check whether the file already exists
-            if (FileExists(FileList, Filenames[i]))
+            if (FileExists(FileList, Filenames[i]) && IsHomeStationChanged == false)
                 continue;
 
             FilePath = ImageFolder.Path + Filenames[i];
@@ -124,18 +168,19 @@ static class GenericCodeClass
             }
         }
         Filenames.RemoveAll(IsError);
+        IsHomeStationChanged = false;
     }
 
     public static async Task<int> GetFileUsingHttp(string URL, StorageFolder Folder, string FileName)
     {
         HttpClient Client = new HttpClient();
         var URI = new Uri(URL);
-        HttpResponseMessage message = await Client.GetAsync(URI);
+        HttpResponseMessage Message = await Client.GetAsync(URI);
 
-        if(message.IsSuccessStatusCode)
+        if (Message.IsSuccessStatusCode)
         {
             StorageFile sampleFile = await Folder.CreateFileAsync(FileName, CreationCollisionOption.ReplaceExisting);// this line throws an exception
-            var FileBuffer = await message.Content.ReadAsBufferAsync();
+            var FileBuffer = await Message.Content.ReadAsBufferAsync();
             await FileIO.WriteBufferAsync(sampleFile, FileBuffer);
             return 0; //Return code to show an image was successfully downloaded.
         }
@@ -213,6 +258,25 @@ static class GenericCodeClass
 
         return ImageBitmap;
 
+    }
+
+    public static async Task DeleteAllFiles(StorageFolder ImageFolder)
+    {
+        StorageFile File;
+        //var URI = new Uri("http://www.ssd.noaa.gov/goes/west/wfo/sew/img/2014186_2030vis.jpg");
+        int i;
+        
+        if (ImageFolder == null)
+            ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+
+        //Get list of files currently in the local data folder
+        var FileList = await ImageFolder.GetFilesAsync();
+
+        for (i = 0; i < FileList.Count; i++)
+        {
+            File = await ImageFolder.GetFileAsync(FileList[i].Name);
+            await File.DeleteAsync();
+        }
     }
 
     //public static void GetFileUsingHttp(string URL, string StorePath)

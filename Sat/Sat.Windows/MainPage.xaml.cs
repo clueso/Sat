@@ -35,6 +35,7 @@ namespace Sat
         private StorageFolder ImageFolder;
         private DispatcherTimer LoopTimer;
         private DispatcherTimer DownloadTimer;
+        private Task tmpTask;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -55,6 +56,7 @@ namespace Sat
 
         public MainPage()
         {
+            //tmpTask = DownloadFiles();
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
@@ -64,10 +66,8 @@ namespace Sat
             DownloadTimer = new DispatcherTimer();
             LoopTimer.Tick += Timer_Handler;
             DownloadTimer.Tick += Timer_Handler;
-            LoopTimer.Interval = new TimeSpan(0, 0, 1); //Create a timer that trigger every 1 s
-            DownloadTimer.Interval = new TimeSpan(0, 30, 0); //Create a timer that triggers every 30 min
             
-            DownloadFiles();
+            //DownloadFiles();
         }
 
         /// <summary>
@@ -81,10 +81,20 @@ namespace Sat
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session. The state will be null the first time a page is visited.</param>
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            //LoopTimer.Start();
-            //DownloadTimer.Start();
+            await DownloadFiles();
+            //await tmpTask;
+
+            if(GenericCodeClass.HomeStationChanged == true)
+            {
+                await GenericCodeClass.DeleteAllFiles(ImageFolder);
+                GenericCodeClass.HomeStationChanged = false;
+            }
+            LoopTimer.Interval = new TimeSpan(0, 0, GenericCodeClass.LoopInterval); //Create a timer that trigger every 1 s
+            DownloadTimer.Interval = new TimeSpan(0, 0, GenericCodeClass.DownloadInterval); //Create a timer that triggers every 30 min
+            LoopTimer.Start();
+            DownloadTimer.Start();
         }
 
         /// <summary>
@@ -126,7 +136,8 @@ namespace Sat
 
         private void QuitButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            App.Current.Exit();
+            //GenericCodeClass.DeleteAllFiles(ImageFolder);
+            //App.Current.Exit();
         }
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
@@ -157,11 +168,13 @@ namespace Sat
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
+            //await GenericCodeClass.DeleteAllFiles(ImageFolder);
             await DownloadFiles();    
         }
 
-        private void QuitButton_Click(object sender, RoutedEventArgs e)
+        private async void QuitButton_Click(object sender, RoutedEventArgs e)
         {
+            await GenericCodeClass.DeleteAllFiles(ImageFolder);
             App.Current.Exit();
         }
 
@@ -177,7 +190,7 @@ namespace Sat
             
             await GenericCodeClass.GetListOfLatestFiles(Files, 3);
             //GenericCodeClass.GetListOfURLs(Files, 6);
-            
+            StatusBox.Text += "Finished GetListOfLatestFiles";
             for (i = 0; i < Files.Count; i++)
             {
                 StatusBox.Text = string.Concat(StatusBox.Text, Files[i]);
@@ -195,8 +208,8 @@ namespace Sat
             else
                 CurrImgIndex = -1;
             //StatusBox.Text = "You clicked Download Button";
-            DownloadTimer.Start();
-            LoopTimer.Start();
+            //DownloadTimer.Start();
+            //LoopTimer.Start();
         }
 
         private async Task ChangeImage(bool ShowNextImage)
@@ -243,17 +256,24 @@ namespace Sat
             DispatcherTimer tmpTimer = (DispatcherTimer)sender;
 
             tmpTimer.Stop();
-            if (tmpTimer == LoopTimer)
+            if (tmpTimer.Equals(LoopTimer))
             {
                 await ChangeImage(true);
             }
-            else if (tmpTimer == DownloadTimer)
+            else if (tmpTimer.Equals(DownloadTimer))
             {
                 LoopTimer.Stop();
                 await DownloadFiles();
                 LoopTimer.Start();
             }
             tmpTimer.Start();
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoopTimer.Stop();
+            DownloadTimer.Stop();
+            this.Frame.Navigate(typeof(SettingsPage));
         }
     }
 }
