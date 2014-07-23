@@ -56,12 +56,12 @@ namespace Sat
 
         public MainPage()
         {
-            //tmpTask = DownloadFiles();
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
 
+            //tmpTask = DownloadFiles();
             LoopTimer = new DispatcherTimer();
             DownloadTimer = new DispatcherTimer();
             LoopTimer.Tick += Timer_Handler;
@@ -83,8 +83,8 @@ namespace Sat
         /// session. The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            await DownloadFiles();
-            //await tmpTask;
+            //await DownloadFiles();
+            tmpTask = DownloadFiles();
 
             if(GenericCodeClass.HomeStationChanged == true)
             {
@@ -93,6 +93,8 @@ namespace Sat
             }
             LoopTimer.Interval = new TimeSpan(0, 0, GenericCodeClass.LoopInterval); //Create a timer that trigger every 1 s
             DownloadTimer.Interval = new TimeSpan(0, 0, GenericCodeClass.DownloadInterval); //Create a timer that triggers every 30 min
+
+            await tmpTask;
             LoopTimer.Start();
             DownloadTimer.Start();
         }
@@ -107,8 +109,8 @@ namespace Sat
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
-            //LoopTimer.Stop();
-            //DownloadTimer.Stop();
+            LoopTimer.Stop();
+            DownloadTimer.Stop();
         }
 
         #region NavigationHelper registration
@@ -168,6 +170,7 @@ namespace Sat
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
+            GenericCodeClass.GetWeatherDataURLs(Files, 7);
             //await GenericCodeClass.DeleteAllFiles(ImageFolder);
             await DownloadFiles();    
         }
@@ -186,18 +189,28 @@ namespace Sat
             if (ImageFolder == null)
                 ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
+            var imageUriForlogo = new Uri("ms-appx:///Assets/Loading.jpg");
+            //var imageUriForlogo = new Uri("ms-appdata:///local/abc.jpg");
+            ImgBox.Source = new BitmapImage(imageUriForlogo); 
+
             Files.Clear(); //Get rid of the old list
+            //StatusBox.Text += "Starting GetListOfLatestFiles at " + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
+
+            if(GenericCodeClass.LightningDataSelected)
+                GenericCodeClass.GetWeatherDataURLs(Files, 6);
+            else
+                await GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
             
-            await GenericCodeClass.GetListOfLatestFiles(Files, 3);
-            //GenericCodeClass.GetListOfURLs(Files, 6);
-            StatusBox.Text += "Finished GetListOfLatestFiles";
+            //StatusBox.Text += "Finished GetListOfLatestFiles" + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
             for (i = 0; i < Files.Count; i++)
             {
                 StatusBox.Text = string.Concat(StatusBox.Text, Files[i]);
                 StatusBox.Text = string.Concat(StatusBox.Text, Environment.NewLine);
             }
 
+            //StatusBox.Text += "Starting DownloadFiles at " + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
             await GenericCodeClass.DownloadFiles(ImageFolder, Files, Files.Count);
+            //StatusBox.Text += "Finished DownloadFiles at " + DateTime.Now.ToUniversalTime().ToString();
 
             if (Files.Count > 1)
             {
@@ -222,6 +235,9 @@ namespace Sat
 
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
+                StatusBox.Text = "Next Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + " of " + Files.Count.ToString() + "::" + Files[CurrImgIndex].ToString();
+                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
+
                 if (ShowNextImage)
                 {
                     CurrImgIndex = ++CurrImgIndex % Files.Count;
@@ -230,18 +246,21 @@ namespace Sat
                 {
                     CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
                 }
-                
-                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
+
+                //ImageUri = new Uri("ms-appdata:///local/" + Files[CurrImgIndex].ToString());
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
                 //ImgBox.Source = ImgSource;
                 //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "2014186_1730vis.jpg");
                 //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
-                StatusBox.Text = "Next Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + "::" + Files[CurrImgIndex].ToString();
             }
             else
             {
+                Uri ImageUri = new Uri("ms-appx:///Assets/Error.jpg"); ;
+                BitmapImage ErrorImg = new BitmapImage(ImageUri);
+                if (!ImgBox.Source.Equals(ErrorImg))
+                    ImgBox.Source = ErrorImg;
+                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "Error.jpg");
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
-                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "Error.jpg");
             }
 
             LoopTimer.Start();

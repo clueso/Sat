@@ -20,7 +20,7 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,-5,0,5">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -28,7 +28,8 @@
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="205*"/>
+            <RowDefinition Height="109*"/>
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
@@ -46,16 +47,16 @@
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
-        <StackPanel HorizontalAlignment="Center" Height="198" Margin="58,0,51,28" Grid.Row="1" VerticalAlignment="Bottom" Width="1257">
-            <Button x:Name="DownloadButton" Content="Download" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,0,1122,0" Click="DownloadButton_Click"/>
-            <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,0,1122,0" Click="NextButton_Click"/>
-            <Button x:Name="PrevButton" Content="Previous" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,0,1122,0" Click="PrevButton_Click"/>
-            <Button x:Name="SettingsButton" Content="Settings" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,0,1122,0" Click="SettingsButton_Click"/>
-            <Button x:Name="QuitButton" Content="Quit" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,0,1122,0" Click="QuitButton_Click" Tapped="QuitButton_Tapped"/>
+        <StackPanel Height="64" Margin="7,0,5,8" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom">
+            <Button x:Name="DownloadButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,7,50,7" Click="DownloadButton_Click" Width="150" Height="50" Content="Download"/>
+            <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Center" VerticalAlignment="Center" Click="NextButton_Click" Width="150" Height="50" Margin="50,7"/>
+            <Button x:Name="PrevButton" Content="Previous" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0" Click="PrevButton_Click" Width="150" Height="50"/>
+            <Button x:Name="SettingsButton" Content="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0" Click="SettingsButton_Click" Width="150" Height="50" Canvas.ZIndex="-3"/>
+            <Button x:Name="QuitButton" Content="Quit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0,0,0" Click="QuitButton_Click" Tapped="QuitButton_Tapped" Width="150" Height="50"/>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Height="397" Margin="34,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="1101">
-            <Image x:Name="ImgBox" Height="325" Margin="0,0,159,0"/>
-            <TextBox x:Name="StatusBox" TextWrapping="Wrap" AcceptsReturn="True" Margin="10,0,159,0" Height="70"/>
+        <StackPanel HorizontalAlignment="Left" Height="551" Grid.Row="1" VerticalAlignment="Top" Width="1356" Margin="10,0,0,0" Grid.RowSpan="2" Orientation="Horizontal">
+            <Image x:Name="ImgBox" Height="545" Margin="70,0,60,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="637" Stretch="None"/>
+            <TextBox x:Name="StatusBox" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,10,0" Height="545" VerticalAlignment="Top" HorizontalAlignment="Right" Width="536"/>
         </StackPanel>
     </Grid>
 </Page>

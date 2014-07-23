@@ -14,11 +14,12 @@ static class GenericCodeClass
 {
     private static int LoopTimerInterval = 1; //Loop timer interval in seconds
     private static int DownloadTimerInterval = 1800; //Download time interval in seconds
-    private static string HomeWeatherStation = "west/wfo/sew";
+    private static string HomeStationURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
     private static bool IsHomeStationChanged = false;
-    //private HttpClient Client;
-    //private HttpResponseMessage Message;
-
+    private static bool IsECLightningDataSelected = false;
+    private static HttpClient Client;
+    private static HttpResponseMessage Message;
+    private static int DownloadPeriod = 3;
     //Provide access to private property specifying Loop timer Interval
     public static int LoopInterval
     {
@@ -33,6 +34,12 @@ static class GenericCodeClass
         set { DownloadTimerInterval = value; }
     }
 
+    public static int FileDownloadPeriod
+    {
+        get { return DownloadPeriod; }
+        set { DownloadPeriod = value; }
+    }
+
     //Provide access to private property specifying whether home station has changed
     public static bool HomeStationChanged
     {
@@ -43,25 +50,31 @@ static class GenericCodeClass
     //Provide access to private property specifying Home Weather Station
     public static string HomeStation
     {
-        get { return HomeWeatherStation; }
+        get { return HomeStationURL; }
         set 
         {
-            if (HomeWeatherStation != value)
+            if (HomeStationURL != value)
                 IsHomeStationChanged = true;
-            
-            HomeWeatherStation = value;
+
+            HomeStationURL = value;
         }
+    }
+
+    //Provide access to private property specifying whether home station has changed
+    public static bool LightningDataSelected
+    {
+        get { return IsECLightningDataSelected; }
+        set { IsECLightningDataSelected = value; }
     }
 
     public static async Task GetListOfLatestFiles(List<string> FileNames, int NoOfHours)
     {
-        string URLPath = "http://www.ssd.noaa.gov/goes/" + HomeWeatherStation + "/img/";
-        
+        var URI = new Uri(HomeStationURL);
 
-        HttpClient Client = new HttpClient();
-        var URI = new Uri(URLPath);
+        if (Client == null)
+            Client = new HttpClient();
+
         //Task<HttpResponseMessage> HttpClientTask = Client.GetAsync(URI);
-        HttpResponseMessage Message = await Client.GetAsync(URI); ;
 
         string RegExpString = ">\\s*";
         int i;
@@ -69,8 +82,20 @@ static class GenericCodeClass
         DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
         DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(NoOfHours, 0, 0));    //Subtract 3 hours from the Current Time
         TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
+
+        if (StartDateTime.Year != CurrDateTime.Year)
+            RegExpString = RegExpString + "(" + CurrDateTime.Year.ToString() + "|" + StartDateTime.Year.ToString() + ")";
+        else
+            RegExpString = RegExpString + CurrDateTime.Year.ToString();
         
-        RegExpString = RegExpString + CurrDateTime.Year.ToString() + NoOfDays.Days.ToString() + "_(";
+        if(StartDateTime.Day != CurrDateTime.Day)
+        {
+            RegExpString = RegExpString + "(" + NoOfDays.Days.ToString() + "|";
+            NoOfDays = StartDateTime.Subtract(StartOfYearDate);
+            RegExpString = RegExpString + NoOfDays.Days.ToString() + ")_(";
+        }
+        else
+            RegExpString = RegExpString + NoOfDays.Days.ToString() + "_(";
 
         if (StartDateTime.Hour > CurrDateTime.Hour)  //When the start and current time are on either side of midnight
         {
@@ -88,6 +113,7 @@ static class GenericCodeClass
 
         RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
 
+        Message = await Client.GetAsync(URI);
         //message = await HttpClientTask;
 
         if (Message.IsSuccessStatusCode)
@@ -114,26 +140,28 @@ static class GenericCodeClass
 
     }
 
-    public static void GetListOfURLs(List<string> FileNames, int NoOfFiles)
+    public static void GetWeatherDataURLs(List<string> FileNames, int NoOfFiles)
     {
         DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
-        DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
-        TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
         int i;
 
 
         FileNames.Clear();
 
-        if (CurrDateTime.Minute < 30)
-            CurrDateTime = CurrDateTime.AddMinutes(0.0 - CurrDateTime.Minute);
-        else
-            CurrDateTime = CurrDateTime.AddMinutes(30.0 - CurrDateTime.Minute);
+        CurrDateTime = CurrDateTime.AddMinutes(-CurrDateTime.Minute % 10);
+
+        //if (CurrDateTime.Minute < 30)
+        //    CurrDateTime = CurrDateTime.AddMinutes(0.0 - CurrDateTime.Minute);
+        //else
+        //    CurrDateTime = CurrDateTime.AddMinutes(30.0 - CurrDateTime.Minute);
 
         for (i = 0; i < NoOfFiles; i++)
         {
-            FileNames.Add(CurrDateTime.Year.ToString() + NoOfDays.Days.ToString() + "_" + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + "vis.jpg");
-            CurrDateTime = CurrDateTime.AddMinutes(-30.0);
-            NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
+            //FileNames.Add(CurrDateTime.Year.ToString() + NoOfDays.Days.ToString() + "_" + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + "vis.jpg");
+            FileNames.Add("PAC_" + CurrDateTime.Year.ToString() + CurrDateTime.Month.ToString("D2") + CurrDateTime.Day.ToString("D2") + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + ".png");
+            //CurrDateTime = CurrDateTime.AddMinutes(-30.0);
+            //NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
+            CurrDateTime = CurrDateTime.AddMinutes(-10);
         }
 
         FileNames.Reverse();
@@ -141,10 +169,12 @@ static class GenericCodeClass
 
     public static async Task DownloadFiles(StorageFolder ImageFolder, List<string> Filenames, int NoOfFiles)
     {
-        string URLPath = "http://www.ssd.noaa.gov/goes/" + HomeWeatherStation + "/img/";
+        //string URLPath = "http://weather.gc.ca/data/lightning_images/";
+        //string URLPath = "http://www.ssd.noaa.gov/goes/" + HomeWeatherStation + "/img/";
         string FilePath;
         int i;
         int RetCode; //Error code to check whether file was downloaded successfully
+        //Task<int>[] TaskArray = new Task<int>[Filenames.Count];
         
         if(ImageFolder == null)
             ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
@@ -160,26 +190,45 @@ static class GenericCodeClass
 
             FilePath = ImageFolder.Path + Filenames[i];
 
-            RetCode = await GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
-            
-            if(RetCode == -1)
+            RetCode = await GetFileUsingHttp(HomeStationURL + Filenames[i], ImageFolder, Filenames[i]);
+            //TaskArray[i] = GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
+
+            if (RetCode == -1)
             {
                 Filenames[i] = "Error.jpg";
             }
         }
+
+        //for (i = 0; i < NoOfFiles; i++)
+        //{
+        //    if(TaskArray[i] != null)
+        //    {
+        //        RetCode = await TaskArray[i];
+
+        //        if (RetCode == -1)
+        //        {
+        //            Filenames[i] = "Error.jpg";
+        //        }
+        //    }            
+        //}
+        
         Filenames.RemoveAll(IsError);
         IsHomeStationChanged = false;
     }
 
     public static async Task<int> GetFileUsingHttp(string URL, StorageFolder Folder, string FileName)
     {
-        HttpClient Client = new HttpClient();
         var URI = new Uri(URL);
-        HttpResponseMessage Message = await Client.GetAsync(URI);
+        StorageFile sampleFile;
+        
+        if (Client == null)
+            Client = new HttpClient();
+
+        Message = await Client.GetAsync(URI);
 
         if (Message.IsSuccessStatusCode)
         {
-            StorageFile sampleFile = await Folder.CreateFileAsync(FileName, CreationCollisionOption.ReplaceExisting);// this line throws an exception
+            sampleFile = await Folder.CreateFileAsync(FileName, CreationCollisionOption.ReplaceExisting);// this line throws an exception
             var FileBuffer = await Message.Content.ReadAsBufferAsync();
             await FileIO.WriteBufferAsync(sampleFile, FileBuffer);
             return 0; //Return code to show an image was successfully downloaded.
