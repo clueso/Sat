@@ -83,18 +83,18 @@ namespace Sat
         /// session. The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            //await DownloadFiles();
-            tmpTask = DownloadFiles();
+            await DownloadFiles();
+            //tmpTask = DownloadFiles();
 
             if(GenericCodeClass.HomeStationChanged == true)
             {
                 await GenericCodeClass.DeleteAllFiles(ImageFolder);
                 GenericCodeClass.HomeStationChanged = false;
             }
-            LoopTimer.Interval = new TimeSpan(0, 0, GenericCodeClass.LoopInterval); //Create a timer that trigger every 1 s
-            DownloadTimer.Interval = new TimeSpan(0, 0, GenericCodeClass.DownloadInterval); //Create a timer that triggers every 30 min
+            LoopTimer.Interval = GenericCodeClass.LoopInterval; //Create a timer that trigger every 1 s
+            DownloadTimer.Interval = GenericCodeClass.DownloadInterval; //Create a timer that triggers every 30 min
 
-            await tmpTask;
+            //await tmpTask;
             LoopTimer.Start();
             DownloadTimer.Start();
         }
@@ -255,10 +255,12 @@ namespace Sat
             }
             else
             {
-                Uri ImageUri = new Uri("ms-appx:///Assets/Error.jpg"); ;
-                BitmapImage ErrorImg = new BitmapImage(ImageUri);
-                if (!ImgBox.Source.Equals(ErrorImg))
-                    ImgBox.Source = ErrorImg;
+                Uri ImageUri = new Uri("ms-appx:///Assets/Error.jpg");
+                BitmapImage bitmap = ImgBox.Source as BitmapImage;
+
+                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.jpg")
+                    ImgBox.Source = new BitmapImage(ImageUri);
+                
                 //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "Error.jpg");
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             }

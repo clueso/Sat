@@ -12,8 +12,8 @@ using System.Text.RegularExpressions;
 
 static class GenericCodeClass
 {
-    private static int LoopTimerInterval = 1; //Loop timer interval in seconds
-    private static int DownloadTimerInterval = 1800; //Download time interval in seconds
+    private static TimeSpan LoopTimerInterval = new TimeSpan(0,0,0,0,500); //Loop timer interval in seconds
+    private static TimeSpan DownloadTimerInterval = new TimeSpan(0, 30, 0); //Download time interval in seconds
     private static string HomeStationURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
     private static bool IsHomeStationChanged = false;
     private static bool IsECLightningDataSelected = false;
@@ -21,14 +21,14 @@ static class GenericCodeClass
     private static HttpResponseMessage Message;
     private static int DownloadPeriod = 3;
     //Provide access to private property specifying Loop timer Interval
-    public static int LoopInterval
+    public static TimeSpan LoopInterval
     {
         get { return LoopTimerInterval; }
         set { LoopTimerInterval = value; }
     }
 
     //Provide access to private property specifying Download timer Interval
-    public static int DownloadInterval
+    public static TimeSpan DownloadInterval
     {
         get { return DownloadTimerInterval; }
         set { DownloadTimerInterval = value; }
@@ -82,7 +82,7 @@ static class GenericCodeClass
         DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
         DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(NoOfHours, 0, 0));    //Subtract 3 hours from the Current Time
         TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
-
+        
         if (StartDateTime.Year != CurrDateTime.Year)
             RegExpString = RegExpString + "(" + CurrDateTime.Year.ToString() + "|" + StartDateTime.Year.ToString() + ")";
         else
@@ -113,13 +113,23 @@ static class GenericCodeClass
 
         RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
 
-        Message = await Client.GetAsync(URI);
-        //message = await HttpClientTask;
+        try
+        {
+            Message = await Client.GetAsync(URI);
+            //message = await HttpClientTask;
+        }
+        catch (Exception e)
+        {
+            return;  
+        }
+        
 
         if (Message.IsSuccessStatusCode)
         {
             Regex RegExp = new Regex(RegExpString);
             MatchCollection Matches = RegExp.Matches(Message.Content.ToString());
+            int Location;
+            string StartDateTimeString = StartDateTime.Year.ToString() + StartDateTime.Subtract(StartOfYearDate).Days.ToString() + "_" + StartDateTime.Hour.ToString("D2") + StartDateTime.Minute.ToString("D2") + "vis.jpg";
 
             if(Matches.Count > 0)
             {
@@ -131,13 +141,16 @@ static class GenericCodeClass
                         FileNames.Add(tmp.Substring(1, tmp.Length-2));
                     }
                 }
+                FileNames.Add(StartDateTimeString);
+                FileNames.Sort();
+                Location = FileNames.IndexOf(StartDateTimeString);
+                FileNames.RemoveRange(0, Location+1);
             }
         }
         else
         {
 
         }
-
     }
 
     public static void GetWeatherDataURLs(List<string> FileNames, int NoOfFiles)
