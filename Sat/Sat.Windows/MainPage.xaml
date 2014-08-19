@@ -49,8 +49,8 @@
         </Grid>
         <StackPanel Height="64" Margin="7,0,5,8" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom">
             <Button x:Name="DownloadButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,7,50,7" Click="DownloadButton_Click" Width="150" Height="50" Content="Download"/>
-            <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Center" VerticalAlignment="Center" Click="NextButton_Click" Width="150" Height="50" Margin="50,7"/>
-            <Button x:Name="PrevButton" Content="Previous" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0" Click="PrevButton_Click" Width="150" Height="50"/>
+            <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Center" VerticalAlignment="Center" Click="NextButton_Click" Width="150" Height="50" Margin="50,7" IsEnabled="False"/>
+            <Button x:Name="PrevButton" Content="Previous" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0" Click="PrevButton_Click" Width="150" Height="50" IsEnabled="False"/>
             <Button x:Name="SettingsButton" Content="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0" Click="SettingsButton_Click" Width="150" Height="50" Canvas.ZIndex="-3"/>
             <Button x:Name="QuitButton" Content="Quit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0,0,0" Click="QuitButton_Click" Tapped="QuitButton_Tapped" Width="150" Height="50"/>
         </StackPanel>

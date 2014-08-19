@@ -15,11 +15,12 @@ static class GenericCodeClass
     private static TimeSpan LoopTimerInterval = new TimeSpan(0,0,0,0,500); //Loop timer interval in seconds
     private static TimeSpan DownloadTimerInterval = new TimeSpan(0, 30, 0); //Download time interval in seconds
     private static string HomeStationURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
-    private static bool IsHomeStationChanged = false;
+    private static bool IsHomeStationChanged = true;
     private static bool IsECLightningDataSelected = false;
     private static HttpClient Client;
     private static HttpResponseMessage Message;
     private static int DownloadPeriod = 3;
+    private static List<string> ExistingFiles;
     //Provide access to private property specifying Loop timer Interval
     public static TimeSpan LoopInterval
     {
@@ -70,11 +71,18 @@ static class GenericCodeClass
     public static async Task GetListOfLatestFiles(List<string> FileNames, int NoOfHours)
     {
         var URI = new Uri(HomeStationURL);
+        string StartDateTimeString;
+
+        if (LightningDataSelected == true)
+        {
+            GenericCodeClass.GetWeatherDataURLs(FileNames, 6);
+            return;
+        }
 
         if (Client == null)
             Client = new HttpClient();
 
-        //Task<HttpResponseMessage> HttpClientTask = Client.GetAsync(URI);
+        var HttpClientTask = Client.GetAsync(URI);
 
         string RegExpString = ">\\s*";
         int i;
@@ -82,13 +90,13 @@ static class GenericCodeClass
         DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
         DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(NoOfHours, 0, 0));    //Subtract 3 hours from the Current Time
         TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
-        
+
         if (StartDateTime.Year != CurrDateTime.Year)
             RegExpString = RegExpString + "(" + CurrDateTime.Year.ToString() + "|" + StartDateTime.Year.ToString() + ")";
         else
             RegExpString = RegExpString + CurrDateTime.Year.ToString();
-        
-        if(StartDateTime.Day != CurrDateTime.Day)
+
+        if (StartDateTime.Day != CurrDateTime.Day)
         {
             RegExpString = RegExpString + "(" + NoOfDays.Days.ToString() + "|";
             NoOfDays = StartDateTime.Subtract(StartOfYearDate);
@@ -99,52 +107,53 @@ static class GenericCodeClass
 
         if (StartDateTime.Hour > CurrDateTime.Hour)  //When the start and current time are on either side of midnight
         {
-            for(i = StartDateTime.Hour; i <= 23; i++)
+            for (i = StartDateTime.Hour; i <= 23; i++)
                 RegExpString = RegExpString + i.ToString("D2") + "|";
-        
-            for(i = 0; i < CurrDateTime.Hour; i++)
+
+            for (i = 0; i < CurrDateTime.Hour; i++)
                 RegExpString = RegExpString + i.ToString("D2") + "|";
         }
         else
         {
-            for(i = StartDateTime.Hour; i < CurrDateTime.Hour; i++)
-                RegExpString = RegExpString + i.ToString("D2") + "|"; 
+            for (i = StartDateTime.Hour; i < CurrDateTime.Hour; i++)
+                RegExpString = RegExpString + i.ToString("D2") + "|";
         }
 
         RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
+        StartDateTimeString = StartDateTime.Year.ToString() + StartDateTime.Subtract(StartOfYearDate).Days.ToString() + "_" + StartDateTime.Hour.ToString("D2") + StartDateTime.Minute.ToString("D2") + "vis.jpg";
+        FileNames.Add(StartDateTimeString);
 
         try
         {
-            Message = await Client.GetAsync(URI);
-            //message = await HttpClientTask;
+            //Message = await Client.GetAsync(URI);
+            Message = await HttpClientTask;
         }
         catch (Exception e)
         {
-            return;  
+            return;
         }
-        
+
 
         if (Message.IsSuccessStatusCode)
         {
             Regex RegExp = new Regex(RegExpString);
+            int MessageLength = Message.Content.ToString().Length;
             MatchCollection Matches = RegExp.Matches(Message.Content.ToString());
             int Location;
-            string StartDateTimeString = StartDateTime.Year.ToString() + StartDateTime.Subtract(StartOfYearDate).Days.ToString() + "_" + StartDateTime.Hour.ToString("D2") + StartDateTime.Minute.ToString("D2") + "vis.jpg";
-
-            if(Matches.Count > 0)
+            
+            if (Matches.Count > 0)
             {
                 foreach (Match match in Matches)
                 {
                     if (match.Success)
                     {
-			            string tmp = match.ToString();	//The regular expression matches the "<" and ">" signs around the filename. These signs have to be removed before adding the filename to the list
-                        FileNames.Add(tmp.Substring(1, tmp.Length-2));
+                        string tmp = match.ToString();	//The regular expression matches the "<" and ">" signs around the filename. These signs have to be removed before adding the filename to the list
+                        FileNames.Add(tmp.Substring(1, tmp.Length - 2));
                     }
                 }
-                FileNames.Add(StartDateTimeString);
                 FileNames.Sort();
                 Location = FileNames.IndexOf(StartDateTimeString);
-                FileNames.RemoveRange(0, Location+1);
+                FileNames.RemoveRange(0, Location + 1);
             }
         }
         else
@@ -190,8 +199,8 @@ static class GenericCodeClass
         //Task<int>[] TaskArray = new Task<int>[Filenames.Count];
         
         if(ImageFolder == null)
-            ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-
+            ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+        
         //Get list of files currently in the local data folder
         var FileList = await ImageFolder.GetFilesAsync();
 
@@ -267,7 +276,7 @@ static class GenericCodeClass
     {
         if (ImageFolder == null)
         {
-            ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+            ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
         }
 
         StorageFile ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
@@ -297,7 +306,7 @@ static class GenericCodeClass
 
         if(ImageFolder == null)
         {
-             ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+             ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
         }
 
         ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
@@ -329,7 +338,7 @@ static class GenericCodeClass
         int i;
         
         if (ImageFolder == null)
-            ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+            ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
         //Get list of files currently in the local data folder
         var FileList = await ImageFolder.GetFilesAsync();

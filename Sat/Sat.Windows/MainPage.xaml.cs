@@ -21,6 +21,12 @@ using System.Threading.Tasks;
 
 namespace Sat
 {
+    //struct FileData
+    //{
+    //    string FileName;
+    //    bool isDownloaded;
+    //}
+
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -60,14 +66,8 @@ namespace Sat
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
-
-            //tmpTask = DownloadFiles();
-            LoopTimer = new DispatcherTimer();
-            DownloadTimer = new DispatcherTimer();
-            LoopTimer.Tick += Timer_Handler;
-            DownloadTimer.Tick += Timer_Handler;
             
-            //DownloadFiles();
+            
         }
 
         /// <summary>
@@ -83,16 +83,35 @@ namespace Sat
         /// session. The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            await DownloadFiles();
-            //tmpTask = DownloadFiles();
+            Task GetFileNamesTask, DeleteFilesTask, DownloadFilesTask;
+            var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.jpg");
+            //var imageUriForlogo = new Uri("ms-appdata:///local/abc.jpg");
+            ImgBox.Source = new BitmapImage(LoadingimageUri); 
 
             if(GenericCodeClass.HomeStationChanged == true)
             {
-                await GenericCodeClass.DeleteAllFiles(ImageFolder);
+                DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
+
+                Files.Clear(); //Get rid of the old list
+                GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
+                                               
                 GenericCodeClass.HomeStationChanged = false;
+                
+                await GetFileNamesTask;
+                await DeleteFilesTask;                
             }
+
+            DownloadFilesTask = DownloadFiles();
+
+            LoopTimer = new DispatcherTimer();
+            DownloadTimer = new DispatcherTimer();
+            LoopTimer.Tick += Timer_Handler;
+            DownloadTimer.Tick += Timer_Handler;
+
             LoopTimer.Interval = GenericCodeClass.LoopInterval; //Create a timer that trigger every 1 s
             DownloadTimer.Interval = GenericCodeClass.DownloadInterval; //Create a timer that triggers every 30 min
+
+            await DownloadFilesTask;
 
             //await tmpTask;
             LoopTimer.Start();
@@ -170,14 +189,19 @@ namespace Sat
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            GenericCodeClass.GetWeatherDataURLs(Files, 7);
-            //await GenericCodeClass.DeleteAllFiles(ImageFolder);
+            Files.Clear(); //Get rid of the old list
+            //StatusBox.Text += "Starting GetListOfLatestFiles at " + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
+
+            if (GenericCodeClass.LightningDataSelected)
+                GenericCodeClass.GetWeatherDataURLs(Files, 6);
+            else
+                await GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
+
             await DownloadFiles();    
         }
 
         private async void QuitButton_Click(object sender, RoutedEventArgs e)
         {
-            await GenericCodeClass.DeleteAllFiles(ImageFolder);
             App.Current.Exit();
         }
 
@@ -187,20 +211,8 @@ namespace Sat
             int i;
 
             if (ImageFolder == null)
-                ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+                ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
-            var imageUriForlogo = new Uri("ms-appx:///Assets/Loading.jpg");
-            //var imageUriForlogo = new Uri("ms-appdata:///local/abc.jpg");
-            ImgBox.Source = new BitmapImage(imageUriForlogo); 
-
-            Files.Clear(); //Get rid of the old list
-            //StatusBox.Text += "Starting GetListOfLatestFiles at " + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
-
-            if(GenericCodeClass.LightningDataSelected)
-                GenericCodeClass.GetWeatherDataURLs(Files, 6);
-            else
-                await GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
-            
             //StatusBox.Text += "Finished GetListOfLatestFiles" + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
             for (i = 0; i < Files.Count; i++)
             {
@@ -231,11 +243,15 @@ namespace Sat
             LoopTimer.Stop();   //Stop the loop timer to allow enough time to change image
 
             if (ImageFolder == null)
-                ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+                ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
                 StatusBox.Text = "Next Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + " of " + Files.Count.ToString() + "::" + Files[CurrImgIndex].ToString();
+                //Uri ImageUri = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
+                //BitmapImage bitmap = ImgBox.Source as BitmapImage;
+
+                //bitmap.UriSource = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
                 ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
 
                 if (ShowNextImage)
