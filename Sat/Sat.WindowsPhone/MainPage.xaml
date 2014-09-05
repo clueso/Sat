@@ -8,7 +8,40 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid x:Name="LayoutRoot">
 
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Panel -->
+        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+            <TextBlock Text="MY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock Text="page title" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+        </StackPanel>
+
+        <!--TODO: Content should be placed within the following grid-->
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,0,19,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,50">
+                <Button x:Name="DownloadButton" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Download" Tapped="DownloadButton_Click"/>
+                <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Center" VerticalAlignment="Center" Tapped="NextButton_Click" Margin="12,0,0,0"/>
+                <Button x:Name="PrevButton" Content="Previous" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12,0,0,0" Tapped="PrevButton_Click"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                <Button x:Name="SettingsButton" Content="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Tapped="SettingsButton_Click"/>
+                <Button x:Name="QuitButton" Content="Quit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12,0,0,0" Tapped="QuitButton_Click"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="362" Orientation="Horizontal">
+                <Image x:Name="ImgBox" Height="425" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="361"/>
+                <TextBox x:Name="StatusBox" TextWrapping="Wrap" AcceptsReturn="True" Margin="100,0,0,0" Height="545" VerticalAlignment="Top" HorizontalAlignment="Right" Width="536"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

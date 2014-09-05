@@ -26,7 +26,7 @@ namespace Sat
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        
+
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -66,7 +66,6 @@ namespace Sat
         /// session. The state will be null the first time a page is visited.</param>
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-   
         }
 
         /// <summary>
@@ -213,7 +212,7 @@ namespace Sat
 
         private void StationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
         }
     }
 }

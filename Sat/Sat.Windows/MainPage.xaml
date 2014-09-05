@@ -55,7 +55,9 @@
             <Button x:Name="QuitButton" Content="Quit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0,0,0" Click="QuitButton_Click" Tapped="QuitButton_Tapped" Width="150" Height="50"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" Height="551" Grid.Row="1" VerticalAlignment="Top" Width="1356" Margin="10,0,0,0" Grid.RowSpan="2" Orientation="Horizontal">
-            <Image x:Name="ImgBox" Height="545" Margin="70,0,60,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="637"/>
+            <ScrollViewer x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1">
+            <Image x:Name="ImgBox" Height="545" Margin="10,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="737"/>
+            </ScrollViewer>
             <TextBox x:Name="StatusBox" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,10,0" Height="545" VerticalAlignment="Top" HorizontalAlignment="Right" Width="536"/>
         </StackPanel>
     </Grid>
