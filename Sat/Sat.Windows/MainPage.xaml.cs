@@ -16,6 +16,8 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
+//using Windows.UI.Notifications;
+//using Windows.Data.Xml.Dom;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -41,7 +43,8 @@ namespace Sat
         private StorageFolder ImageFolder;
         private DispatcherTimer LoopTimer;
         private DispatcherTimer DownloadTimer;
-        
+        //private XmlDocument LiveTileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileSquare150x150Image);
+        //private static bool test = true; //Live tile        
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -92,8 +95,13 @@ namespace Sat
             {
                 GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
                 DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
-                               
-                GenericCodeClass.HomeStationChanged = false;
+                
+                //Live tile
+                //GenericCodeClass.HomeStationChanged = false;
+                //XmlNodeList tileImageAttributes = LiveTileXml.GetElementsByTagName("image");
+                //((XmlElement)tileImageAttributes[0]).SetAttribute("src", "ms-appx:///assets/Error.jpg");
+                //TileNotification tileNotification = new TileNotification(LiveTileXml);
+                //TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
                 
                 await GetFileNamesTask;
                 await DeleteFilesTask;                
@@ -170,6 +178,16 @@ namespace Sat
         {
             //GenericCodeClass.DeleteAllFiles(ImageFolder);
             //App.Current.Exit();
+        }
+
+        private void PauseButton_Click(object sender, TappedRoutedEventArgs e)
+        {
+            LoopTimer.Stop();
+        }
+
+        private void PlayButton_Click(object sender, TappedRoutedEventArgs e)
+        {
+            LoopTimer.Start();
         }
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
@@ -271,6 +289,7 @@ namespace Sat
 
         private async Task ChangeImage(bool ShowNextImage)
         {
+            //string Filename;    //Live tile
             //WriteableBitmap tmpBitmap;
             LoopTimer.Stop();   //Stop the loop timer to allow enough time to change image
 
@@ -286,15 +305,33 @@ namespace Sat
                 //bitmap.UriSource = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
                 ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
 
-                if (ShowNextImage)
-                {
-                    CurrImgIndex = ++CurrImgIndex % Files.Count;
-                }
-                else
-                {
-                    CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
-                }
+                //Live tile-----
+                //XmlNodeList tileImageAttributes = LiveTileXml.GetElementsByTagName("image");
+                //if(test)
+                //{
+                //    Filename = "assets/Error.jpg";
+                //    test = false;
+                //}                     
+                //else
+                //{
+                //    Filename = "assets/Loading.jpg";
+                //    test = true;
 
+                //}
+
+                //((XmlElement)tileImageAttributes[0]).SetAttribute("src", Filename);
+                //TileNotification tileNotification = new TileNotification(LiveTileXml);
+                //TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
+
+                //if (ShowNextImage)
+                //{
+                //    CurrImgIndex = ++CurrImgIndex % Files.Count;
+                //}
+                //else
+                //{
+                //    CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
+                //}
+                //End Live Tile
                 //ImageUri = new Uri("ms-appdata:///local/" + Files[CurrImgIndex].ToString());
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
                 //ImgBox.Source = ImgSource;
@@ -346,6 +383,11 @@ namespace Sat
             LoopTimer.Stop();
             DownloadTimer.Stop();
             this.Frame.Navigate(typeof(SettingsPage));
+        }
+
+        private void DownloadButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
         }
     }
 
