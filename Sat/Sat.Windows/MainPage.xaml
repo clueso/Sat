@@ -12,7 +12,7 @@
 
     <Page.Resources>
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
-        <x:String x:Key="AppName">My Application</x:String>
+        <x:String x:Key="AppName">Satellite Imagery</x:String>
     </Page.Resources>
 
     <!--
@@ -28,8 +28,9 @@
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
-            <RowDefinition Height="205*"/>
-            <RowDefinition Height="109*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
@@ -38,27 +39,35 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
-                        Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
-                        AutomationProperties.Name="Back"
-                        AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
-        <StackPanel Height="64" Margin="7,0,5,8" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom">
-            <Button x:Name="DownloadButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,7,50,7" Click="DownloadButton_Click" Width="150" Height="50" Content="Download"/>
-            <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Center" VerticalAlignment="Center" Click="NextButton_Click" Width="150" Height="50" Margin="50,7" IsEnabled="False"/>
-            <Button x:Name="PrevButton" Content="Previous" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0" Click="PrevButton_Click" Width="150" Height="50" IsEnabled="False"/>
-            <Button x:Name="SettingsButton" Content="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0" Click="SettingsButton_Click" Width="150" Height="50" Canvas.ZIndex="-3"/>
-            <Button x:Name="QuitButton" Content="Quit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0,0,0" Click="QuitButton_Click" Tapped="QuitButton_Tapped" Width="150" Height="50"/>
+        <!-- Station name -->
+        <StackPanel Grid.Row="1" Margin="120,0,0,0">
+            <TextBlock x:Name="StationBox" FontSize="30" Margin="0,0,30,0">Seattle</TextBlock>
         </StackPanel>
-        <StackPanel HorizontalAlignment="Left" Height="551" Grid.Row="1" VerticalAlignment="Top" Width="1356" Margin="10,0,0,0" Grid.RowSpan="2" Orientation="Horizontal">
-            <ScrollViewer x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1">
-            <Image x:Name="ImgBox" Height="545" Margin="10,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="737"/>
+        <!-- Loop controls and image # -->
+        <StackPanel Grid.Row="2" Height="auto">
+            <Grid Height="70" Margin="92,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <AppBarButton Grid.Column="0" Icon="previous" x:Name="PrevButton" Tapped="PrevButton_Click" IsEnabled="False"/>
+                <AppBarButton Grid.Column="1" Icon="pause" x:Name="PlayPauseButton" Tapped="PlayPauseButton_Click"/>
+                <AppBarButton Grid.Column="2" Icon="next" x:Name="NextButton" Tapped="NextButton_Click" IsEnabled="False" Grid.ColumnSpan="2" Margin="2,0,0,0"/>
+                <AppBarButton Grid.Column="3" Icon="Refresh" x:Name="DownloadButton" Tapped="DownloadButton_Click" Grid.ColumnSpan="2" Margin="2,0,0,0" />
+                <TextBlock Grid.Column="5" x:Name="StatusBox" Margin="50,0,0,0" VerticalAlignment="Center" FontSize="18"/>
+            </Grid>
+        </StackPanel>
+        <!-- Image -->
+        <StackPanel Grid.Row="3" Margin="120,0,40,40">
+            <ScrollViewer x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" MaxZoomFactor="3">
+                <Image x:Name="ImgBox" Height="482" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             </ScrollViewer>
-            <TextBox x:Name="StatusBox" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,10,0" Height="545" VerticalAlignment="Top" HorizontalAlignment="Right" Width="536"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -18,17 +18,12 @@ using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
 //using Windows.UI.Notifications;
 //using Windows.Data.Xml.Dom;
+using Windows.UI.ApplicationSettings; //Settings flyout
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
 namespace Sat
 {
-    //struct FileData
-    //{
-    //    string FileName;
-    //    bool isDownloaded;
-    //}
-
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -43,6 +38,7 @@ namespace Sat
         private StorageFolder ImageFolder;
         private DispatcherTimer LoopTimer;
         private DispatcherTimer DownloadTimer;
+        private OptionsPage OptionsPageFlyout;
         //private XmlDocument LiveTileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileSquare150x150Image);
         //private static bool test = true; //Live tile        
         /// <summary>
@@ -69,8 +65,14 @@ namespace Sat
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
-            
-            
+            if(OptionsPageFlyout == null)
+                OptionsPageFlyout = new OptionsPage();
+            OptionsPageFlyout.SettingsChanged += this.MainPage_SettingsChanged;
+            SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested; //Settings flyout
+            LoopTimer = new DispatcherTimer();
+            DownloadTimer = new DispatcherTimer();
+            LoopTimer.Tick += Timer_Handler;
+            DownloadTimer.Tick += Timer_Handler;
         }
 
         /// <summary>
@@ -91,28 +93,24 @@ namespace Sat
             //var imageUriForlogo = new Uri("ms-appdata:///local/abc.jpg");
             ImgBox.Source = new BitmapImage(LoadingimageUri); 
 
-            if(GenericCodeClass.HomeStationChanged == true)
-            {
-                GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
+            //if(GenericCodeClass.HomeStationChanged == true)
+            //{
+                GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
                 DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
-                
+                StationBox.Text = GenericCodeClass.HomeStationName;
                 //Live tile
                 //GenericCodeClass.HomeStationChanged = false;
                 //XmlNodeList tileImageAttributes = LiveTileXml.GetElementsByTagName("image");
                 //((XmlElement)tileImageAttributes[0]).SetAttribute("src", "ms-appx:///assets/Error.jpg");
                 //TileNotification tileNotification = new TileNotification(LiveTileXml);
                 //TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
-                
+                //End Live Tile
+
                 await GetFileNamesTask;
                 await DeleteFilesTask;                
-            }
-
+            //}
+            
             DownloadFilesTask = DownloadFiles();
-
-            LoopTimer = new DispatcherTimer();
-            DownloadTimer = new DispatcherTimer();
-            LoopTimer.Tick += Timer_Handler;
-            DownloadTimer.Tick += Timer_Handler;
 
             LoopTimer.Interval = GenericCodeClass.LoopInterval; //Create a timer that trigger every 1 s
             DownloadTimer.Interval = GenericCodeClass.DownloadInterval; //Create a timer that triggers every 30 min
@@ -131,10 +129,7 @@ namespace Sat
 
                 if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.jpg")
                     ImgBox.Source = new BitmapImage(ImageUri);
-            }
-                
-
-            
+            }    
         }
 
         /// <summary>
@@ -180,14 +175,22 @@ namespace Sat
             //App.Current.Exit();
         }
 
-        private void PauseButton_Click(object sender, TappedRoutedEventArgs e)
+        private void PlayPauseButton_Click(object sender, TappedRoutedEventArgs e)
         {
-            LoopTimer.Stop();
-        }
+            if (NextButton.IsEnabled == false)
+            {
+                LoopTimer.Stop();
+                PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);                
+            }
+            else
+            {
+                PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
+                LoopTimer.Start();
+            }
 
-        private void PlayButton_Click(object sender, TappedRoutedEventArgs e)
-        {
-            LoopTimer.Start();
+            NextButton.IsEnabled = !NextButton.IsEnabled;
+            PrevButton.IsEnabled = !PrevButton.IsEnabled;
+            
         }
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
@@ -218,38 +221,34 @@ namespace Sat
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            Files.Clear(); //Get rid of the old list
-            //StatusBox.Text += "Starting GetListOfLatestFiles at " + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
-
-            if (GenericCodeClass.LightningDataSelected)
-                GenericCodeClass.GetWeatherDataURLs(Files, 6);
-            else
-                await GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
-
-            await DownloadFiles();    
+            await GenericCodeClass.GetListOfLatestFiles(Files);
+            await DownloadFiles();
+            if(NextButton.IsEnabled == true)
+                ChangeImage(true);
         }
 
-        private void QuitButton_Click(object sender, RoutedEventArgs e)
-        {
-            App.Current.Exit();
-        }
+        //private void QuitButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    App.Current.Exit();
+        //}
 
         private async Task DownloadFiles()
         {
             //StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
             int i;
             int RetCode;
+            int DownloadedFiles = 1;
 
             if (ImageFolder == null)
                 ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
             //DownloadFilesTask = GenericCodeClass.DownloadFiles(ImageFolder, Files, Files.Count);
             //StatusBox.Text += "Finished GetListOfLatestFiles" + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
-            for (i = 0; i < Files.Count; i++)
-            {
-                StatusBox.Text = string.Concat(StatusBox.Text, Files[i]);
-                StatusBox.Text = string.Concat(StatusBox.Text, Environment.NewLine);
-            }
+            //for (i = 0; i < Files.Count; i++)
+            //{
+            //    StatusBox.Text = string.Concat(StatusBox.Text, Files[i]);
+            //    StatusBox.Text = string.Concat(StatusBox.Text, Environment.NewLine);
+            //}
 
 
             //StatusBox.Text += "Starting DownloadFiles at " + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
@@ -258,6 +257,7 @@ namespace Sat
                 if (GenericCodeClass.ExistingFiles.Contains(Files[i].ToString()) && GenericCodeClass.HomeStationChanged == false)
                     continue;
 
+                StatusBox.Text = "Downloading " + DownloadedFiles.ToString() + " of " + Files.Count.ToString() + " images...";
                 RetCode = await GenericCodeClass.GetFileUsingHttp(GenericCodeClass.HomeStation + Files[i], ImageFolder, Files[i]);
                 //TaskArray[i] = GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
 
@@ -268,9 +268,11 @@ namespace Sat
                 else
                 {
                     ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[i]);
+                    DownloadedFiles += 1;
+                    StatusBox.Text += "Finished";
                 }
             }
-            //StatusBox.Text += "Finished DownloadFiles at " + DateTime.Now.ToUniversalTime().ToString();
+            
 
             if (Files.Count > 1)
             {
@@ -291,14 +293,16 @@ namespace Sat
         {
             //string Filename;    //Live tile
             //WriteableBitmap tmpBitmap;
-            LoopTimer.Stop();   //Stop the loop timer to allow enough time to change image
+
+            if (NextButton.IsEnabled == false)
+                LoopTimer.Stop();   //Stop the loop timer to allow enough time to change image
 
             if (ImageFolder == null)
                 ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
-                StatusBox.Text = "Next Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + " of " + Files.Count.ToString() + "::" + Files[CurrImgIndex].ToString();
+                StatusBox.Text = "Image " + (CurrImgIndex+1).ToString() + " of " + Files.Count.ToString() + " :: " + Files[CurrImgIndex].ToString();
                 //Uri ImageUri = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
                 //BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
@@ -322,16 +326,17 @@ namespace Sat
                 //((XmlElement)tileImageAttributes[0]).SetAttribute("src", Filename);
                 //TileNotification tileNotification = new TileNotification(LiveTileXml);
                 //TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
-
-                //if (ShowNextImage)
-                //{
-                //    CurrImgIndex = ++CurrImgIndex % Files.Count;
-                //}
-                //else
-                //{
-                //    CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
-                //}
                 //End Live Tile
+
+                if (ShowNextImage)
+                {
+                    CurrImgIndex = ++CurrImgIndex % Files.Count;
+                }
+                else
+                {
+                    CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
+                }
+                
                 //ImageUri = new Uri("ms-appdata:///local/" + Files[CurrImgIndex].ToString());
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
                 //ImgBox.Source = ImgSource;
@@ -350,7 +355,8 @@ namespace Sat
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             }
 
-            LoopTimer.Start();
+            if(NextButton.IsEnabled == false)
+                LoopTimer.Start();
             //tmpBitmap = (WriteableBitmap)ImgBox.Source;
             //GenericCodeClass.OverlayFileInImage(ImageFolder, tmpBitmap, "Overlay.jpg");
             //tmpBitmap.Invalidate();
@@ -362,7 +368,7 @@ namespace Sat
             DispatcherTimer tmpTimer = (DispatcherTimer)sender;
 
             LoopTimer.Stop();
-            DownloadTimer.Stop();
+            //DownloadTimer.Stop();
 
             if (tmpTimer.Equals(LoopTimer))
             {
@@ -370,12 +376,13 @@ namespace Sat
             }
             else if (tmpTimer.Equals(DownloadTimer))
             {
-                LoopTimer.Stop();
+                //LoopTimer.Stop();
+                await GenericCodeClass.GetListOfLatestFiles(Files);
                 await DownloadFiles();
-                LoopTimer.Start();
+                DownloadTimer.Start();
             }
             LoopTimer.Start();
-            DownloadTimer.Start();
+            //DownloadTimer.Start();
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
@@ -388,6 +395,65 @@ namespace Sat
         private void DownloadButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
 
+        }
+
+        //Setting flyout
+        private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            //Do we also need privacy statement, about etc?
+            args.Request.ApplicationCommands.Add(new SettingsCommand(
+                "Options", "Options", (handler) => ShowCustomSettingFlyout()));
+        }
+
+        private void ShowCustomSettingFlyout()
+        {
+            if(OptionsPageFlyout == null)
+                OptionsPageFlyout = new OptionsPage();
+            OptionsPageFlyout.Show();
+        }
+       //End settings flyout
+
+        private async void MainPage_SettingsChanged(object sender, EventArgs e)
+        {
+            Task GetFileNamesTask, DeleteFilesTask, DownloadFilesTask;
+            var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.jpg");
+            
+            if(NextButton.IsEnabled == false)
+                LoopTimer.Stop();
+
+            ImgBox.Source = new BitmapImage(LoadingimageUri);
+
+            if (GenericCodeClass.HomeStationChanged == true)
+            {
+                GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
+                DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
+                StationBox.Text = GenericCodeClass.HomeStationName;
+                
+                await GetFileNamesTask;
+                await DeleteFilesTask;
+                GenericCodeClass.HomeStationChanged = false;
+            }
+
+            DownloadFilesTask = DownloadFiles();
+
+            if (!DownloadFilesTask.IsFaulted)
+            {
+                await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
+            }
+            else
+            {
+                //Show Error Message
+                Uri ImageUri = new Uri("ms-appx:///Assets/Error.jpg");
+                BitmapImage bitmap = ImgBox.Source as BitmapImage;
+
+                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.jpg")
+                    ImgBox.Source = new BitmapImage(ImageUri);
+            }
+
+            LoopTimer.Interval = GenericCodeClass.LoopInterval;
+            
+            if(NextButton.IsEnabled == false)
+                LoopTimer.Start();
         }
     }
 

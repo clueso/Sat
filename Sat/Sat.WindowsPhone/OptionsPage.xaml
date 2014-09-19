@@ -1,0 +1,95 @@
+﻿<Page
+    x:Class="Sat.OptionsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sat"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Panel -->
+        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+            <TextBlock Text="SATELLITE IMAGERY" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock Text="options" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+        </StackPanel>
+
+        <!--TODO: Content should be placed within the following grid-->
+        <StackPanel Grid.Row="1" Margin="19,9.5,19,0">
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Station" />
+            <!-- Section 1 body -->
+            <ComboBox x:Name="StationComboBox" Margin="0,17,0,0" Padding="0,0,27,0" Width="auto" SelectionChanged="StationComboBox_SelectionChanged" SelectedIndex="0">
+                <x:String>Seattle</x:String>
+                <x:String>Vancouver</x:String>
+                <x:String>Billings</x:String>
+                <x:String>Boise</x:String>
+                <x:String>Elko</x:String>
+                <x:String>Eureka</x:String>
+                <x:String>Flagstaff</x:String>
+                <x:String>Glasgow</x:String>
+                <x:String>Great Falls</x:String>
+                <x:String>Hanford/San Joaquin Valley</x:String>
+                <x:String>Las Vegas</x:String>
+                <x:String>Los Angeles/Oxnard</x:String>
+                <x:String>Medford</x:String>
+                <x:String>Missoula</x:String>
+                <x:String>Pendleton</x:String>
+                <x:String>Phoenix</x:String>
+                <x:String>Pocatello</x:String>
+                <x:String>Portland</x:String>
+                <x:String>Reno</x:String>
+                <x:String>Sacramento</x:String>
+                <x:String>Salk Lake City</x:String>
+                <x:String>San Diego</x:String>
+                <x:String>San Francisco Bay/Monterey</x:String>
+                <x:String>Spokane</x:String>
+                <x:String>Tucson</x:String>
+                <x:String>Central BC</x:String>
+                <x:String>EC Lightning Data</x:String>
+            </ComboBox>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Margin="19,9.5,19,0">
+            <!-- Section 2 header -->
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Duration" />
+            <!-- Section 2 body -->
+            <Grid Margin="0,17,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <RadioButton Grid.Column="0" Content="3 hr"/>
+                <RadioButton Grid.Column="1" Content="6 hr"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Margin="19,9.5,19,0">
+            <!-- Section 3 header -->
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Loop Speed (time per image)" />
+            <!-- Section 3 body -->
+            <Grid Margin="0,17,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <RadioButton Grid.Column="0" Content="0.1 sec"/>
+                <RadioButton Grid.Column="1" Content="0.5 sec"/>
+                <RadioButton Grid.Column="2" Content="1 sec"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Page>

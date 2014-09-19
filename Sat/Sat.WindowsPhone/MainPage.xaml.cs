@@ -142,6 +142,16 @@ namespace Sat
             //App.Current.Exit();
         }
 
+        private void PauseButton_Click(object sender, TappedRoutedEventArgs e)
+        {
+            LoopTimer.Stop();
+        }
+
+        private void PlayButton_Click(object sender, TappedRoutedEventArgs e)
+        {
+            LoopTimer.Start();
+        }
+
         private async void NextButton_Click(object sender, TappedRoutedEventArgs e)
         {
             await ChangeImage(true);
@@ -168,10 +178,23 @@ namespace Sat
             await ChangeImage(false);
         }
 
-        private async void DownloadButton_Click(object sender, TappedRoutedEventArgs e)
-        {
-            GenericCodeClass.GetWeatherDataURLs(Files, 7);
+        //private async void DownloadButton_Click(object sender, TappedRoutedEventArgs e)
+        //{
+        //    GenericCodeClass.GetWeatherDataURLs(Files, 7);
             //await GenericCodeClass.DeleteAllFiles(ImageFolder);
+        //    await DownloadFiles();
+        //}
+
+        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            Files.Clear(); //Get rid of the old list
+            //StatusBox.Text += "Starting GetListOfLatestFiles at " + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
+
+            if (GenericCodeClass.LightningDataSelected)
+                GenericCodeClass.GetWeatherDataURLs(Files, 6);
+            else
+                await GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
+
             await DownloadFiles();
         }
 
@@ -235,7 +258,7 @@ namespace Sat
 
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
-                StatusBox.Text = "Next Button:" + "CurrImgIndex = " + CurrImgIndex.ToString() + " of " + Files.Count.ToString() + "::" + Files[CurrImgIndex].ToString();
+                StatusBox.Text = "Image " + CurrImgIndex.ToString() + " of " + Files.Count.ToString();
                 ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
 
                 if (ShowNextImage)
@@ -290,11 +313,16 @@ namespace Sat
             tmpTimer.Start();
         }
 
+        private void OptionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(OptionsPage));
+        }
+
         private void SettingsButton_Click(object sender, TappedRoutedEventArgs e)
         {
-            LoopTimer.Stop();
-            DownloadTimer.Stop();
-            this.Frame.Navigate(typeof(SettingsPage));
+           LoopTimer.Stop();
+           DownloadTimer.Stop();
+           this.Frame.Navigate(typeof(SettingsPage));
         }
     }
 }

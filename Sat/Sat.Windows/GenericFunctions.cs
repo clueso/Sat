@@ -13,9 +13,10 @@ using System.Text.RegularExpressions;
 static class GenericCodeClass
 {
     private static TimeSpan LoopTimerInterval = new TimeSpan(0,0,0,0,500); //Loop timer interval in seconds
-    private static TimeSpan DownloadTimerInterval = new TimeSpan(0, 30, 0); //Download time interval in seconds
+    private static TimeSpan DownloadTimerInterval = new TimeSpan(3, 0, 0); //Download time interval in minutes
     private static string HomeStationURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
-    private static bool IsHomeStationChanged = true;
+    private static string HomeStationString ="Seattle";
+    private static bool IsHomeStationChanged = false;
     private static bool IsECLightningDataSelected = false;
     private static HttpClient Client;
     private static HttpResponseMessage Message;
@@ -62,6 +63,12 @@ static class GenericCodeClass
         }
     }
 
+    public static string HomeStationName
+    {
+        get { return HomeStationString; }
+        set { HomeStationString = value;}
+    }
+
     //Provide access to private property specifying whether home station has changed
     public static bool LightningDataSelected
     {
@@ -69,7 +76,7 @@ static class GenericCodeClass
         set { IsECLightningDataSelected = value; }
     }
 
-    public static async Task GetListOfLatestFiles(List<string> FileNames, int NoOfHours)
+    public static async Task GetListOfLatestFiles(List<string> FileNames)
     {
         var URI = new Uri(HomeStationURL);
         string StartDateTimeString;
@@ -102,7 +109,7 @@ static class GenericCodeClass
         string RegExpString = ">\\s*";
         DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
         DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
-        DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(NoOfHours, 0, 0));    //Subtract 3 hours from the Current Time
+        DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(DownloadPeriod, 0, 0));    //Subtract 3 hours from the Current Time
         TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
 
         if (StartDateTime.Year != CurrDateTime.Year)
@@ -176,7 +183,7 @@ static class GenericCodeClass
         }
         else
         {
-
+            //return some sort of error code?
         }
     }
 
