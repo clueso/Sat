@@ -26,6 +26,9 @@ namespace Sat
         public OptionsPage()
         {
             this.InitializeComponent();
+
+            if(StationComboBox != null)
+                StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
         }
 
         private void StationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -137,7 +140,7 @@ namespace Sat
                         break;
                     case 25:
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/flt/t7/img/";
-                        ChosenCityName = "Floaters";
+                        ChosenCityName = "Central BC";
                         break;
                     case 26:
                         ChosenCityURL = "http://weather.gc.ca/data/lightning_images/";
@@ -177,7 +180,7 @@ namespace Sat
 
         private void OptionsPage_LostFocus(object sender, RoutedEventArgs e)
         {
-            
+            //handle event of user pressing somewhere on the main app window here?
             
         }
     }

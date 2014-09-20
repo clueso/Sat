@@ -193,7 +193,7 @@ namespace Sat
             if (GenericCodeClass.LightningDataSelected)
                 GenericCodeClass.GetWeatherDataURLs(Files, 6);
             else
-                await GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
+                await GenericCodeClass.GetListOfLatestFiles(Files); //Ashwin
 
             await DownloadFiles();
         }
@@ -222,7 +222,7 @@ namespace Sat
             if (GenericCodeClass.LightningDataSelected)
                 GenericCodeClass.GetWeatherDataURLs(Files, 6);
             else
-                await GenericCodeClass.GetListOfLatestFiles(Files, GenericCodeClass.FileDownloadPeriod);
+                await GenericCodeClass.GetListOfLatestFiles(Files); //Ashwin
 
             //StatusBox.Text += "Finished GetListOfLatestFiles" + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
             for (i = 0; i < Files.Count; i++)
