@@ -302,8 +302,7 @@ namespace Sat
 
             if (CurrImgIndex != -1 && Files.Count != 0)
             {
-                //Ashwin - Test comment.
-                StatusBox.Text = "Test Image " + (CurrImgIndex+1).ToString() + " of " + Files.Count.ToString() + " :: " + Files[CurrImgIndex].ToString();
+                StatusBox.Text = "Image " + (CurrImgIndex+1).ToString() + " of " + Files.Count.ToString() ;
                 //Uri ImageUri = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
                 //BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
