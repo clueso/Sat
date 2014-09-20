@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 static class GenericCodeClass
 {
     private static TimeSpan LoopTimerInterval = new TimeSpan(0,0,0,0,500); //Loop timer interval in seconds
-    private static TimeSpan DownloadTimerInterval = new TimeSpan(0, 30, 0); //Download time interval in minutes
+    private static TimeSpan DownloadTimerInterval = new TimeSpan(3, 0, 0); //Download time interval in minutes
     private static string HomeStationURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
     private static string HomeStationString ="Seattle";
     private static bool IsHomeStationChanged = false;
