@@ -61,7 +61,7 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr"/>
+                <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr" IsChecked="True"/>
                 <RadioButton x:Name="DurationRadioButton2" Grid.Column="1" Content="6 hr" IsChecked="True"/>
             </Grid>
         </StackPanel>

@@ -26,6 +26,17 @@ namespace Sat
         public OptionsPage()
         {
             this.InitializeComponent();
+
+            DurationRadioButton1.IsChecked = true;
+
+            if (GenericCodeClass.LoopInterval.Milliseconds == 500)
+                LoopTimerRadioButton2.IsChecked = true;
+            else if (GenericCodeClass.LoopInterval.Milliseconds == 100)
+                LoopTimerRadioButton1.IsChecked = true;
+            else if (GenericCodeClass.LoopInterval.Milliseconds == 1000)
+                LoopTimerRadioButton3.IsChecked = true;
+
+            StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
         }
 
         private void StationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -41,19 +52,19 @@ namespace Sat
                         break;
                     case 1://Vancouver
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/vanc/img/";
-                        GenericCodeClass.HomeStationName = "Vancouver";
+                        ChosenCityName = "Vancouver";
                         break;
                     case 2://Billings
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/byz/img/";
-                        GenericCodeClass.HomeStationName = "Billings";
+                        ChosenCityName = "Billings";
                         break;
                     case 3://Boise
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/boi/img/";
-                        GenericCodeClass.HomeStationName = "Boise";
+                        ChosenCityName = "Boise";
                         break;
                     case 4://Elko
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/lkn/img/";
-                        GenericCodeClass.HomeStationName = "Elko";
+                        ChosenCityName = "Elko";
                         break;
                     case 5://Eureka
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/eka/img/";
@@ -160,7 +171,7 @@ namespace Sat
             //Better to check for existing download intervals before setting new times?
             if (DurationRadioButton1.IsChecked == true)
                 GenericCodeClass.FileDownloadPeriod = 3;
-            else
+            else if(DurationRadioButton2.IsChecked == true)
                 GenericCodeClass.FileDownloadPeriod = 6;
 
             if (LoopTimerRadioButton1.IsChecked == true)
