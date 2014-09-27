@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     IconSource="Assets/SmallLogo.png"
     Title="Options"
-    d:DesignWidth="346" BackClick="OptionsPage_BackClick" LostFocus="OptionsPage_LostFocus">
+    d:DesignWidth="346" Unloaded="OptionsPage_Unloaded">
 
     <!-- This StackPanel acts as a root panel for vertical layout of the content sections -->
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="265" >
@@ -61,8 +61,8 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr" IsChecked="True"/>
-                <RadioButton x:Name="DurationRadioButton2" Grid.Column="1" Content="6 hr" IsChecked="True"/>
+                <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr" IsChecked="True" GroupName="DurationBoxes"/>
+                <RadioButton x:Name="DurationRadioButton2" Grid.Column="1" Content="6 hr" GroupName="DurationBoxes"/>
             </Grid>
         </StackPanel>
 
@@ -76,9 +76,9 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <RadioButton x:Name="LoopTimerRadioButton1" Grid.Column="0" Content="0.1 sec"/>
-                <RadioButton x:Name="LoopTimerRadioButton2" Grid.Column="1" Content="0.5 sec" IsChecked="True"/>
-                <RadioButton x:Name="LoopTimerRadioButton3" Grid.Column="2" Content="1 sec"/>
+                <RadioButton x:Name="LoopTimerRadioButton1" Grid.Column="0" Content="0.1 sec" GroupName="LoopTimerBoxes"/>
+                <RadioButton x:Name="LoopTimerRadioButton2" Grid.Column="1" Content="0.5 sec" IsChecked="True" GroupName="LoopTimerBoxes"/>
+                <RadioButton x:Name="LoopTimerRadioButton3" Grid.Column="2" Content="1 sec" GroupName="LoopTimerBoxes"/>
             </Grid>
         </StackPanel>
     </StackPanel>

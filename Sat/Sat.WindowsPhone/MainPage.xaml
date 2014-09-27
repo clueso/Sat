@@ -23,25 +23,42 @@
 
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="MY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="page title" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <TextBlock Text="SATELLITE IMAGERY" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+            <TextBlock x:Name="StationBox" Text="seattle" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,0,19,0">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,50">
-                <Button x:Name="DownloadButton" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Download" Tapped="DownloadButton_Click"/>
-                <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Center" VerticalAlignment="Center" Tapped="NextButton_Click" Margin="12,0,0,0"/>
-                <Button x:Name="PrevButton" Content="Previous" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12,0,0,0" Tapped="PrevButton_Click"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                <Button x:Name="SettingsButton" Content="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Tapped="SettingsButton_Click"/>
-                <Button x:Name="QuitButton" Content="Quit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12,0,0,0" Tapped="QuitButton_Click"/>
-            </StackPanel>
-            <StackPanel HorizontalAlignment="Left" Height="400" VerticalAlignment="Top" Width="362" Orientation="Horizontal">
-                <Image x:Name="ImgBox" Height="425" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="361"/>
-                <TextBox x:Name="StatusBox" TextWrapping="Wrap" AcceptsReturn="True" Margin="100,0,0,0" Height="545" VerticalAlignment="Top" HorizontalAlignment="Right" Width="536"/>
-            </StackPanel>
-        </Grid>
+        <ScrollViewer Grid.Row="1" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Hidden">
+            <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,0,19,0">
+                <StackPanel>
+                    <Grid Height="70" Margin="-21,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <AppBarButton Grid.Column="0" Icon="previous" x:Name="PrevButton" Tapped="PrevButton_Click" IsEnabled="False"/>
+                        <AppBarButton Grid.Column="1" Icon="pause" x:Name="PlayPauseButton" Tapped="PlayPauseButton_Click" />
+                        <AppBarButton Grid.Column="2" Icon="next" x:Name="NextButton" Tapped="NextButton_Click" Margin="1,1,-1,-1" IsEnabled="False"/>
+                        <TextBlock Grid.Column="4" x:Name="StatusBox" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="18" TextWrapping="Wrap" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel Margin="0,70,0,19">
+                    <ScrollViewer x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="0.6" MaxZoomFactor="3">
+                        <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                    </ScrollViewer>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
+    <!-- App Bar-->
+    <Page.BottomAppBar>
+        <CommandBar x:Name="AppBar" ClosedDisplayMode="Minimal" >
+            <AppBarButton Label="about" Icon="Help" />
+            <AppBarButton Label="options" Icon="Setting" x:Name="OptionsButton" Click="OptionsButton_Click"/>
+            <AppBarButton Label="refresh" Icon="Refresh" x:Name="DownloadButton" Click="DownloadButton_Click"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

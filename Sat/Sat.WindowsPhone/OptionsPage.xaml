@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Unloaded="OptionsPage_Unloaded">
 
     <Grid x:Name="LayoutRoot">
 
@@ -72,8 +72,8 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <RadioButton Grid.Column="0" Content="3 hr"/>
-                <RadioButton Grid.Column="1" Content="6 hr"/>
+                <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr" GroupName="DurationBoxes"/>
+                <RadioButton x:Name="DurationRadioButton2" Grid.Column="1" Content="6 hr" GroupName="DurationBoxes"/>
             </Grid>
         </StackPanel>
         <StackPanel Grid.Row="3" Margin="19,9.5,19,0">
@@ -86,9 +86,9 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <RadioButton Grid.Column="0" Content="0.1 sec"/>
-                <RadioButton Grid.Column="1" Content="0.5 sec"/>
-                <RadioButton Grid.Column="2" Content="1 sec"/>
+                <RadioButton x:Name="LoopTimerRadioButton1" Grid.Column="0" Content="0.1 sec" GroupName="LoopTimerBoxes"/>
+                <RadioButton x:Name="LoopTimerRadioButton2" Grid.Column="1" Content="0.5 sec" GroupName="LoopTimerBoxes"/>
+                <RadioButton x:Name="LoopTimerRadioButton3" Grid.Column="2" Content="1 sec" GroupName="LoopTimerBoxes"/>
             </Grid>
         </StackPanel>
     </Grid>

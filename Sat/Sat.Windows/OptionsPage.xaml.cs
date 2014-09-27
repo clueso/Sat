@@ -27,15 +27,29 @@ namespace Sat
         {
             this.InitializeComponent();
 
-            DurationRadioButton1.IsChecked = true;
+            switch(GenericCodeClass.DownloadInterval.Hours)
+            {
+                case 3:
+                    DurationRadioButton1.IsChecked = true;
+                    break;
+                case 6:
+                    DurationRadioButton2.IsChecked = true;
+                    break;
+            }
 
-            if (GenericCodeClass.LoopInterval.Milliseconds == 500)
-                LoopTimerRadioButton2.IsChecked = true;
-            else if (GenericCodeClass.LoopInterval.Milliseconds == 100)
-                LoopTimerRadioButton1.IsChecked = true;
-            else if (GenericCodeClass.LoopInterval.Milliseconds == 1000)
-                LoopTimerRadioButton3.IsChecked = true;
-
+            switch(GenericCodeClass.LoopInterval.Milliseconds)
+            {
+                case 500:
+                    LoopTimerRadioButton2.IsChecked = true;
+                    break;
+                case 100:
+                    LoopTimerRadioButton1.IsChecked = true;
+                    break;
+                case 1000:
+                    LoopTimerRadioButton3.IsChecked = true;
+                    break;
+            }
+            
             StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
         }
 
@@ -173,6 +187,7 @@ namespace Sat
                 GenericCodeClass.FileDownloadPeriod = 3;
             else if(DurationRadioButton2.IsChecked == true)
                 GenericCodeClass.FileDownloadPeriod = 6;
+            
 
             if (LoopTimerRadioButton1.IsChecked == true)
                 GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 0, 100);
@@ -190,6 +205,34 @@ namespace Sat
         {
             
             
+        }
+
+        private void OptionsPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (ChosenCityName != null && ChosenCityName.Equals(GenericCodeClass.HomeStationName) == false)
+            {
+                GenericCodeClass.HomeStationName = ChosenCityName;
+                GenericCodeClass.HomeStation = ChosenCityURL;   //check for null?
+                GenericCodeClass.HomeStationChanged = true;
+            }
+
+            //Better to check for existing download intervals before setting new times?
+            if (DurationRadioButton1.IsChecked == true)
+                GenericCodeClass.FileDownloadPeriod = 3;
+            else if (DurationRadioButton2.IsChecked == true)
+                GenericCodeClass.FileDownloadPeriod = 6;
+
+
+            if (LoopTimerRadioButton1.IsChecked == true)
+                GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 0, 100);
+            else if (LoopTimerRadioButton2.IsChecked == true)
+                GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 0, 500);
+            else
+                GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 1, 0);
+
+
+            if (SettingsChanged != null)
+                SettingsChanged(this, EventArgs.Empty);
         }
     }
 }

@@ -250,6 +250,12 @@ namespace Sat
             //    StatusBox.Text = string.Concat(StatusBox.Text, Environment.NewLine);
             //}
 
+            //StatusBox.Visibility = Visibility.Collapsed;
+            FileDownloadProgBar.Visibility = Visibility.Visible;
+            FileDownloadProgBar.IsIndeterminate = false;
+            FileDownloadProgBar.Maximum = Files.Count;
+            FileDownloadProgBar.Minimum = 0;
+            FileDownloadProgBar.Value = 0;
 
             //StatusBox.Text += "Starting DownloadFiles at " + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
             for (i = 0; i < Files.Count; i++)
@@ -269,10 +275,13 @@ namespace Sat
                 {
                     ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[i]);
                     DownloadedFiles += 1;
+                    FileDownloadProgBar.Value += 1;
                     StatusBox.Text += "Finished";
                 }
             }
-            
+
+            StatusBox.Visibility = Visibility.Visible;
+            FileDownloadProgBar.Visibility = Visibility.Collapsed;
 
             if (Files.Count > 1)
             {
@@ -423,17 +432,18 @@ namespace Sat
 
             ImgBox.Source = new BitmapImage(LoadingimageUri);
 
+            GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
+
             if (GenericCodeClass.HomeStationChanged == true)
             {
-                GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
                 DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
                 StationBox.Text = GenericCodeClass.HomeStationName;
                 
-                await GetFileNamesTask;
+                
                 await DeleteFilesTask;
                 GenericCodeClass.HomeStationChanged = false;
             }
-
+            await GetFileNamesTask;
             DownloadFilesTask = DownloadFiles();
 
             if (!DownloadFilesTask.IsFaulted)
