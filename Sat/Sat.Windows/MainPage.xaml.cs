@@ -280,7 +280,7 @@ namespace Sat
                 }
             }
 
-            StatusBox.Visibility = Visibility.Visible;
+            //StatusBox.Visibility = Visibility.Visible;
             FileDownloadProgBar.Visibility = Visibility.Collapsed;
 
             if (Files.Count > 1)
