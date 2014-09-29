@@ -20,7 +20,7 @@
             <!-- Section 1 header -->
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Station" />
             <!-- Section 1 body -->
-            <ComboBox x:Name="StationComboBox" Margin="0,17,0,0" Padding="0,0,27,0" Width="auto" SelectionChanged="StationComboBox_SelectionChanged" SelectedIndex="0">
+            <ComboBox x:Name="StationComboBox" Margin="0,17,0,0" Padding="10,0,27,0" Width="auto" SelectionChanged="StationComboBox_SelectionChanged" SelectedIndex="0">
                 <x:String>Seattle</x:String>
                 <x:String>Vancouver</x:String>
                 <x:String>Billings</x:String>

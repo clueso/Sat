@@ -53,21 +53,20 @@
                     <ColumnDefinition Width="75" />
                     <ColumnDefinition Width="75" />
                     <ColumnDefinition Width="75" />
-                    <ColumnDefinition Width="75" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <AppBarButton Grid.Column="0" Icon="previous" x:Name="PrevButton" Tapped="PrevButton_Click" IsEnabled="False"/>
                 <AppBarButton Grid.Column="1" Icon="pause" x:Name="PlayPauseButton" Tapped="PlayPauseButton_Click"/>
                 <AppBarButton Grid.Column="2" Icon="next" x:Name="NextButton" Tapped="NextButton_Click" IsEnabled="False" Grid.ColumnSpan="2" Margin="2,0,0,0"/>
                 <AppBarButton Grid.Column="3" Icon="Refresh" x:Name="DownloadButton" Tapped="DownloadButton_Click" Grid.ColumnSpan="2" Margin="2,0,0,0" />
-                <TextBlock Grid.Column="5" x:Name="StatusBox" Margin="14,10,36,38" VerticalAlignment="Center" FontSize="18"/>
-                <ProgressBar x:Name="FileDownloadProgBar" Grid.Column="5" HorizontalAlignment="Left" Height="27" Margin="14,37,0,0" VerticalAlignment="Top" Width="364" Visibility="Visible"/>
+                <TextBlock Grid.Column="4" x:Name="StatusBox" Margin="20,10,0,38" VerticalAlignment="Center" FontSize="12"/>
+                <ProgressBar Grid.Column="4" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="4" Width="200" Margin="20,37,0,0" VerticalAlignment="Top" Visibility="Visible"/>
             </Grid>
         </StackPanel>
         <!-- Image -->
         <StackPanel Grid.Row="3" Margin="120,0,40,40">
             <ScrollViewer x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" MaxZoomFactor="3">
-                <Image x:Name="ImgBox" Height="482" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             </ScrollViewer>
         </StackPanel>
     </Grid>
