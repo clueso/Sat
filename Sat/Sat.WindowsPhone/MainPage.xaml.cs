@@ -244,18 +244,17 @@ namespace Sat
             //    StatusBox.Text = string.Concat(StatusBox.Text, Environment.NewLine);
             //}
 
+            FileDownloadProgBar.Visibility = Visibility.Visible;
+            FileDownloadProgBar.IsIndeterminate = false;
+            FileDownloadProgBar.Maximum = Files.Count;
+            FileDownloadProgBar.Minimum = 0;
+            FileDownloadProgBar.Value = 0;
 
             //StatusBox.Text += "Starting DownloadFiles at " + DateTime.Now.ToUniversalTime().ToString() + Environment.NewLine;
             for (i = 0; i < Files.Count; i++)
             {
                 if (GenericCodeClass.ExistingFiles.Contains(Files[i].ToString()) && GenericCodeClass.HomeStationChanged == false)
                     continue;
-
-                FileDownloadProgBar.Visibility = Visibility.Visible;
-                FileDownloadProgBar.IsIndeterminate = false;
-                FileDownloadProgBar.Maximum = Files.Count;
-                FileDownloadProgBar.Minimum = 0;
-                FileDownloadProgBar.Value = 0;
 
                 StatusBox.Text = "Downloading " + DownloadedFiles.ToString() + " of " + Files.Count.ToString() + " images...";
                 RetCode = await GenericCodeClass.GetFileUsingHttp(GenericCodeClass.HomeStation + Files[i], ImageFolder, Files[i]);
