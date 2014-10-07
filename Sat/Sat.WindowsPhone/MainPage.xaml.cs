@@ -256,7 +256,7 @@ namespace Sat
                 if (GenericCodeClass.ExistingFiles.Contains(Files[i].ToString()) && GenericCodeClass.HomeStationChanged == false)
                     continue;
 
-                StatusBox.Text = "Downloading " + DownloadedFiles.ToString() + " of " + Files.Count.ToString() + " images...";
+                StatusBox.Text = "Downloading " + DownloadedFiles.ToString() + " of " + Files.Count.ToString() + " images. ";
                 RetCode = await GenericCodeClass.GetFileUsingHttp(GenericCodeClass.HomeStation + Files[i], ImageFolder, Files[i]);
                 //TaskArray[i] = GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
 
@@ -269,7 +269,7 @@ namespace Sat
                     ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[i]);
                     DownloadedFiles += 1;
                     FileDownloadProgBar.Value += 1;
-                    StatusBox.Text += "Finished";
+                    StatusBox.Text += "Finished.";
                 }
             }
 
@@ -394,13 +394,6 @@ namespace Sat
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(OptionsPage));
-        }
-
-        private void SettingsButton_Click(object sender, TappedRoutedEventArgs e)
-        {
-           LoopTimer.Stop();
-           DownloadTimer.Stop();
-           this.Frame.Navigate(typeof(SettingsPage));
         }
     }
 }

@@ -9,13 +9,11 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid x:Name="LayoutRoot">
-
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -24,7 +22,9 @@
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock Text="SATELLITE IMAGERY" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock x:Name="StationBox" Text="seattle" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" >
+            <TextBlock x:Name="StationBox" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            </ScrollViewer>
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
@@ -37,17 +37,16 @@
                             <ColumnDefinition Width="60" />
                             <ColumnDefinition Width="60" />
                             <ColumnDefinition Width="*" />
-
                         </Grid.ColumnDefinitions>
                         <AppBarButton Grid.Column="0" Icon="previous" x:Name="PrevButton" Tapped="PrevButton_Click" IsEnabled="False"/>
                         <AppBarButton Grid.Column="1" Icon="pause" x:Name="PlayPauseButton" Tapped="PlayPauseButton_Click" />
-                        <AppBarButton Grid.Column="2" Icon="next" x:Name="NextButton" Tapped="NextButton_Click" Margin="1,1,-1,-1" IsEnabled="False"/>
-                        <TextBlock Grid.Column="3" x:Name="StatusBox" Margin="20,0,0,18" VerticalAlignment="Center" FontSize="12" TextWrapping="Wrap" />
-                        <ProgressBar Grid.Column="3" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="6" Margin="20,36,0,0" VerticalAlignment="Top"/>
+                        <AppBarButton Grid.Column="2" Icon="next" x:Name="NextButton" Tapped="NextButton_Click" IsEnabled="False"/>
+                        <TextBlock Grid.Column="3" x:Name="StatusBox" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" Margin="22,18,0,0" TextWrapping="Wrap"/>
+                        <ProgressBar Grid.Column="3" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="6" Width="150" Margin="22,36,0,0" VerticalAlignment="Top"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Margin="0,70,0,19">
-                    <ScrollViewer x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="0.6" MaxZoomFactor="3">
+                    <ScrollViewer x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="0.6" MaxZoomFactor="3" Margin="0">
                         <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left" />
                     </ScrollViewer>
                 </StackPanel>
@@ -63,3 +62,5 @@
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
+
+   
