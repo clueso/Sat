@@ -195,6 +195,7 @@ namespace Sat
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
+            CurrImgIndex = ++CurrImgIndex % Files.Count;
             await ChangeImage(true);
         }
 
@@ -216,6 +217,7 @@ namespace Sat
             //{
             //    ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             //}
+            CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
             await ChangeImage(false);
         }
 
@@ -224,7 +226,7 @@ namespace Sat
             await GenericCodeClass.GetListOfLatestFiles(Files);
             await DownloadFiles();
             if(NextButton.IsEnabled == true)
-                ChangeImage(true);
+                await ChangeImage(true);
         }
 
         //private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -337,14 +339,14 @@ namespace Sat
                 //TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
                 //End Live Tile
 
-                if (ShowNextImage)
-                {
-                    CurrImgIndex = ++CurrImgIndex % Files.Count;
-                }
-                else
-                {
-                    CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
-                }
+                //if (ShowNextImage)
+                //{
+                //    CurrImgIndex = ++CurrImgIndex % Files.Count;
+                //}
+                //else
+                //{
+                //    CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
+                //}
                 
                 //ImageUri = new Uri("ms-appdata:///local/" + Files[CurrImgIndex].ToString());
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, Files[CurrImgIndex]);
@@ -381,6 +383,7 @@ namespace Sat
 
             if (tmpTimer.Equals(LoopTimer))
             {
+                CurrImgIndex = ++CurrImgIndex % Files.Count;
                 await ChangeImage(true);
             }
             else if (tmpTimer.Equals(DownloadTimer))

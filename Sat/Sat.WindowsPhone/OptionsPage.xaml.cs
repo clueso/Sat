@@ -150,111 +150,111 @@ namespace Sat
                 {
                     case 0://Seattle
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
-                        GenericCodeClass.HomeStationName = "seattle";
+                        GenericCodeClass.HomeStationName = "Seattle";
                         break;
                     case 1://Vancouver
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/vanc/img/";
-                        GenericCodeClass.HomeStationName = "vancouver";
+                        GenericCodeClass.HomeStationName = "Vancouver";
                         break;
                     case 2://Billings
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/byz/img/";
-                        GenericCodeClass.HomeStationName = "billings";
+                        GenericCodeClass.HomeStationName = "Billings";
                         break;
                     case 3://Boise
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/boi/img/";
-                        GenericCodeClass.HomeStationName = "boise";
+                        GenericCodeClass.HomeStationName = "Boise";
                         break;
                     case 4://Elko
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/lkn/img/";
-                        GenericCodeClass.HomeStationName = "elko";
+                        GenericCodeClass.HomeStationName = "Elko";
                         break;
                     case 5://Eureka
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/eka/img/";
-                        GenericCodeClass.HomeStationName = "eureka";
+                        GenericCodeClass.HomeStationName = "Eureka";
                         break;
                     case 6://FlagStaff
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/fgz/img/";
-                        GenericCodeClass.HomeStationName = "flagStaff";
+                        GenericCodeClass.HomeStationName = "FlagStaff";
                         break;
                     case 7://Glasgow
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/ggw/img/";
-                        GenericCodeClass.HomeStationName = "glasgow";
+                        GenericCodeClass.HomeStationName = "Glasgow";
                         break;
                     case 8://Great Falls
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/tfx/img/";
-                        GenericCodeClass.HomeStationName = "great falls";
+                        GenericCodeClass.HomeStationName = "Great falls";
                         break;
                     case 9://Hanford/San Joaquin Valley
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/hnx/img/";
-                        GenericCodeClass.HomeStationName = "hanford/san joaquin valley";
+                        GenericCodeClass.HomeStationName = "Hanford/San Joaquin Valley";
                         break;
                     case 10://Las Vegas
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/vef/img/";
-                        GenericCodeClass.HomeStationName = "las vegas";
+                        GenericCodeClass.HomeStationName = "Las Vegas";
                         break;
                     case 11://Los Angeles/Oxnard
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/lox/img/";
-                        GenericCodeClass.HomeStationName = "los angeles/oxnard";
+                        GenericCodeClass.HomeStationName = "Los Angeles/Oxnard";
                         break;
                     case 12://Medford
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/mfr/img/";
-                        GenericCodeClass.HomeStationName = "medford";
+                        GenericCodeClass.HomeStationName = "Medford";
                         break;
                     case 13://Missoula
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/mso/img/";
-                        GenericCodeClass.HomeStationName = "missoula";
+                        GenericCodeClass.HomeStationName = "Missoula";
                         break;
                     case 14://Pendleton
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/pdt/img/";
-                        GenericCodeClass.HomeStationName = "pendleton";
+                        GenericCodeClass.HomeStationName = "Pendleton";
                         break;
                     case 15://Phoenix
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/psr/img/";
-                        GenericCodeClass.HomeStationName = "phoenix";
+                        GenericCodeClass.HomeStationName = "Phoenix";
                         break;
                     case 16://Pocatello
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/pih/img/";
-                        GenericCodeClass.HomeStationName = "pocatello";
+                        GenericCodeClass.HomeStationName = "Pocatello";
                         break;
                     case 17://Portland
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/pqr/img/";
-                        GenericCodeClass.HomeStationName = "portland";
+                        GenericCodeClass.HomeStationName = "Portland";
                         break;
                     case 18://Reno
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/rev/img/";
-                        GenericCodeClass.HomeStationName = "reno";
+                        GenericCodeClass.HomeStationName = "Reno";
                         break;
                     case 19://Sacramento
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/sto/img/";
-                        GenericCodeClass.HomeStationName = "sacramento";
+                        GenericCodeClass.HomeStationName = "Sacramento";
                         break;
                     case 20://Salt Lake City
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/slc/img/";
-                        GenericCodeClass.HomeStationName = "salt lake city";
+                        GenericCodeClass.HomeStationName = "Salt Lake City";
                         break;
                     case 21://San Diego
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/sgx/img/";
-                        GenericCodeClass.HomeStationName = "san diego";
+                        GenericCodeClass.HomeStationName = "San Diego";
                         break;
                     case 22://San Francisco Bay/Monterey
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/mtr/img/";
-                        GenericCodeClass.HomeStationName = "san francisco bay/monterey";
+                        GenericCodeClass.HomeStationName = "San Francisco Bay/Monterey";
                         break;
                     case 23://Spokane
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/otx/img/";
-                        GenericCodeClass.HomeStationName = "spokane";
+                        GenericCodeClass.HomeStationName = "Spokane";
                         break;
                     case 24://Tucson
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/twc/img/";
-                        GenericCodeClass.HomeStationName = "tucson";
+                        GenericCodeClass.HomeStationName = "Tucson";
                         break;
                     case 25:
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/flt/t7/img/";
-                        GenericCodeClass.HomeStationName = "prince george";
+                        GenericCodeClass.HomeStationName = "Central BC";
                         break;
                     case 26:
                         GenericCodeClass.HomeStation = "http://weather.gc.ca/data/lightning_images/";
-                        GenericCodeClass.HomeStationName = "pacific lightning";
+                        GenericCodeClass.HomeStationName = "EC Lightning Data";
                         GenericCodeClass.LightningDataSelected = true;
                         break;
                 }
