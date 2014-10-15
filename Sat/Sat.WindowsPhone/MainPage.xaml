@@ -42,7 +42,7 @@
                         <AppBarButton Grid.Column="1" Icon="pause" x:Name="PlayPauseButton" Tapped="PlayPauseButton_Click" />
                         <AppBarButton Grid.Column="2" Icon="next" x:Name="NextButton" Tapped="NextButton_Click" IsEnabled="False"/>
                         <TextBlock Grid.Column="3" x:Name="StatusBox" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" Margin="22,18,0,0" TextWrapping="Wrap"/>
-                        <ProgressBar Grid.Column="3" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="6" Width="150" Margin="22,36,0,0" VerticalAlignment="Top"/>
+                        <ProgressBar Grid.Column="3" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="6" Width="150" Margin="22,36,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Margin="0,70,0,19">

@@ -22,6 +22,7 @@ static class GenericCodeClass
     private static HttpResponseMessage Message;
     private static int DownloadPeriod = 3;
     public static List<string> ExistingFiles = new List<string>();
+    public static bool IsLoopPaused = false;
 
     //Provide access to private property specifying Loop timer Interval
     public static TimeSpan LoopInterval

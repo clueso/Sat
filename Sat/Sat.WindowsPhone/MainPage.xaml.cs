@@ -87,6 +87,18 @@ namespace Sat
 
             GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
 
+            if (GenericCodeClass.IsLoopPaused == false)
+            {
+                PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
+            }
+            else
+            {
+                PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);
+            }
+
+            NextButton.IsEnabled = GenericCodeClass.IsLoopPaused;
+            PrevButton.IsEnabled = GenericCodeClass.IsLoopPaused;
+
             if(GenericCodeClass.HomeStationChanged == true)
             {
                 DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
@@ -112,8 +124,15 @@ namespace Sat
             if (!DownloadFilesTask.IsFaulted)
             {
                 await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
-                if(NextButton.IsEnabled == false)
-                    LoopTimer.Start();
+                if (GenericCodeClass.IsLoopPaused == false)
+                {
+                    LoopTimer.Start();                    
+                }
+                else
+                {
+                    PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);
+                }
+                                   
                 DownloadTimer.Start();
             }
             else
@@ -172,7 +191,7 @@ namespace Sat
 
         private void PlayPauseButton_Click(object sender, TappedRoutedEventArgs e)
         {
-            if (NextButton.IsEnabled == false)
+            if (GenericCodeClass.IsLoopPaused == false)
             {
                 LoopTimer.Stop();
                 PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);                
@@ -185,6 +204,7 @@ namespace Sat
 
             NextButton.IsEnabled = !NextButton.IsEnabled;
             PrevButton.IsEnabled = !PrevButton.IsEnabled;
+            GenericCodeClass.IsLoopPaused = !GenericCodeClass.IsLoopPaused;
             
         }
 
@@ -220,7 +240,7 @@ namespace Sat
         {
             await GenericCodeClass.GetListOfLatestFiles(Files);
             await DownloadFiles();
-            if(NextButton.IsEnabled == true)
+            if (GenericCodeClass.IsLoopPaused == true)
                 await ChangeImage(true);
         }
 
@@ -247,7 +267,7 @@ namespace Sat
             //    StatusBox.Text = string.Concat(StatusBox.Text, Environment.NewLine);
             //}
 
-            FileDownloadProgBar.Visibility = Visibility.Visible;
+            
             FileDownloadProgBar.IsIndeterminate = false;
             FileDownloadProgBar.Maximum = Files.Count;
             FileDownloadProgBar.Minimum = 0;
@@ -260,7 +280,9 @@ namespace Sat
                     continue;
 
                 StatusBox.Text = "Downloading " + DownloadedFiles.ToString() + " of " + Files.Count.ToString() + " images. ";
+                FileDownloadProgBar.Visibility = Visibility.Visible;
                 RetCode = await GenericCodeClass.GetFileUsingHttp(GenericCodeClass.HomeStation + Files[i], ImageFolder, Files[i]);
+                
                 //TaskArray[i] = GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
 
                 if (RetCode == -1)
@@ -298,7 +320,7 @@ namespace Sat
             //string Filename;    //Live tile
             //WriteableBitmap tmpBitmap;
 
-            if (NextButton.IsEnabled == false)
+            if (GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Stop();   //Stop the loop timer to allow enough time to change image
 
             if (ImageFolder == null)
@@ -359,7 +381,7 @@ namespace Sat
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             }
 
-            if(NextButton.IsEnabled == false)
+            if (GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Start();
             //tmpBitmap = (WriteableBitmap)ImgBox.Source;
             //GenericCodeClass.OverlayFileInImage(ImageFolder, tmpBitmap, "Overlay.jpg");

@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 
+
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
 namespace Sat
@@ -130,7 +131,7 @@ namespace Sat
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-
+            
             // TODO: Save application state and stop any background activity
             deferral.Complete();
         }

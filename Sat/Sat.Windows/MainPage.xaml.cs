@@ -177,7 +177,7 @@ namespace Sat
 
         private void PlayPauseButton_Click(object sender, TappedRoutedEventArgs e)
         {
-            if (NextButton.IsEnabled == false)
+            if (GenericCodeClass.IsLoopPaused == false)
             {
                 LoopTimer.Stop();
                 PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);                
@@ -190,6 +190,7 @@ namespace Sat
 
             NextButton.IsEnabled = !NextButton.IsEnabled;
             PrevButton.IsEnabled = !PrevButton.IsEnabled;
+            GenericCodeClass.IsLoopPaused = !GenericCodeClass.IsLoopPaused;
             
         }
 
@@ -253,7 +254,6 @@ namespace Sat
             //}
 
             //StatusBox.Visibility = Visibility.Collapsed;
-            FileDownloadProgBar.Visibility = Visibility.Visible;
             FileDownloadProgBar.IsIndeterminate = false;
             FileDownloadProgBar.Maximum = Files.Count;
             FileDownloadProgBar.Minimum = 0;
@@ -266,6 +266,7 @@ namespace Sat
                     continue;
 
                 StatusBox.Text = "Downloading " + DownloadedFiles.ToString() + " of " + Files.Count.ToString() + " images. ";
+                FileDownloadProgBar.Visibility = Visibility.Visible;
                 RetCode = await GenericCodeClass.GetFileUsingHttp(GenericCodeClass.HomeStation + Files[i], ImageFolder, Files[i]);
                 //TaskArray[i] = GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
 
@@ -305,7 +306,7 @@ namespace Sat
             //string Filename;    //Live tile
             //WriteableBitmap tmpBitmap;
 
-            if (NextButton.IsEnabled == false)
+            if (GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Stop();   //Stop the loop timer to allow enough time to change image
 
             if (ImageFolder == null)
@@ -366,7 +367,7 @@ namespace Sat
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             }
 
-            if(NextButton.IsEnabled == false)
+            if (GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Start();
             //tmpBitmap = (WriteableBitmap)ImgBox.Source;
             //GenericCodeClass.OverlayFileInImage(ImageFolder, tmpBitmap, "Overlay.jpg");
@@ -430,7 +431,7 @@ namespace Sat
             Task GetFileNamesTask, DeleteFilesTask, DownloadFilesTask;
             var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.jpg");
             
-            if(NextButton.IsEnabled == false)
+            if(GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Stop();
 
             ImgBox.Source = new BitmapImage(LoadingimageUri);
@@ -464,8 +465,8 @@ namespace Sat
             }
 
             LoopTimer.Interval = GenericCodeClass.LoopInterval;
-            
-            if(NextButton.IsEnabled == false)
+
+            if (GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Start();
         }
     }

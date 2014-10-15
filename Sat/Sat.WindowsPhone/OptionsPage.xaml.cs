@@ -93,7 +93,7 @@ namespace Sat
             }
             CurrentCityName = GenericCodeClass.HomeStationName;
             StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
-
+            
             //Set up "checked" event handlers. Not setting them in the XAML file as they result in unnecessary function 
             //calls when values are set in the code above. 
             DurationRadioButton1.Checked += DurationRadioButton1_Checked;
@@ -174,7 +174,7 @@ namespace Sat
                         break;
                     case 6://FlagStaff
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/fgz/img/";
-                        GenericCodeClass.HomeStationName = "FlagStaff";
+                        GenericCodeClass.HomeStationName = "Flagstaff";
                         break;
                     case 7://Glasgow
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/ggw/img/";
@@ -182,7 +182,7 @@ namespace Sat
                         break;
                     case 8://Great Falls
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/tfx/img/";
-                        GenericCodeClass.HomeStationName = "Great falls";
+                        GenericCodeClass.HomeStationName = "Great Falls";
                         break;
                     case 9://Hanford/San Joaquin Valley
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/hnx/img/";
