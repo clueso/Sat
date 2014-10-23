@@ -65,14 +65,14 @@ namespace Sat
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
-            if(OptionsPageFlyout == null)
+            if (OptionsPageFlyout == null)
                 OptionsPageFlyout = new OptionsPage();
-            OptionsPageFlyout.SettingsChanged += this.MainPage_SettingsChanged;
             SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested; //Settings flyout
+            OptionsPageFlyout.SettingsChanged += this.MainPage_SettingsChanged;
             LoopTimer = new DispatcherTimer();
             DownloadTimer = new DispatcherTimer();
             LoopTimer.Tick += Timer_Handler;
-            DownloadTimer.Tick += Timer_Handler;
+            DownloadTimer.Tick += Timer_Handler;            
         }
 
         /// <summary>
@@ -96,8 +96,11 @@ namespace Sat
             //if(GenericCodeClass.HomeStationChanged == true)
             //{
                 GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
-                DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
+                if(!GenericCodeClass.IsAppResuming)
+                    await GenericCodeClass.DeleteAllFiles(ImageFolder);
+                                   
                 StationBox.Text = GenericCodeClass.HomeStationName;
+                GenericCodeClass.IsAppResuming = false;
                 //Live tile
                 //GenericCodeClass.HomeStationChanged = false;
                 //XmlNodeList tileImageAttributes = LiveTileXml.GetElementsByTagName("image");
@@ -107,14 +110,14 @@ namespace Sat
                 //End Live Tile
 
                 await GetFileNamesTask;
-                await DeleteFilesTask;                
+                //await DeleteFilesTask;                
             //}
             
             DownloadFilesTask = DownloadFiles();
 
             LoopTimer.Interval = GenericCodeClass.LoopInterval; //Create a timer that trigger every 1 s
             DownloadTimer.Interval = GenericCodeClass.DownloadInterval; //Create a timer that triggers every 30 min
-
+            
             if (!DownloadFilesTask.IsFaulted)
             {
                 await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
@@ -144,6 +147,8 @@ namespace Sat
         {
             LoopTimer.Stop();
             DownloadTimer.Stop();
+            SettingsPane.GetForCurrentView().CommandsRequested -= OnCommandsRequested;
+            GenericCodeClass.IsAppResuming = true;
         }
 
         #region NavigationHelper registration
@@ -196,8 +201,12 @@ namespace Sat
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            CurrImgIndex = ++CurrImgIndex % Files.Count;
-            await ChangeImage(true);
+            if (Files.Count != 0)
+                CurrImgIndex = ++CurrImgIndex % Files.Count;
+            else
+                CurrImgIndex = -1;
+
+            await ChangeImage(CurrImgIndex);
         }
 
         private async void PrevButton_Click(object sender, RoutedEventArgs e)
@@ -218,8 +227,12 @@ namespace Sat
             //{
             //    ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             //}
-            CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
-            await ChangeImage(false);
+            if (Files.Count != 0)
+                CurrImgIndex = (CurrImgIndex + Files.Count - 1) % Files.Count;
+            else
+                CurrImgIndex = -1;
+
+            await ChangeImage(CurrImgIndex);
         }
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
@@ -227,7 +240,7 @@ namespace Sat
             await GenericCodeClass.GetListOfLatestFiles(Files);
             await DownloadFiles();
             if(NextButton.IsEnabled == true)
-                await ChangeImage(true);
+                await ChangeImage(CurrImgIndex);
         }
 
         //private void QuitButton_Click(object sender, RoutedEventArgs e)
@@ -289,6 +302,7 @@ namespace Sat
             if (Files.Count > 1)
             {
                 CurrImgIndex = 0;
+                await ChangeImage(CurrImgIndex);
                 //ImgBox.Source = GenericCodeClass.GetBitmapImage(Files[CurrImgIndex]);
                 //MapBox.ImageLocation = URLPath + Files[CurrImgIndex];
             }
@@ -301,7 +315,7 @@ namespace Sat
             //await DownloadFilesTask;
         }
 
-        private async Task ChangeImage(bool ShowNextImage)
+        private async Task ChangeImage(int ImageIndex)
         {
             //string Filename;    //Live tile
             //WriteableBitmap tmpBitmap;
@@ -312,14 +326,14 @@ namespace Sat
             if (ImageFolder == null)
                 ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
-            if (CurrImgIndex != -1 && Files.Count != 0)
+            if (Files.Count != 0 && ImageIndex >= 0 && ImageIndex <= Files.Count)
             {
-                StatusBox.Text = "Image " + (CurrImgIndex+1).ToString() + " of " + Files.Count.ToString() ;
+                StatusBox.Text = "Image " + (ImageIndex + 1).ToString() + " of " + Files.Count.ToString();
                 //Uri ImageUri = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
                 //BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
                 //bitmap.UriSource = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
-                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[CurrImgIndex]);
+                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[ImageIndex]);
 
                 //Live tile-----
                 //XmlNodeList tileImageAttributes = LiveTileXml.GetElementsByTagName("image");
@@ -362,7 +376,7 @@ namespace Sat
 
                 if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.jpg")
                     ImgBox.Source = new BitmapImage(ImageUri);
-                
+                StatusBox.Text = "Error Downloading Images";       
                 //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "Error.jpg");
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             }
@@ -384,8 +398,11 @@ namespace Sat
 
             if (tmpTimer.Equals(LoopTimer))
             {
-                CurrImgIndex = ++CurrImgIndex % Files.Count;
-                await ChangeImage(true);
+                if (Files.Count != 0)
+                    CurrImgIndex = ++CurrImgIndex % Files.Count;
+                else
+                    CurrImgIndex = -1;
+                await ChangeImage(CurrImgIndex);
             }
             else if (tmpTimer.Equals(DownloadTimer))
             {

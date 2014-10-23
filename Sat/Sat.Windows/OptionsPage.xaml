@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     IconSource="Assets/SmallLogo.png"
     Title="Options"
-    d:DesignWidth="346" Unloaded="OptionsPage_Unloaded">
+    d:DesignWidth="346" Unloaded="OptionsPage_Unloaded" Loaded="OnLoaded">
 
     <!-- This StackPanel acts as a root panel for vertical layout of the content sections -->
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="265" >

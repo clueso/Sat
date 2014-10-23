@@ -90,6 +90,10 @@ namespace Sat
                 case 1000:
                     LoopTimerRadioButton3.IsChecked = true;
                     break;
+                case 0:
+                    if (GenericCodeClass.LoopInterval.Seconds == 1)
+                        LoopTimerRadioButton3.IsChecked = true;
+                    break;
             }
             CurrentCityName = GenericCodeClass.HomeStationName;
             StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;

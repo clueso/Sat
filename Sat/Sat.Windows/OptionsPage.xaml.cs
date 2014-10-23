@@ -25,32 +25,7 @@ namespace Sat
 
         public OptionsPage()
         {
-            this.InitializeComponent();
-
-            switch(GenericCodeClass.DownloadInterval.Hours)
-            {
-                case 3:
-                    DurationRadioButton1.IsChecked = true;
-                    break;
-                case 6:
-                    DurationRadioButton2.IsChecked = true;
-                    break;
-            }
-
-            switch(GenericCodeClass.LoopInterval.Milliseconds)
-            {
-                case 500:
-                    LoopTimerRadioButton2.IsChecked = true;
-                    break;
-                case 100:
-                    LoopTimerRadioButton1.IsChecked = true;
-                    break;
-                case 1000:
-                    LoopTimerRadioButton3.IsChecked = true;
-                    break;
-            }
-            
-            StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
+            this.InitializeComponent();            
         }
 
         private void StationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -221,18 +196,48 @@ namespace Sat
                 GenericCodeClass.FileDownloadPeriod = 3;
             else if (DurationRadioButton2.IsChecked == true)
                 GenericCodeClass.FileDownloadPeriod = 6;
-
-
+            
             if (LoopTimerRadioButton1.IsChecked == true)
                 GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 0, 100);
             else if (LoopTimerRadioButton2.IsChecked == true)
                 GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 0, 500);
             else
-                GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 1, 0);
-
-
+                GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 0, 1000);
+            
             if (SettingsChanged != null)
                 SettingsChanged(this, EventArgs.Empty);
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            switch (GenericCodeClass.FileDownloadPeriod)
+            {
+                case 3:
+                    DurationRadioButton1.IsChecked = true;
+                    break;
+                case 6:
+                    DurationRadioButton2.IsChecked = true;
+                    break;
+            }
+
+            switch (GenericCodeClass.LoopInterval.Milliseconds)
+            {
+                case 0:
+                    if (GenericCodeClass.LoopInterval.Seconds == 1)
+                        LoopTimerRadioButton3.IsChecked = true;
+                    break;
+                case 500:
+                    LoopTimerRadioButton2.IsChecked = true;
+                    break;
+                case 100:
+                    LoopTimerRadioButton1.IsChecked = true;
+                    break;
+                case 1000:
+                    LoopTimerRadioButton3.IsChecked = true;
+                    break;
+            }
+
+            StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
         }
     }
 }

@@ -23,6 +23,7 @@ static class GenericCodeClass
     private static int DownloadPeriod = 3;
     public static List<string> ExistingFiles = new List<string>();
     public static bool IsLoopPaused = false;
+    public static bool IsAppResuming = false;
 
     //Provide access to private property specifying Loop timer Interval
     public static TimeSpan LoopInterval
@@ -214,54 +215,54 @@ static class GenericCodeClass
         FileNames.Reverse();
     }
 
-    public static async Task DownloadFiles(StorageFolder ImageFolder, List<string> Filenames, int NoOfFiles)
-    {
-        //string URLPath = "http://weather.gc.ca/data/lightning_images/";
-        //string URLPath = "http://www.ssd.noaa.gov/goes/" + HomeWeatherStation + "/img/";
-        int i;
-        int RetCode; //Error code to check whether file was downloaded successfully
-        //Task<int>[] TaskArray = new Task<int>[Filenames.Count];
+    //public static async Task DownloadFiles(StorageFolder ImageFolder, List<string> Filenames, int NoOfFiles)
+    //{
+    //    //string URLPath = "http://weather.gc.ca/data/lightning_images/";
+    //    //string URLPath = "http://www.ssd.noaa.gov/goes/" + HomeWeatherStation + "/img/";
+    //    int i;
+    //    int RetCode; //Error code to check whether file was downloaded successfully
+    //    //Task<int>[] TaskArray = new Task<int>[Filenames.Count];
         
-        if(ImageFolder == null)
-            ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+    //    if(ImageFolder == null)
+    //        ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
         
-        //Get list of files currently in the local data folder
-        //var FileList = await ImageFolder.GetFilesAsync();
+    //    //Get list of files currently in the local data folder
+    //    //var FileList = await ImageFolder.GetFilesAsync();
 
-        for (i = 0; i < NoOfFiles; i++)
-        {
-            //Check whether the file already exists
-            //if (FileExists(FileList, Filenames[i]) && IsHomeStationChanged == false)
-            //    continue;
+    //    for (i = 0; i < NoOfFiles; i++)
+    //    {
+    //        //Check whether the file already exists
+    //        //if (FileExists(FileList, Filenames[i]) && IsHomeStationChanged == false)
+    //        //    continue;
 
-            if (ExistingFiles.Contains(Filenames[i].ToString()) && IsHomeStationChanged == false)
-                continue;
+    //        if (ExistingFiles.Contains(Filenames[i].ToString()) && IsHomeStationChanged == false)
+    //            continue;
 
-            RetCode = await GetFileUsingHttp(HomeStationURL + Filenames[i], ImageFolder, Filenames[i]);
-            //TaskArray[i] = GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
+    //        RetCode = await GetFileUsingHttp(HomeStationURL + Filenames[i], ImageFolder, Filenames[i]);
+    //        //TaskArray[i] = GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
 
-            if (RetCode == -1)
-            {
-                Filenames[i] = "Error.jpg";
-            }
-        }
+    //        if (RetCode == -1)
+    //        {
+    //            Filenames[i] = "Error.jpg";
+    //        }
+    //    }
 
-        //for (i = 0; i < NoOfFiles; i++)
-        //{
-        //    if(TaskArray[i] != null)
-        //    {
-        //        RetCode = await TaskArray[i];
+    //    //for (i = 0; i < NoOfFiles; i++)
+    //    //{
+    //    //    if(TaskArray[i] != null)
+    //    //    {
+    //    //        RetCode = await TaskArray[i];
 
-        //        if (RetCode == -1)
-        //        {
-        //            Filenames[i] = "Error.jpg";
-        //        }
-        //    }            
-        //}
+    //    //        if (RetCode == -1)
+    //    //        {
+    //    //            Filenames[i] = "Error.jpg";
+    //    //        }
+    //    //    }            
+    //    //}
         
-        Filenames.RemoveAll(IsError);
-        IsHomeStationChanged = false;
-    }
+    //    Filenames.RemoveAll(IsError);
+    //    IsHomeStationChanged = false;
+    //}
 
     public static async Task<int> GetFileUsingHttp(string URL, StorageFolder Folder, string FileName)
     {
