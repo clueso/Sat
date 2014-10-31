@@ -56,7 +56,7 @@
     <!-- App Bar-->
     <Page.BottomAppBar>
         <CommandBar x:Name="AppBar" ClosedDisplayMode="Minimal" >
-            <AppBarButton Label="about" Icon="Help" />
+            <AppBarButton x:Name="AboutButtons" Label="about" Icon="Help" Click="AboutButton_Click" />
             <AppBarButton Label="options" Icon="Setting" x:Name="OptionsButton" Click="OptionsButton_Click"/>
             <AppBarButton Label="refresh" Icon="Refresh" x:Name="DownloadButton" Click="DownloadButton_Click"/>
         </CommandBar>

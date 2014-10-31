@@ -176,12 +176,6 @@ namespace Sat
                 SettingsChanged(this, EventArgs.Empty);
         }
 
-        private void OptionsPage_LostFocus(object sender, RoutedEventArgs e)
-        {
-            
-            
-        }
-
         private void OptionsPage_Unloaded(object sender, RoutedEventArgs e)
         {
             if (ChosenCityName != null && ChosenCityName.Equals(GenericCodeClass.HomeStationName) == false)

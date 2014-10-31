@@ -28,7 +28,7 @@ namespace Sat
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private static String CurrentCityName;
-        private static String CurrentCityURL;
+        //private static String CurrentCityURL;
 
         public OptionsPage()
         {

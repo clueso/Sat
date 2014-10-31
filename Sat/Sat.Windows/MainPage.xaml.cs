@@ -38,7 +38,8 @@ namespace Sat
         private StorageFolder ImageFolder;
         private DispatcherTimer LoopTimer;
         private DispatcherTimer DownloadTimer;
-        private OptionsPage OptionsPageFlyout;
+        private OptionsPage OptionsPageFlyout = null;
+        private AboutPage AboutPageFlyout = null;
         //private XmlDocument LiveTileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileSquare150x150Image);
         //private static bool test = true; //Live tile        
         /// <summary>
@@ -67,6 +68,8 @@ namespace Sat
             this.navigationHelper.SaveState += navigationHelper_SaveState;
             if (OptionsPageFlyout == null)
                 OptionsPageFlyout = new OptionsPage();
+            if (AboutPageFlyout == null)
+                AboutPageFlyout = new AboutPage();
             SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested; //Settings flyout
             OptionsPageFlyout.SettingsChanged += this.MainPage_SettingsChanged;
             LoopTimer = new DispatcherTimer();
@@ -277,7 +280,7 @@ namespace Sat
             {
                 if (GenericCodeClass.ExistingFiles.Contains(Files[i].ToString()) && GenericCodeClass.HomeStationChanged == false)
                     continue;
-
+                
                 StatusBox.Text = "Downloading " + DownloadedFiles.ToString() + " of " + Files.Count.ToString() + " images. ";
                 FileDownloadProgBar.Visibility = Visibility.Visible;
                 RetCode = await GenericCodeClass.GetFileUsingHttp(GenericCodeClass.HomeStation + Files[i], ImageFolder, Files[i]);
@@ -328,7 +331,8 @@ namespace Sat
 
             if (Files.Count != 0 && ImageIndex >= 0 && ImageIndex <= Files.Count)
             {
-                StatusBox.Text = "Image " + (ImageIndex + 1).ToString() + " of " + Files.Count.ToString();
+                DateTime LocalTime = GenericCodeClass.GetDateTimeFromFile(Files[ImageIndex]);
+                StatusBox.Text = "Image " + (ImageIndex + 1).ToString() + " of " + Files.Count.ToString() + " " + LocalTime.ToString();
                 //Uri ImageUri = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
                 //BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
@@ -433,6 +437,8 @@ namespace Sat
             //Do we also need privacy statement, about etc?
             args.Request.ApplicationCommands.Add(new SettingsCommand(
                 "Options", "Options", (handler) => ShowCustomSettingFlyout()));
+            args.Request.ApplicationCommands.Add(new SettingsCommand(
+                "About", "About", (handler) => ShowAboutFlyout()));            
         }
 
         private void ShowCustomSettingFlyout()
@@ -440,6 +446,13 @@ namespace Sat
             if(OptionsPageFlyout == null)
                 OptionsPageFlyout = new OptionsPage();
             OptionsPageFlyout.Show();
+        }
+
+        private void ShowAboutFlyout()
+        {
+            if (AboutPageFlyout == null)
+                AboutPageFlyout = new AboutPage();
+            AboutPageFlyout.Show();
         }
        //End settings flyout
 

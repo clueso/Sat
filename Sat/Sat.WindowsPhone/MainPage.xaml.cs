@@ -99,10 +99,11 @@ namespace Sat
             NextButton.IsEnabled = GenericCodeClass.IsLoopPaused;
             PrevButton.IsEnabled = GenericCodeClass.IsLoopPaused;
 
+            StationBox.Text = GenericCodeClass.HomeStationName;
+
             if(GenericCodeClass.HomeStationChanged == true)
             {
                 DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
-                StationBox.Text = GenericCodeClass.HomeStationName;
                 //Live tile
                 //GenericCodeClass.HomeStationChanged = false;
                 //XmlNodeList tileImageAttributes = LiveTileXml.GetElementsByTagName("image");
@@ -337,7 +338,8 @@ namespace Sat
 
             if (Files.Count != 0 && ImageIndex >= 0 && ImageIndex <= Files.Count)
             {
-                StatusBox.Text = "Image " + (ImageIndex + 1).ToString() + " of " + Files.Count.ToString();
+                DateTime LocalTime = GenericCodeClass.GetDateTimeFromFile(Files[ImageIndex]);
+                StatusBox.Text = "Image " + (ImageIndex + 1).ToString() + " of " + Files.Count.ToString() + " " + LocalTime.ToString();
                 //Uri ImageUri = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
                 //BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
@@ -432,6 +434,11 @@ namespace Sat
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(OptionsPage));
+        }
+
+        private void AboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AboutPage));
         }
     }
 }

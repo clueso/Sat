@@ -77,6 +77,18 @@ static class GenericCodeClass
         set { IsECLightningDataSelected = value; }
     }
 
+    public static DateTime GetDateTimeFromFile(string Filename)
+    {
+        DateTime LocalDateTime;
+
+        string TimeString = Filename.Substring(8, 4);
+        string Year = Filename.Substring(0, 4);
+        string Day = Filename.Substring(4, 3);
+        LocalDateTime = new DateTime(Convert.ToInt32(Year) - 1, 12, 31, Convert.ToInt32(TimeString.Substring(0, 2)), Convert.ToInt32(TimeString.Substring(2, 2)), 0);
+        LocalDateTime = LocalDateTime.AddDays(Convert.ToDouble(Day)).ToLocalTime();
+        return LocalDateTime;
+    }
+
     public static async Task GetListOfLatestFiles(List<string> FileNames)
     {
         var URI = new Uri(HomeStationURL);
