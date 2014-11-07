@@ -81,12 +81,30 @@ static class GenericCodeClass
     public static DateTime GetDateTimeFromFile(string Filename)
     {
         DateTime LocalDateTime;
-                
-        string TimeString = Filename.Substring(8,4);
-        string Year = Filename.Substring(0,4);
-        string Day = Filename.Substring(4,3);
-        LocalDateTime = new DateTime(Convert.ToInt32(Year) - 1, 12, 31, Convert.ToInt32(TimeString.Substring(0, 2)), Convert.ToInt32(TimeString.Substring(2, 2)), 0);
-        LocalDateTime = LocalDateTime.AddDays(Convert.ToDouble(Day)).ToLocalTime();
+
+        string Time;
+        string Year;
+        string Day;
+        string Month;
+
+        if(Filename.EndsWith(".png"))	//Extract date from Env. Canada lightning data image file name
+        {
+            Time = Filename.Substring(12, 4);
+            Year = Filename.Substring(4,4);
+            Day =  Filename.Substring(10,2);
+            Month = Filename.Substring(8,2);
+            LocalDateTime = new DateTime(Convert.ToInt32(Year), Convert.ToInt32(Month), Convert.ToInt32(Day), Convert.ToInt32(Time.Substring(0, 2)), Convert.ToInt32(Time.Substring(2, 2)), 0);
+        }
+        else	//Extract date from NOAA satellite data image file name
+        {
+            Time = Filename.Substring(8, 4);
+            Year = Filename.Substring(0,4);
+            Day =  Filename.Substring(4,3);
+            LocalDateTime = new DateTime(Convert.ToInt32(Year) - 1, 12, 31, Convert.ToInt32(Time.Substring(0, 2)), Convert.ToInt32(Time.Substring(2, 2)), 0);
+            LocalDateTime = LocalDateTime.AddDays(Convert.ToDouble(Day)).ToLocalTime();
+        }
+        
+        
         return LocalDateTime;
     }
 

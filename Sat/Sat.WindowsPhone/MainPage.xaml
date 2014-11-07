@@ -23,7 +23,7 @@
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock Text="SATELLITE IMAGERY" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" >
-            <TextBlock x:Name="StationBox" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+                <TextBlock x:Name="StationBox" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
             </ScrollViewer>
         </StackPanel>
 
@@ -41,8 +41,8 @@
                         <AppBarButton Grid.Column="0" Icon="previous" x:Name="PrevButton" Tapped="PrevButton_Click" IsEnabled="False"/>
                         <AppBarButton Grid.Column="1" Icon="pause" x:Name="PlayPauseButton" Tapped="PlayPauseButton_Click" />
                         <AppBarButton Grid.Column="2" Icon="next" x:Name="NextButton" Tapped="NextButton_Click" IsEnabled="False"/>
-                        <TextBlock Grid.Column="3" x:Name="StatusBox" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" Margin="22,18,0,0" TextWrapping="Wrap"/>
-                        <ProgressBar Grid.Column="3" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="6" Width="150" Margin="22,36,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
+                        <TextBlock Grid.Column="3" x:Name="StatusBox" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="22,18,0,0" TextWrapping="Wrap" Width="170"/>
+                        <ProgressBar Grid.Column="3" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="6" Width="150" Margin="22,50,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Margin="0,70,0,19">
