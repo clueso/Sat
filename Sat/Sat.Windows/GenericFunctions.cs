@@ -525,6 +525,6 @@ static class GenericCodeClass
 
     public static bool IsError(string s)
     {
-        return s.Equals("Error.jpg");
+        return s.Equals("Error.png");
     }
 }

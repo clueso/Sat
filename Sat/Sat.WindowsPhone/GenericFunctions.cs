@@ -272,7 +272,7 @@ static class GenericCodeClass
 
             if (RetCode == -1)
             {
-                Filenames[i] = "Error.jpg";
+                Filenames[i] = "Error.png";
             }
         }
 
@@ -524,6 +524,6 @@ static class GenericCodeClass
 
     public static bool IsError(string s)
     {
-        return s.Equals("Error.jpg");
+        return s.Equals("Error.png");
     }
 }

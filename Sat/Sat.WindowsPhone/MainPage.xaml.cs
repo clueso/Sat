@@ -81,7 +81,7 @@ namespace Sat
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             Task GetFileNamesTask, DeleteFilesTask, DownloadFilesTask;
-            var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.jpg");
+            var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.png");
             //var imageUriForlogo = new Uri("ms-appdata:///local/abc.jpg");
             ImgBox.Source = new BitmapImage(LoadingimageUri);
 
@@ -139,10 +139,10 @@ namespace Sat
             else
             {
                 //Show Error Message
-                Uri ImageUri = new Uri("ms-appx:///Assets/Error.jpg");
+                Uri ImageUri = new Uri("ms-appx:///Assets/Error.png");
                 BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
-                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.jpg")
+                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
                     ImgBox.Source = new BitmapImage(ImageUri);
             }    
         }
@@ -339,7 +339,7 @@ namespace Sat
             if (Files.Count != 0 && ImageIndex >= 0 && ImageIndex <= Files.Count)
             {
                 DateTime LocalTime = GenericCodeClass.GetDateTimeFromFile(Files[ImageIndex]);
-                StatusBox.Text = "Image " + (ImageIndex + 1).ToString() + "/" + Files.Count.ToString() + "  " + LocalTime.ToString("dd MMM HH:mm");
+                StatusBox.Text = LocalTime.ToString("MMM dd HH:mm") + "   " + (ImageIndex + 1).ToString() + "/" + Files.Count.ToString();
                 //Uri ImageUri = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
                 //BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
@@ -382,10 +382,10 @@ namespace Sat
             }
             else
             {
-                Uri ImageUri = new Uri("ms-appx:///Assets/Error.jpg");
+                Uri ImageUri = new Uri("ms-appx:///Assets/Error.png");
                 BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
-                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.jpg")
+                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
                     ImgBox.Source = new BitmapImage(ImageUri);
                 StatusBox.Text = "Error Downloading Images";       
                 //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "Error.jpg");
