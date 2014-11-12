@@ -61,7 +61,7 @@ namespace Sat
                         break;
                     case 6://FlagStaff
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/fgz/img/";
-                        ChosenCityName = "FlagStaff";
+                        ChosenCityName = "Flagstaff";
                         break;
                     case 7://Glasgow
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/ggw/img/";
@@ -73,7 +73,7 @@ namespace Sat
                         break;
                     case 9://Hanford/San Joaquin Valley
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/hnx/img/";
-                        ChosenCityName = "Hanford, San Joaquin Valley";
+                        ChosenCityName = "Hanford/San Joaquin Valley";
                         break;
                     case 10://Las Vegas
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/vef/img/";
