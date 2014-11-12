@@ -35,97 +35,97 @@ namespace Sat
                 GenericCodeClass.LightningDataSelected = false;
                 switch (StationComboBox.SelectedIndex)
                 {
-                    case 0://Seattle
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
-                        ChosenCityName = "Seattle";
-                        break;
-                    case 1://Vancouver
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/vanc/img/";
-                        ChosenCityName = "Vancouver";
-                        break;
-                    case 2://Billings
+                    case 0://Billings
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/byz/img/";
                         ChosenCityName = "Billings";
                         break;
-                    case 3://Boise
+                    case 1://Boise
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/boi/img/";
                         ChosenCityName = "Boise";
                         break;
-                    case 4://Elko
+                    case 2://Elko
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/lkn/img/";
                         ChosenCityName = "Elko";
                         break;
-                    case 5://Eureka
+                    case 3://Eureka
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/eka/img/";
                         ChosenCityName = "Eureka";
                         break;
-                    case 6://FlagStaff
+                    case 4://FlagStaff
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/fgz/img/";
                         ChosenCityName = "Flagstaff";
                         break;
-                    case 7://Glasgow
+                    case 5://Glasgow
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/ggw/img/";
                         ChosenCityName = "Glasgow";
                         break;
-                    case 8://Great Falls
+                    case 6://Great Falls
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/tfx/img/";
                         ChosenCityName = "Great Falls";
                         break;
-                    case 9://Hanford/San Joaquin Valley
+                    case 7://Hanford/San Joaquin Valley
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/hnx/img/";
                         ChosenCityName = "Hanford/San Joaquin Valley";
                         break;
-                    case 10://Las Vegas
+                    case 8://Las Vegas
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/vef/img/";
                         ChosenCityName = "Las Vegas";
                         break;
-                    case 11://Los Angeles/Oxnard
+                    case 9://Los Angeles/Oxnard
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/lox/img/";
                         ChosenCityName = "Los Angeles/Oxnard";
                         break;
-                    case 12://Medford
+                    case 10://Medford
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/mfr/img/";
                         ChosenCityName = "Medford";
                         break;
-                    case 13://Missoula
+                    case 11://Missoula
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/mso/img/";
                         ChosenCityName = "Missoula";
                         break;
-                    case 14://Pendleton
+                    case 12://Pendleton
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/pdt/img/";
                         ChosenCityName = "Pendleton";
                         break;
-                    case 15://Phoenix
+                    case 13://Phoenix
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/psr/img/";
                         ChosenCityName = "Phoenix";
                         break;
-                    case 16://Pocatello
+                    case 14://Pocatello
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/pih/img/";
                         ChosenCityName = "Pocatello";
                         break;
-                    case 17://Portland
+                    case 15://Portland
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/pqr/img/";
                         ChosenCityName = "Portland";
                         break;
-                    case 18://Reno
+                    case 16:
+                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/flt/t7/img/";
+                        ChosenCityName = "Prince George";
+                        break;
+                    case 17://Reno
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/rev/img/";
                         ChosenCityName = "Reno";
                         break;
-                    case 19://Sacramento
+                    case 18://Sacramento
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/sto/img/";
                         ChosenCityName = "Sacramento";
                         break;
-                    case 20://Salt Lake City
+                    case 19://Salt Lake City
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/slc/img/";
                         ChosenCityName = "Salt Lake City";
                         break;
-                    case 21://San Diego
+                    case 20://San Diego
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/sgx/img/";
                         ChosenCityName = "San Diego";
                         break;
-                    case 22://San Francisco Bay/Monterey
+                    case 21://San Francisco Bay/Monterey
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/mtr/img/";
                         ChosenCityName = "San Francisco Bay/Monterey";
+                        break;
+                    case 22://Seattle
+                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
+                        ChosenCityName = "Seattle";
                         break;
                     case 23://Spokane
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/otx/img/";
@@ -135,9 +135,9 @@ namespace Sat
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/twc/img/";
                         ChosenCityName = "Tucson";
                         break;
-                    case 25:
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/flt/t7/img/";
-                        ChosenCityName = "Central BC";
+                    case 25://Vancouver
+                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/vanc/img/";
+                        ChosenCityName = "Vancouver";
                         break;
                     case 26:
                         ChosenCityURL = "http://weather.gc.ca/data/lightning_images/";
