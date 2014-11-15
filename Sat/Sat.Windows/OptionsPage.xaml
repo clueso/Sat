@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     IconSource="Assets/SmallLogo.png"
-    Title="Options"
+    x:Uid="OptionsPage_title" Title=""
     d:DesignWidth="346" Unloaded="OptionsPage_Unloaded" Loaded="OnLoaded">
 
     <!-- This StackPanel acts as a root panel for vertical layout of the content sections -->
@@ -18,7 +18,7 @@
         <!-- Content Section 1-->
         <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
             <!-- Section 1 header -->
-            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Station" />
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Station"/>
             <!-- Section 1 body -->
             <ComboBox x:Name="StationComboBox" Margin="0,17,0,0" Padding="10,0,27,0" Width="auto" SelectionChanged="StationComboBox_SelectionChanged" SelectedIndex="0">
                 <x:String>Billings</x:String>
