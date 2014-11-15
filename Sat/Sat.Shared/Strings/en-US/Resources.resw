@@ -153,10 +153,10 @@
   <data name="OptionsPage_LoopSpeed_txt" xml:space="preserve">
     <value>Loop Speed (time per image)</value>
   </data>
-  <data name="OptionsPage_Station_txt" xml:space="preserve">
+  <data name="OptionsPage_Station.Text" xml:space="preserve">
     <value>Station</value>
   </data>
-  <data name="OptionsPage_tile.Title" xml:space="preserve">
+  <data name="OptionsPage_tile" xml:space="preserve">
     <value>Options</value>
   </data>
   <data name="Options_menu_text" xml:space="preserve">
