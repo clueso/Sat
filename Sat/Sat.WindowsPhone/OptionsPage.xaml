@@ -60,7 +60,6 @@
                 <x:String>Spokane</x:String>
                 <x:String>Tucson</x:String>
                 <x:String>Vancouver</x:String>
-                <x:String>EC Lightning Data</x:String>
             </ComboBox>
         </StackPanel>
         <StackPanel Grid.Row="2" Margin="19,9.5,19,0">

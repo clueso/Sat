@@ -29,7 +29,7 @@
 
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <TextBlock x:Name="AboutPageTextBlock" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="This app gives you the weather in fantastic detail. If you like it, please contact ilovethisapp@trulyamazingapp.com" VerticalAlignment="Top" Height="481" Width="351" FontSize="20"/>
+            <TextBlock x:Name="AboutPageTextBlock" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="481" Width="351" FontSize="20"/>
 
         </Grid>
     </Grid>

@@ -256,11 +256,6 @@ namespace Sat
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/vanc/img/";
                         GenericCodeClass.HomeStationName = "Vancouver";
                         break;
-                    case 26:
-                        GenericCodeClass.HomeStation = "http://weather.gc.ca/data/lightning_images/";
-                        GenericCodeClass.HomeStationName = "EC Lightning Data";
-                        GenericCodeClass.LightningDataSelected = true;
-                        break;
                 }
 
                 if (GenericCodeClass.HomeStationName.Equals(CurrentCityName) == false)
