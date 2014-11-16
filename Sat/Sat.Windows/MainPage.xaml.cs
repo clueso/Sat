@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 //using Windows.UI.Notifications;
 //using Windows.Data.Xml.Dom;
 using Windows.UI.ApplicationSettings; //Settings flyout
@@ -40,6 +41,7 @@ namespace Sat
         private DispatcherTimer DownloadTimer;
         private OptionsPage OptionsPageFlyout = null;
         private AboutPage AboutPageFlyout = null;
+        private ResourceLoader StringLoader;
         //private XmlDocument LiveTileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileSquare150x150Image);
         //private static bool test = true; //Live tile        
         /// <summary>
@@ -74,6 +76,7 @@ namespace Sat
             OptionsPageFlyout.SettingsChanged += this.MainPage_SettingsChanged;
             LoopTimer = new DispatcherTimer();
             DownloadTimer = new DispatcherTimer();
+            StringLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
             LoopTimer.Tick += Timer_Handler;
             DownloadTimer.Tick += Timer_Handler;            
         }
@@ -280,8 +283,8 @@ namespace Sat
             {
                 if (GenericCodeClass.ExistingFiles.Contains(Files[i].ToString()) && GenericCodeClass.HomeStationChanged == false)
                     continue;
-                
-                StatusBox.Text = "Downloading image " + DownloadedFiles.ToString() + "/" + Files.Count.ToString();
+
+                StatusBox.Text = StringLoader.GetString("Download_txt_1") + DownloadedFiles.ToString() + StringLoader.GetString("Separator_slash") + Files.Count.ToString(); //"Downloading image "
                 FileDownloadProgBar.Visibility = Visibility.Visible;
                 RetCode = await GenericCodeClass.GetFileUsingHttp(GenericCodeClass.HomeStation + Files[i], ImageFolder, Files[i]);
                 //TaskArray[i] = GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
@@ -295,7 +298,7 @@ namespace Sat
                     ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[i]);
                     DownloadedFiles += 1;
                     FileDownloadProgBar.Value += 1;
-                    StatusBox.Text += "Finished.";
+                    StatusBox.Text += StringLoader.GetString("Finished_txt"); // "Finished.";
                 }
             }
 
@@ -332,7 +335,7 @@ namespace Sat
             if (Files.Count != 0 && ImageIndex >= 0 && ImageIndex <= Files.Count)
             {
                 DateTime LocalTime = GenericCodeClass.GetDateTimeFromFile(Files[ImageIndex]);
-                StatusBox.Text = LocalTime.ToString("MMM dd HH:mm") + "   " + (ImageIndex + 1).ToString() + "/" + Files.Count.ToString();
+                StatusBox.Text = LocalTime.ToString("MMM dd HH:mm") + "   " + (ImageIndex + 1).ToString() + StringLoader.GetString("Separator_slash") + Files.Count.ToString();
                 //Uri ImageUri = new Uri("ms-appdata:///temp/Images/" + Files[CurrImgIndex].ToString());
                 //BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
@@ -380,7 +383,7 @@ namespace Sat
 
                 if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
                     ImgBox.Source = new BitmapImage(ImageUri);
-                StatusBox.Text = "Error Downloading Images";       
+                StatusBox.Text = StringLoader.GetString("Err_Download");// "Error Downloading Images";       
                 //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "Error.jpg");
                 //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
             }
@@ -436,9 +439,9 @@ namespace Sat
         {
             //Do we also need privacy statement, about etc?
             args.Request.ApplicationCommands.Add(new SettingsCommand(
-                "Options", "Options", (handler) => ShowCustomSettingFlyout()));
+                StringLoader.GetString("Options_menu_text"), StringLoader.GetString("Options_menu_text"), (handler) => ShowCustomSettingFlyout()));
             args.Request.ApplicationCommands.Add(new SettingsCommand(
-                "About", "About", (handler) => ShowAboutFlyout()));            
+                StringLoader.GetString("About_menu_text"), StringLoader.GetString("About_menu_text"), (handler) => ShowAboutFlyout()));            
         }
 
         private void ShowCustomSettingFlyout()
