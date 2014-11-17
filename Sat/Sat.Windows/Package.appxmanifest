@@ -3,7 +3,7 @@
   <Identity Name="a53267f9-8037-4da5-8633-cc645f1b77aa" Publisher="CN=Daniel" Version="1.0.0.0" />
   <Properties>
     <DisplayName>Sat.Windows</DisplayName>
-    <PublisherDisplayName>Daniel</PublisherDisplayName>
+    <PublisherDisplayName>Pomegranate Apps</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
