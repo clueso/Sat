@@ -53,14 +53,13 @@
                     <ColumnDefinition Width="75" />
                     <ColumnDefinition Width="75" />
                     <ColumnDefinition Width="75" />
-                    <ColumnDefinition Width="75" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <AppBarButton Grid.Column="0" Icon="Previous" x:Name="PrevButton" Tapped="PrevButton_Click" IsEnabled="False"/>
                 <AppBarButton Grid.Column="1" Icon="Pause" x:Name="PlayPauseButton" Tapped="PlayPauseButton_Click"/>
-                <AppBarButton Grid.Column="2" Icon="Next" x:Name="NextButton" Tapped="NextButton_Click" IsEnabled="False" Grid.ColumnSpan="2" Margin="2,0,0,0"/>
-                <TextBlock Grid.Column="4" x:Name="StatusBox" Margin="40,18,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="14"/>
-                <ProgressBar Grid.Column="4" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="4" Width="200" Margin="40,40,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
+                <AppBarButton Grid.Column="2" Icon="Next" x:Name="NextButton" Tapped="NextButton_Click" IsEnabled="False" Grid.ColumnSpan="2" Margin="2,-4,0,0"/>
+                <TextBlock Grid.Column="3" x:Name="StatusBox" Margin="40,18,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="14"/>
+                <ProgressBar Grid.Column="3" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="4" Width="200" Margin="40,40,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
             </Grid>
         </StackPanel>
         <!-- Image -->
@@ -71,7 +70,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <ScrollViewer Grid.Column="0" x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" MaxZoomFactor="3" Margin="0,0,0,0">
-                    <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left" Source="Assets/2014321_0230vis.jpg" />
+                    <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                 </ScrollViewer>
                 <UI:AdControl x:Name="AdBox" Grid.Column="1" ApplicationId="d25517cb-12d4-4699-8bdc-52040c712cab" AdUnitId="10043104" HorizontalAlignment="Left" Height="449" Margin="60,0,0,0" Width="350" VerticalAlignment="Top" ErrorOccurred="AdBox_ErrorOccurred"/>
             </Grid>

@@ -334,5 +334,10 @@ namespace Sat
         {
             this.Frame.Navigate(typeof(AboutPage));
         }
+
+        private void AdBox_ErrorOcurred(object sender, Microsoft.Advertising.Mobile.Common.AdErrorEventArgs e)
+        {
+            AdBox.Visibility = Visibility.Collapsed;
+        }
     }
 }
