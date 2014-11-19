@@ -385,5 +385,10 @@ namespace Sat
             if (GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Start();
         }
+
+        private void AdBox_ErrorOccurred(object sender, Microsoft.Advertising.WinRT.UI.AdErrorEventArgs e)
+        {
+            AdBox.Visibility = Visibility.Collapsed;
+        }
     }
 }
