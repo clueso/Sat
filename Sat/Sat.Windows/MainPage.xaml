@@ -28,7 +28,7 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="120"/>
+            <RowDefinition Height="140"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -63,7 +63,7 @@
             </Grid>
         </StackPanel>
         <!-- Image -->
-        <StackPanel Grid.Row="3" Margin="120,0,40,50">
+        <StackPanel Grid.Row="3" Margin="120,0,40,40">
             <Grid Height="490" Margin="0,0,40,40">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="725" />
@@ -75,6 +75,5 @@
                 <UI:AdControl x:Name="AdBox" Grid.Column="1" ApplicationId="d25517cb-12d4-4699-8bdc-52040c712cab" AdUnitId="10043104" HorizontalAlignment="Left" Height="449" Margin="60,0,0,0" Width="350" VerticalAlignment="Top" ErrorOccurred="AdBox_ErrorOccurred"/>
             </Grid>
         </StackPanel>
-        <UI:AdControl ApplicationId="d25517cb-12d4-4699-8bdc-52040c712cab" AdUnitId="10043104" HorizontalAlignment="Center" Height="68" Margin="310,464,176,0" Grid.Row="3" VerticalAlignment="Top" Width="880"/>
     </Grid>
 </Page>
