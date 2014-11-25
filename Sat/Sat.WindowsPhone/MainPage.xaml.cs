@@ -113,9 +113,18 @@ namespace Sat
             LoopTimer.Interval = GenericCodeClass.LoopInterval; //Create a timer that trigger every 1 s
             DownloadTimer.Interval = GenericCodeClass.DownloadInterval; //Create a timer that triggers every 30 min
 
-            if (!DownloadFilesTask.IsFaulted)
+            try 
             {
                 await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
+            }
+            catch
+            {
+
+            }
+            
+
+            if (!DownloadFilesTask.IsFaulted)
+            {
                 if (GenericCodeClass.IsLoopPaused == false)
                 {
                     LoopTimer.Start();                    
@@ -133,7 +142,7 @@ namespace Sat
                 Uri ImageUri = new Uri("ms-appx:///Assets/Error.png");
                 BitmapImage bitmap = ImgBox.Source as BitmapImage;
 
-                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
+                if (bitmap != null && bitmap.UriSource != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
                     ImgBox.Source = new BitmapImage(ImageUri);
             }    
         }
@@ -320,11 +329,6 @@ namespace Sat
             LoopTimer.Start();
         }
 
-        private void DownloadButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-
-        }
-
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(OptionsPage));
@@ -335,9 +339,6 @@ namespace Sat
             this.Frame.Navigate(typeof(AboutPage));
         }
 
-        private void AdBox_ErrorOcurred(object sender, Microsoft.Advertising.Mobile.Common.AdErrorEventArgs e)
-        {
-            AdBox.Visibility = Visibility.Collapsed;
-        }
+        
     }
 }

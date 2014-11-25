@@ -72,7 +72,6 @@
                 <ScrollViewer Grid.Column="0" x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" MaxZoomFactor="3" Margin="0,0,0,0">
                     <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                 </ScrollViewer>
-                <UI:AdControl x:Name="AdBox" Grid.Column="1" ApplicationId="d25517cb-12d4-4699-8bdc-52040c712cab" AdUnitId="10043104" HorizontalAlignment="Left" Height="449" Margin="60,0,0,0" Width="350" VerticalAlignment="Top" ErrorOccurred="AdBox_ErrorOccurred"/>
             </Grid>
         </StackPanel>
     </Grid>

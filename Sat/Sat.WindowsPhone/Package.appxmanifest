@@ -4,7 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="c6a1cd0b-1469-4fa6-9a91-9c85935cd1a3" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Sat.WindowsPhone</DisplayName>
-    <PublisherDisplayName>Daniel</PublisherDisplayName>
+    <PublisherDisplayName>Scirocco Software</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
@@ -16,7 +16,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Sat.WindowsPhone.App">
-      <m3:VisualElements DisplayName="Satellite Imagery" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Sat.WindowsPhone" ForegroundText="light" BackgroundColor="transparent">
+      <m3:VisualElements DisplayName="Satellite Imagery" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="The Satellite Imagery app provides a quick source of advanced weather information from the National Oceanic and Atmospheric Administration (NOAA) for mobile users on the go." ForegroundText="light" BackgroundColor="transparent">
         <m3:DefaultTile Square71x71Logo="Assets\Square71x71Logo.png">
           <m3:ShowNameOnTiles>
             <m3:ShowOn Tile="square150x150Logo" />

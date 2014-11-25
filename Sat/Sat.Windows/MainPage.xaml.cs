@@ -71,7 +71,8 @@ namespace Sat
             LoopTimer = new DispatcherTimer();
             DownloadTimer = new DispatcherTimer();
             LoopTimer.Tick += Timer_Handler;
-            DownloadTimer.Tick += Timer_Handler;            
+            DownloadTimer.Tick += Timer_Handler;
+            //Microsoft.Advertising.WinRT.UI.AdSettingsFlyout.HeaderBackground = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF,0xA0,0x00,0x00));
         }
 
         /// <summary>
@@ -103,10 +104,18 @@ namespace Sat
 
             LoopTimer.Interval = GenericCodeClass.LoopInterval; //Create a timer that trigger every 1 s
             DownloadTimer.Interval = GenericCodeClass.DownloadInterval; //Create a timer that triggers every 30 min
-            
-            if (!DownloadFilesTask.IsFaulted)
+
+            try
             {
                 await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
+            }
+            catch
+            {
+
+            }
+
+            if (!DownloadFilesTask.IsFaulted)
+            {
                 LoopTimer.Start();
                 DownloadTimer.Start();
             }
@@ -176,7 +185,6 @@ namespace Sat
             NextButton.IsEnabled = !NextButton.IsEnabled;
             PrevButton.IsEnabled = !PrevButton.IsEnabled;
             GenericCodeClass.IsLoopPaused = !GenericCodeClass.IsLoopPaused;
-            
         }
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
@@ -312,11 +320,6 @@ namespace Sat
             this.Frame.Navigate(typeof(SettingsPage));
         }
 
-        private void DownloadButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-
-        }
-
         //Setting flyout
         private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
         {
@@ -366,11 +369,20 @@ namespace Sat
             await GetFileNamesTask;
             DownloadFilesTask = DownloadFiles();
 
-            if (!DownloadFilesTask.IsFaulted)
+            try
             {
                 await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
             }
-            else
+            catch
+            {
+
+            }
+
+            if (DownloadFilesTask.IsFaulted)
+            //{
+            //    await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
+            //}
+            //else
             {
                 //Show Error Message
                 Uri ImageUri = new Uri("ms-appx:///Assets/Error.png");
@@ -382,13 +394,14 @@ namespace Sat
 
             LoopTimer.Interval = GenericCodeClass.LoopInterval;
 
-            if (GenericCodeClass.IsLoopPaused == false)
+            if (GenericCodeClass.IsLoopPaused == false && !DownloadFilesTask.IsFaulted)
                 LoopTimer.Start();
         }
 
-        private void AdBox_ErrorOccurred(object sender, Microsoft.Advertising.WinRT.UI.AdErrorEventArgs e)
-        {
-            AdBox.Visibility = Visibility.Collapsed;
-        }
+        //private void AdBox_ErrorOccurred(object sender, Microsoft.Advertising.WinRT.UI.AdErrorEventArgs e)
+        //{
+        //    AdBox.Visibility = Visibility.Collapsed;
+        //}
+
     }
 }
