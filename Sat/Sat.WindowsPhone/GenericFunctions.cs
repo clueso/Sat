@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 static class GenericCodeClass
 {
     private static TimeSpan LoopTimerInterval = new TimeSpan(0,0,0,0,500); //Loop timer interval in seconds
-    private static TimeSpan DownloadTimerInterval = new TimeSpan(3, 0, 0); //Download time interval in minutes
+    private static TimeSpan DownloadTimerInterval = new TimeSpan(0, 15, 0); //Download time interval in minutes
     private static string HomeStationURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
     private static string HomeStationString ="Seattle";
     private static bool IsHomeStationChanged = true;
@@ -137,47 +137,47 @@ static class GenericCodeClass
 
         var HttpClientTask = Client.GetAsync(URI);
 
-        string RegExpString = ">\\s*";
+        //string RegExpString = ">\\s*";
         DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
         DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
         DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(DownloadPeriod, 0, 0));    //Subtract 3 hours from the Current Time
         TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
 
-        if (StartDateTime.Year != CurrDateTime.Year)
-            RegExpString = RegExpString + "(" + CurrDateTime.Year.ToString() + "|" + StartDateTime.Year.ToString() + ")";
-        else
-            RegExpString = RegExpString + CurrDateTime.Year.ToString();
+        //if (StartDateTime.Year != CurrDateTime.Year)
+        //    RegExpString = RegExpString + "(" + CurrDateTime.Year.ToString() + "|" + StartDateTime.Year.ToString() + ")";
+        //else
+        //    RegExpString = RegExpString + CurrDateTime.Year.ToString();
 
-        if (StartDateTime.Day != CurrDateTime.Day)
-        {
-            RegExpString = RegExpString + "(" + NoOfDays.Days.ToString() + "|";
-            NoOfDays = StartDateTime.Subtract(StartOfYearDate);
-            RegExpString = RegExpString + NoOfDays.Days.ToString() + ")_(";
-        }
-        else
-            RegExpString = RegExpString + NoOfDays.Days.ToString() + "_(";
+        //if (StartDateTime.Day != CurrDateTime.Day)
+        //{
+        //    RegExpString = RegExpString + "(" + NoOfDays.Days.ToString() + "|";
+        //    NoOfDays = StartDateTime.Subtract(StartOfYearDate);
+        //    RegExpString = RegExpString + NoOfDays.Days.ToString() + ")_(";
+        //}
+        //else
+        //    RegExpString = RegExpString + NoOfDays.Days.ToString() + "_(";
 
-        if (StartDateTime.Hour > CurrDateTime.Hour)  //When the start and current time are on either side of midnight
-        {
-            for (i = StartDateTime.Hour; i <= 23; i++)
-                RegExpString = RegExpString + i.ToString("D2") + "|";
+        //if (StartDateTime.Hour > CurrDateTime.Hour)  //When the start and current time are on either side of midnight
+        //{
+        //    for (i = StartDateTime.Hour; i <= 23; i++)
+        //        RegExpString = RegExpString + i.ToString("D2") + "|";
 
-            for (i = 0; i < CurrDateTime.Hour; i++)
-                RegExpString = RegExpString + i.ToString("D2") + "|";
-        }
-        else
-        {
-            for (i = StartDateTime.Hour; i < CurrDateTime.Hour; i++)
-                RegExpString = RegExpString + i.ToString("D2") + "|";
-        }
+        //    for (i = 0; i < CurrDateTime.Hour; i++)
+        //        RegExpString = RegExpString + i.ToString("D2") + "|";
+        //}
+        //else
+        //{
+        //    for (i = StartDateTime.Hour; i < CurrDateTime.Hour; i++)
+        //        RegExpString = RegExpString + i.ToString("D2") + "|";
+        //}
 
-        RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
+        //RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
 
         StartDateTimeString = StartDateTime.Year.ToString() + StartDateTime.Subtract(StartOfYearDate).Days.ToString()
             + "_" + StartDateTime.Hour.ToString("D2") + StartDateTime.Minute.ToString("D2") + "vis.jpg";
         
         FileNames.Add(StartDateTimeString);
-        RegExp = new Regex(RegExpString);
+        RegExp = new Regex(">[0-9]+_[0-9]+vis.jpg<");
 
         try
         {
@@ -194,7 +194,7 @@ static class GenericCodeClass
         if (Message.IsSuccessStatusCode)
         {
             int MessageLength = Message.Content.ToString().Length;
-            MatchCollection Matches = RegExp.Matches(Message.Content.ToString().Substring(MessageLength/2));
+            MatchCollection Matches = RegExp.Matches(Message.Content.ToString());//.Substring(MessageLength/2));
             int Location;
             
             if (Matches.Count > 0)

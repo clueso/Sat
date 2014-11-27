@@ -84,18 +84,18 @@ namespace Sat
             ImgBox.Source = new BitmapImage(LoadingimageUri);
 
             GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
+            SetNavigationButtonState(GenericCodeClass.IsLoopPaused, false);
+            //if (GenericCodeClass.IsLoopPaused == false)
+            //{
+            //    PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
+            //}
+            //else
+            //{
+            //    PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);
+            //}
 
-            if (GenericCodeClass.IsLoopPaused == false)
-            {
-                PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
-            }
-            else
-            {
-                PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);
-            }
-
-            NextButton.IsEnabled = GenericCodeClass.IsLoopPaused;
-            PrevButton.IsEnabled = GenericCodeClass.IsLoopPaused;
+            //NextButton.IsEnabled = GenericCodeClass.IsLoopPaused;
+            //PrevButton.IsEnabled = GenericCodeClass.IsLoopPaused;
 
             StationBox.Text = GenericCodeClass.HomeStationName;
 
@@ -129,11 +129,8 @@ namespace Sat
                 {
                     LoopTimer.Start();                    
                 }
-                else
-                {
-                    PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);
-                }
-                                   
+                
+                SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);                   
                 DownloadTimer.Start();
             }
             else
@@ -189,17 +186,18 @@ namespace Sat
             if (GenericCodeClass.IsLoopPaused == false)
             {
                 LoopTimer.Stop();
-                PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);                
+                //PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);                
             }
             else
             {
-                PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
+                //PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
                 LoopTimer.Start();
             }
 
-            NextButton.IsEnabled = !NextButton.IsEnabled;
-            PrevButton.IsEnabled = !PrevButton.IsEnabled;
+            //NextButton.IsEnabled = !NextButton.IsEnabled;
+            //PrevButton.IsEnabled = !PrevButton.IsEnabled;
             GenericCodeClass.IsLoopPaused = !GenericCodeClass.IsLoopPaused;
+            SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
             
         }
 
@@ -339,6 +337,24 @@ namespace Sat
             this.Frame.Navigate(typeof(AboutPage));
         }
 
+        //Set the state for the navigation buttons. 
+        //EnableAll is used to enable/disable all the buttons. If EnableAll is true all buttons are enabled depending on the. 
+        //state of the loop. Otherwise they are all disabled.
+        private void SetNavigationButtonState(bool LoopPaused, bool EnableAll)
+        {
+            if (EnableAll)
+            {
+                if (LoopPaused)
+                    PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);
+                else
+                    PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
+            }
+
+            PlayPauseButton.IsEnabled = EnableAll;
+            NextButton.IsEnabled = EnableAll && LoopPaused;
+            PrevButton.IsEnabled = EnableAll && LoopPaused;
+
+        }
         
     }
 }

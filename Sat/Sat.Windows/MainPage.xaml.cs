@@ -90,8 +90,9 @@ namespace Sat
         {
             Task GetFileNamesTask, DownloadFilesTask;
             var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.png");
-            ImgBox.Source = new BitmapImage(LoadingimageUri); 
-            
+            ImgBox.Source = new BitmapImage(LoadingimageUri);
+
+            SetNavigationButtonState(GenericCodeClass.IsLoopPaused, false);
             GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
             if(!GenericCodeClass.IsAppResuming)
                 await GenericCodeClass.DeleteAllFiles(ImageFolder);
@@ -116,8 +117,10 @@ namespace Sat
 
             if (!DownloadFilesTask.IsFaulted)
             {
-                LoopTimer.Start();
+                if(!GenericCodeClass.IsLoopPaused)
+                    LoopTimer.Start();
                 DownloadTimer.Start();
+                SetNavigationButtonState(GenericCodeClass.IsLoopPaused,true);
             }
             else
             {
@@ -174,17 +177,18 @@ namespace Sat
             if (GenericCodeClass.IsLoopPaused == false)
             {
                 LoopTimer.Stop();
-                PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);                
+                //PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);                
             }
             else
             {
-                PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
+                //PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
                 LoopTimer.Start();
             }
 
-            NextButton.IsEnabled = !NextButton.IsEnabled;
-            PrevButton.IsEnabled = !PrevButton.IsEnabled;
+            //NextButton.IsEnabled = !NextButton.IsEnabled;
+            //PrevButton.IsEnabled = !PrevButton.IsEnabled;
             GenericCodeClass.IsLoopPaused = !GenericCodeClass.IsLoopPaused;
+            SetNavigationButtonState(GenericCodeClass.IsLoopPaused,true);
         }
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
@@ -228,6 +232,7 @@ namespace Sat
             FileDownloadProgBar.Maximum = Files.Count;
             FileDownloadProgBar.Minimum = 0;
             FileDownloadProgBar.Value = 0;
+            //SetNavigationButtonState(GenericCodeClass.IsLoopPaused, false);
 
             for (i = 0; i < Files.Count; i++)
             {
@@ -349,7 +354,9 @@ namespace Sat
         {
             Task GetFileNamesTask, DeleteFilesTask, DownloadFilesTask;
             var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.png");
-            
+
+            SetNavigationButtonState(GenericCodeClass.IsLoopPaused, false);
+
             if(GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Stop();
 
@@ -368,6 +375,8 @@ namespace Sat
             }
             await GetFileNamesTask;
             DownloadFilesTask = DownloadFiles();
+
+            LoopTimer.Interval = GenericCodeClass.LoopInterval;
 
             try
             {
@@ -391,11 +400,35 @@ namespace Sat
                 if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
                     ImgBox.Source = new BitmapImage(ImageUri);
             }
+            else
+            {
+                SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
+                if (GenericCodeClass.IsLoopPaused == false)
+                    LoopTimer.Start();
+            }
 
-            LoopTimer.Interval = GenericCodeClass.LoopInterval;
+            
 
-            if (GenericCodeClass.IsLoopPaused == false && !DownloadFilesTask.IsFaulted)
-                LoopTimer.Start();
+            
+        }
+
+        //Set the state for the navigation buttons. 
+        //EnableAll is used to enable/disable all the buttons. If EnableAll is true all buttons are enabled depending on the. 
+        //state of the loop. Otherwise they are all disabled.
+        private void SetNavigationButtonState(bool LoopPaused, bool EnableAll)
+        {
+            if (EnableAll)
+            {
+                if (LoopPaused)
+                    PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);
+                else
+                    PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
+            }
+            
+            PlayPauseButton.IsEnabled = EnableAll;
+            NextButton.IsEnabled = EnableAll && LoopPaused;
+            PrevButton.IsEnabled = EnableAll && LoopPaused;
+            
         }
 
         //private void AdBox_ErrorOccurred(object sender, Microsoft.Advertising.WinRT.UI.AdErrorEventArgs e)
