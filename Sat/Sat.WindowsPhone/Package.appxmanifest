@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="c6a1cd0b-1469-4fa6-9a91-9c85935cd1a3" Publisher="CN=Daniel" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="c6a1cd0b-1469-4fa6-9a91-9c85935cd1a3" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="9241SciroccoSoftware.SatelliteImagery" Publisher="CN=B0C3EE66-7C4D-418C-B4FE-1B15D5CAFF9C" Version="1.1.0.2" />
+  <mp:PhoneIdentity PhoneProductId="cef5ce99-98da-43cd-aadf-20c5933ef483" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Sat.WindowsPhone</DisplayName>
+    <DisplayName>Satellite Imagery</DisplayName>
     <PublisherDisplayName>Scirocco Software</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>

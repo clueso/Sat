@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="a53267f9-8037-4da5-8633-cc645f1b77aa" Publisher="CN=Daniel" Version="1.0.0.0" />
+  <Identity Name="9241SciroccoSoftware.SatelliteImagery" Publisher="CN=B0C3EE66-7C4D-418C-B4FE-1B15D5CAFF9C" Version="1.1.0.2" />
   <Properties>
-    <DisplayName>Sat.Windows</DisplayName>
+    <DisplayName>Satellite Imagery</DisplayName>
     <PublisherDisplayName>Scirocco Software</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
