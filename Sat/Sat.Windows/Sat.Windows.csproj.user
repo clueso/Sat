@@ -4,5 +4,6 @@
     <RemoteDebugMachine>DANIEL-SURFACE</RemoteDebugMachine>
     <UseAuthentication>true</UseAuthentication>
     <RemoteDebugEnabled>false</RemoteDebugEnabled>
+    <UseSimulator>true</UseSimulator>
   </PropertyGroup>
 </Project>

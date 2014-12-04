@@ -29,8 +29,22 @@
 
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <TextBlock x:Name="AboutPageTextBlock" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="This app gives you the weather in fantastic detail. If you like it, please contact ilovethisapp@trulyamazingapp.com" VerticalAlignment="Top" Height="481" Width="351" FontSize="20"/>
-
+            <RichTextBlock x:Name="AboutPageTextBlock" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="481" Width="351" FontSize="19">
+                <Paragraph>
+                    <Run Text="The Satellite Imagery app provides a quick source of advanced weather information for mobile users on the go."/>
+                    <LineBreak/>
+                    <LineBreak/>
+                    <Run Text="All data are from the National Oceanic and Atmospheric Administration (NOAA). The app makes no attempt to ensure the quality and accuracy of the data."/>
+                    <LineBreak/>
+                    <LineBreak/>
+                    <Run Text="The internet connection of the phone is used to access data. No information about the user or the phone is collected, stored, or shared."/>
+                    <LineBreak/>
+                    <LineBreak/>
+                    <Run Text="We would love to hear your feedback on the app. If you have any questions, comments, or suggestions, please send an email to "/>
+                    <Hyperlink Click="HyperLink_onClick">scirocco_sw@outlook.com</Hyperlink>
+                    <Run Text="."/>
+                </Paragraph>
+            </RichTextBlock>
         </Grid>
     </Grid>
 </Page>
