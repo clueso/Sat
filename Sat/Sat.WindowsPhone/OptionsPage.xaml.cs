@@ -149,7 +149,7 @@ namespace Sat
         {
             if (StationComboBox != null)
             {
-                GenericCodeClass.LightningDataSelected = false;
+                //GenericCodeClass.LightningDataSelected = false;
                 switch (StationComboBox.SelectedIndex)
                 {
                     case 0://Billings
