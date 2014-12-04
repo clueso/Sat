@@ -113,7 +113,7 @@ namespace Sat
         {
             if (StationComboBox != null)
             {
-                GenericCodeClass.LightningDataSelected = false;
+                //GenericCodeClass.LightningDataSelected = false;
                 switch (StationComboBox.SelectedIndex)
                 {
                     case 0://Seattle
@@ -220,11 +220,11 @@ namespace Sat
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/flt/t7/img/";
                         GenericCodeClass.HomeStationName = "Floaters";
                         break;
-                    case 26:
-                        GenericCodeClass.HomeStation = "http://weather.gc.ca/data/lightning_images/";
-                        GenericCodeClass.HomeStationName = "Lightning";
-                        GenericCodeClass.LightningDataSelected = true;
-                        break;
+                    //case 26:
+                    //    GenericCodeClass.HomeStation = "http://weather.gc.ca/data/lightning_images/";
+                    //    GenericCodeClass.HomeStationName = "Lightning";
+                    //    GenericCodeClass.LightningDataSelected = true;
+                    //    break;
                 }
             }
 

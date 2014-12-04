@@ -17,7 +17,7 @@ static class GenericCodeClass
     private static string HomeStationURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
     private static string HomeStationString ="Seattle";
     private static bool IsHomeStationChanged = false;
-    private static bool IsECLightningDataSelected = false;
+    //private static bool IsECLightningDataSelected = false;
     private static HttpClient Client;
     private static HttpResponseMessage Message;
     private static int DownloadPeriod = 3;
@@ -72,11 +72,11 @@ static class GenericCodeClass
     }
 
     //Provide access to private property specifying whether home station has changed
-    public static bool LightningDataSelected
-    {
-        get { return IsECLightningDataSelected; }
-        set { IsECLightningDataSelected = value; }
-    }
+    //public static bool LightningDataSelected
+    //{
+    //    get { return IsECLightningDataSelected; }
+    //    set { IsECLightningDataSelected = value; }
+    //}
 
     public static DateTime GetDateTimeFromFile(string Filename)
     {
@@ -127,11 +127,11 @@ static class GenericCodeClass
         
         FileNames.Clear();
 
-        if (LightningDataSelected == true)
-        {
-            GenericCodeClass.GetWeatherDataURLs(FileNames, 6);
-            return;
-        }
+        //if (LightningDataSelected == true)
+        //{
+        //    GenericCodeClass.GetWeatherDataURLs(FileNames, 6);
+        //    return;
+        //}
 
         if (Client == null)
             Client = new HttpClient();
@@ -219,24 +219,24 @@ static class GenericCodeClass
         }
     }
 
-    public static void GetWeatherDataURLs(List<string> FileNames, int NoOfFiles)
-    {
-        DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
-        int i;
+    //public static void GetWeatherDataURLs(List<string> FileNames, int NoOfFiles)
+    //{
+    //    DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
+    //    int i;
 
-        //No need to save previous files as that is done in the function GetLatestFiles()
+    //    //No need to save previous files as that is done in the function GetLatestFiles()
 
-        CurrDateTime = CurrDateTime.AddMinutes(-CurrDateTime.Minute % 10);
+    //    CurrDateTime = CurrDateTime.AddMinutes(-CurrDateTime.Minute % 10);
 
 
-        for (i = 0; i < NoOfFiles; i++)
-        {
-            FileNames.Add("PAC_" + CurrDateTime.Year.ToString() + CurrDateTime.Month.ToString("D2") + CurrDateTime.Day.ToString("D2") + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + ".png");
-            CurrDateTime = CurrDateTime.AddMinutes(-10);
-        }
+    //    for (i = 0; i < NoOfFiles; i++)
+    //    {
+    //        FileNames.Add("PAC_" + CurrDateTime.Year.ToString() + CurrDateTime.Month.ToString("D2") + CurrDateTime.Day.ToString("D2") + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + ".png");
+    //        CurrDateTime = CurrDateTime.AddMinutes(-10);
+    //    }
 
-        FileNames.Reverse();
-    }
+    //    FileNames.Reverse();
+    //}
 
     public static async Task<int> GetFileUsingHttp(string URL, StorageFolder Folder, string FileName)
     {
@@ -298,34 +298,34 @@ static class GenericCodeClass
 
     }
 
-    public static async Task<WriteableBitmap> GetWriteableBitmap(StorageFolder ImageFolder, string FileName)
-    {
-        StorageFile ImageFile;
-        WriteableBitmap ImageBitmap;
-        //BitmapImage Image = new BitmapImage();
+    //public static async Task<WriteableBitmap> GetWriteableBitmap(StorageFolder ImageFolder, string FileName)
+    //{
+    //    StorageFile ImageFile;
+    //    WriteableBitmap ImageBitmap;
+    //    //BitmapImage Image = new BitmapImage();
 
-        if(ImageFolder == null)
-        {
-             ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-        }
+    //    if(ImageFolder == null)
+    //    {
+    //         ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+    //    }
 
-        ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
-        ImageBitmap = await LoadWriteableBitmap(ImageFile);
+    //    ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
+    //    ImageBitmap = await LoadWriteableBitmap(ImageFile);
                
-        return ImageBitmap;
-    }
+    //    return ImageBitmap;
+    //}
 
-    private static async Task<WriteableBitmap> LoadWriteableBitmap(StorageFile file)
-    {
-        WriteableBitmap ImageBitmap;
-        FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
+    //private static async Task<WriteableBitmap> LoadWriteableBitmap(StorageFile file)
+    //{
+    //    WriteableBitmap ImageBitmap;
+    //    FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
 
-        ImageBitmap = new WriteableBitmap(720, 480);//Image.PixelWidth,Image.PixelHeight);
-        ImageBitmap.SetSource(stream);
+    //    ImageBitmap = new WriteableBitmap(720, 480);//Image.PixelWidth,Image.PixelHeight);
+    //    ImageBitmap.SetSource(stream);
 
-        return ImageBitmap;
+    //    return ImageBitmap;
 
-    }
+    //}
 
     public static async Task DeleteAllFiles(StorageFolder ImageFolder)
     {
