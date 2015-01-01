@@ -173,7 +173,7 @@ static class GenericCodeClass
 
         //RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
 
-        StartDateTimeString = StartDateTime.Year.ToString() + StartDateTime.Subtract(StartOfYearDate).Days.ToString()
+        StartDateTimeString = StartDateTime.Year.ToString() + StartDateTime.Subtract(StartOfYearDate).Days.ToString("D3")
             + "_" + StartDateTime.Hour.ToString("D2") + StartDateTime.Minute.ToString("D2") + "vis.jpg";
         
         FileNames.Add(StartDateTimeString);
