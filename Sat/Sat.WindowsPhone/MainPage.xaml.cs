@@ -16,7 +16,6 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Resources;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -32,11 +31,10 @@ namespace Sat
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private static List<string> Files = new List<string>();
         private static int CurrImgIndex = -1;
-        //private static WriteableBitmap ImgSource;
         private StorageFolder ImageFolder;
         private DispatcherTimer LoopTimer;
         private DispatcherTimer DownloadTimer;
-        private ResourceLoader StringLoader;
+        
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -64,7 +62,6 @@ namespace Sat
 
             LoopTimer = new DispatcherTimer();
             DownloadTimer = new DispatcherTimer();
-			StringLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
             LoopTimer.Tick += Timer_Handler;
             DownloadTimer.Tick += Timer_Handler;
         }
@@ -84,7 +81,6 @@ namespace Sat
         {
             Task GetFileNamesTask, DeleteFilesTask, DownloadFilesTask;
             var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.png");
-            //var imageUriForlogo = new Uri("ms-appdata:///local/abc.jpg");
             ImgBox.Source = new BitmapImage(LoadingimageUri);
 
             GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
@@ -106,13 +102,6 @@ namespace Sat
             if(GenericCodeClass.HomeStationChanged == true)
             {
                 DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
-                //Live tile
-                //GenericCodeClass.HomeStationChanged = false;
-                //XmlNodeList tileImageAttributes = LiveTileXml.GetElementsByTagName("image");
-                //((XmlElement)tileImageAttributes[0]).SetAttribute("src", "ms-appx:///assets/Error.jpg");
-                //TileNotification tileNotification = new TileNotification(LiveTileXml);
-                //TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
-                //End Live Tile
                 GenericCodeClass.HomeStationChanged = false;
                 await DeleteFilesTask;
             }
@@ -242,7 +231,6 @@ namespace Sat
 
         private async Task DownloadFiles()
         {
-            //StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
             int i;
             int RetCode;
             int DownloadedFiles = 1;
@@ -260,7 +248,7 @@ namespace Sat
                 if (GenericCodeClass.ExistingFiles.Contains(Files[i].ToString()) && GenericCodeClass.HomeStationChanged == false)
                     continue;
 
-                StatusBox.Text = StringLoader.GetString("Download_txt_1") + DownloadedFiles.ToString() + StringLoader.GetString("Separator_slash") + Files.Count.ToString(); //"Downloading image "
+                StatusBox.Text = "Downloading image " + DownloadedFiles.ToString() + "/" + Files.Count.ToString(); ;
                 FileDownloadProgBar.Visibility = Visibility.Visible;
                 RetCode = await GenericCodeClass.GetFileUsingHttp(GenericCodeClass.HomeStation + Files[i], ImageFolder, Files[i]);
                 
@@ -273,7 +261,7 @@ namespace Sat
                     ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[i]);
                     DownloadedFiles += 1;
                     FileDownloadProgBar.Value += 1;
-                    StatusBox.Text += StringLoader.GetString("Finished_txt"); // "Finished.";
+                    StatusBox.Text += "Finished.";
                 }
             }
 
@@ -290,9 +278,6 @@ namespace Sat
 
         private async Task ChangeImage(int ImageIndex)
         {
-            //string Filename;    //Live tile
-            //WriteableBitmap tmpBitmap;
-
             if (GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Stop();   //Stop the loop timer to allow enough time to change image
 
@@ -312,9 +297,7 @@ namespace Sat
 
                 if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
                     ImgBox.Source = new BitmapImage(ImageUri);
-                StatusBox.Text = StringLoader.GetString("Err_Download");// "Error Downloading Images";       
-                //ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, "Error.jpg");
-                //ImgBox.Source = await GenericCodeClass.GetWriteableBitmap(ImageFolder, "Error.jpg");
+                StatusBox.Text = "Error Downloading Images";
             }
 
             if (GenericCodeClass.IsLoopPaused == false)

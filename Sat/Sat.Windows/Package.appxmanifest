@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="a53267f9-8037-4da5-8633-cc645f1b77aa" Publisher="CN=Daniel" Version="1.0.0.0" />
+  <Identity Name="9241SciroccoSoftware.SatelliteImagery" Publisher="CN=B0C3EE66-7C4D-418C-B4FE-1B15D5CAFF9C" Version="1.1.0.3" />
   <Properties>
-    <DisplayName>Sat.Windows</DisplayName>
-    <PublisherDisplayName>Pomegranate Apps</PublisherDisplayName>
+    <DisplayName>Satellite Imagery</DisplayName>
+    <PublisherDisplayName>Scirocco Software</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Sat.Windows.App">
-      <m2:VisualElements DisplayName="Satellite Imagery" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Sat.Windows" ForegroundText="light" BackgroundColor="#A00000">
+      <m2:VisualElements DisplayName="Satellite Imagery" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="The Satellite Imagery app provides a quick source of advanced weather information from the National Oceanic and Atmospheric Administration (NOAA) for mobile users on the go." ForegroundText="light" BackgroundColor="#A00000">
         <m2:DefaultTile DefaultSize="square150x150Logo" ShortName="Satellite Imagery" Wide310x150Logo="Assets\Wide310x150Logo.png" Square70x70Logo="Assets\Square70x70Logo.png">
           <m2:ShowNameOnTiles>
             <m2:ShowOn Tile="square150x150Logo" />

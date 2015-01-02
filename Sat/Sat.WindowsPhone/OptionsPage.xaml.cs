@@ -149,7 +149,7 @@ namespace Sat
         {
             if (StationComboBox != null)
             {
-                GenericCodeClass.LightningDataSelected = false;
+                //GenericCodeClass.LightningDataSelected = false;
                 switch (StationComboBox.SelectedIndex)
                 {
                     case 0://Billings
@@ -255,11 +255,6 @@ namespace Sat
                     case 25://Vancouver
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/vanc/img/";
                         GenericCodeClass.HomeStationName = "Vancouver";
-                        break;
-                    case 26:
-                        GenericCodeClass.HomeStation = "http://weather.gc.ca/data/lightning_images/";
-                        GenericCodeClass.HomeStationName = "EC Lightning Data";
-                        GenericCodeClass.LightningDataSelected = true;
                         break;
                 }
 

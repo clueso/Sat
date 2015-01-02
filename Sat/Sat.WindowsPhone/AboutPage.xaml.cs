@@ -67,6 +67,10 @@ namespace Sat
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            //AboutPageTextBlock.Text = "The Satellite Imagery app provides a quick source of advanced weather information for mobile users on the go.\n\n";
+            //AboutPageTextBlock.Text += "All data are from the National Oceanic and Atmospheric Administration (NOAA). The app makes no attempt to ensure the quality and accuracy of the data.\n\n";
+            //AboutPageTextBlock.Text += "The internet connection of the phone is used to access data. No information about the user or the phone is collected, stored, or shared.\n\n";
+            //AboutPageTextBlock.Text += "We would love to hear your feedback on the app. If you have any questions, comments, or suggestions, please send an email to scirocco_sw@outlook.com.";
         }
 
         /// <summary>

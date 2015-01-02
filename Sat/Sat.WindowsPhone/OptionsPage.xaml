@@ -19,8 +19,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Title Panel -->
@@ -32,8 +30,7 @@
         <!--TODO: Content should be placed within the following grid-->
         <StackPanel Grid.Row="1" Margin="19,9.5,19,0">
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Station" />
-            <!-- Section 1 body -->
-            <ComboBox x:Name="StationComboBox" Margin="0,17,0,0" Padding="0,0,27,0" Width="auto" SelectionChanged="StationComboBox_SelectionChanged" SelectedIndex="0">
+            <ComboBox x:Name="StationComboBox" Padding="0,0,27,0" Width="auto" SelectionChanged="StationComboBox_SelectionChanged" SelectedIndex="0">
                 <x:String>Billings</x:String>
                 <x:String>Boise</x:String>
                 <x:String>Elko</x:String>
@@ -60,14 +57,10 @@
                 <x:String>Spokane</x:String>
                 <x:String>Tucson</x:String>
                 <x:String>Vancouver</x:String>
-                <x:String>EC Lightning Data</x:String>
             </ComboBox>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Margin="19,9.5,19,0">
-            <!-- Section 2 header -->
-            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Duration" />
-            <!-- Section 2 body -->
-            <Grid Margin="0,17,0,0">
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Duration" Margin="0,12,0,0"/>
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -75,12 +68,9 @@
                 <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr" GroupName="DurationBoxes"/>
                 <RadioButton x:Name="DurationRadioButton2" Grid.Column="1" Content="6 hr" GroupName="DurationBoxes"/>
             </Grid>
-        </StackPanel>
-        <StackPanel Grid.Row="3" Margin="19,9.5,19,0">
-            <!-- Section 3 header -->
-            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Loop Speed (time per image)" />
-            <!-- Section 3 body -->
-            <Grid Margin="0,17,0,0">
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Loop Speed (time per image)" Margin="0,12,0,0"/>
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>

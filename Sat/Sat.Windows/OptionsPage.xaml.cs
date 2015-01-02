@@ -32,7 +32,7 @@ namespace Sat
         {
             if (StationComboBox != null)
             {
-                GenericCodeClass.LightningDataSelected = false;
+                //GenericCodeClass.LightningDataSelected = false;
                 switch (StationComboBox.SelectedIndex)
                 {
                     case 0://Billings
@@ -138,11 +138,6 @@ namespace Sat
                     case 25://Vancouver
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/vanc/img/";
                         ChosenCityName = "Vancouver";
-                        break;
-                    case 26:
-                        ChosenCityURL = "http://weather.gc.ca/data/lightning_images/";
-                        ChosenCityName = "EC Lightning Data";
-                        GenericCodeClass.LightningDataSelected = true;
                         break;
                 }
             }

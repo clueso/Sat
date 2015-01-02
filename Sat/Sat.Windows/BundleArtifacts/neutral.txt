@@ -1,0 +1,4 @@
+MainPackage=C:\Users\Daniel\OneDrive\Ashwin\Visual Studio\Sat\Sat\Sat.Windows\bin\Release\Sat.Windows_1.1.0.3_Bundle\Sat.Windows_1.1.0.3_AnyCPU.appx
+SymbolPackage=C:\Users\Daniel\OneDrive\Ashwin\Visual Studio\Sat\Sat\Sat.Windows\AppPackages\Sat.Windows_1.1.0.3_Test\Sat.Windows_1.1.0.3_AnyCPU.appxsym
+ResourcePack=C:\Users\Daniel\OneDrive\Ashwin\Visual Studio\Sat\Sat\Sat.Windows\bin\Release\Sat.Windows_1.1.0.3_Bundle\Sat.Windows_1.1.0.3_scale-140.appx
+ResourcePack=C:\Users\Daniel\OneDrive\Ashwin\Visual Studio\Sat\Sat\Sat.Windows\bin\Release\Sat.Windows_1.1.0.3_Bundle\Sat.Windows_1.1.0.3_scale-180.appx

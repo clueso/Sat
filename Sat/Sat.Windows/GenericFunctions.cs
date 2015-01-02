@@ -17,7 +17,7 @@ static class GenericCodeClass
     private static string HomeStationURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
     private static string HomeStationString ="Seattle";
     private static bool IsHomeStationChanged = false;
-    private static bool IsECLightningDataSelected = false;
+    //private static bool IsECLightningDataSelected = false;
     private static HttpClient Client;
     private static HttpResponseMessage Message;
     private static int DownloadPeriod = 3;
@@ -72,11 +72,11 @@ static class GenericCodeClass
     }
 
     //Provide access to private property specifying whether home station has changed
-    public static bool LightningDataSelected
-    {
-        get { return IsECLightningDataSelected; }
-        set { IsECLightningDataSelected = value; }
-    }
+    //public static bool LightningDataSelected
+    //{
+    //    get { return IsECLightningDataSelected; }
+    //    set { IsECLightningDataSelected = value; }
+    //}
 
     public static DateTime GetDateTimeFromFile(string Filename)
     {
@@ -127,11 +127,11 @@ static class GenericCodeClass
         
         FileNames.Clear();
 
-        if (LightningDataSelected == true)
-        {
-            GenericCodeClass.GetWeatherDataURLs(FileNames, 6);
-            return;
-        }
+        //if (LightningDataSelected == true)
+        //{
+        //    GenericCodeClass.GetWeatherDataURLs(FileNames, 6);
+        //    return;
+        //}
 
         if (Client == null)
             Client = new HttpClient();
@@ -174,7 +174,7 @@ static class GenericCodeClass
 
         //RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
 
-        StartDateTimeString = StartDateTime.Year.ToString() + StartDateTime.Subtract(StartOfYearDate).Days.ToString()
+        StartDateTimeString = StartDateTime.Year.ToString() + StartDateTime.Subtract(StartOfYearDate).Days.ToString("D3")
             + "_" + StartDateTime.Hour.ToString("D2") + StartDateTime.Minute.ToString("D2") + "vis.jpg";
         
         FileNames.Add(StartDateTimeString);
@@ -219,79 +219,23 @@ static class GenericCodeClass
         }
     }
 
-    public static void GetWeatherDataURLs(List<string> FileNames, int NoOfFiles)
-    {
-        DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
-        int i;
-
-        //No need to save previous files as that is done in the function GetLatestFiles()
-
-        CurrDateTime = CurrDateTime.AddMinutes(-CurrDateTime.Minute % 10);
-
-        //if (CurrDateTime.Minute < 30)
-        //    CurrDateTime = CurrDateTime.AddMinutes(0.0 - CurrDateTime.Minute);
-        //else
-        //    CurrDateTime = CurrDateTime.AddMinutes(30.0 - CurrDateTime.Minute);
-
-        for (i = 0; i < NoOfFiles; i++)
-        {
-            //FileNames.Add(CurrDateTime.Year.ToString() + NoOfDays.Days.ToString() + "_" + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + "vis.jpg");
-            FileNames.Add("PAC_" + CurrDateTime.Year.ToString() + CurrDateTime.Month.ToString("D2") + CurrDateTime.Day.ToString("D2") + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + ".png");
-            //CurrDateTime = CurrDateTime.AddMinutes(-30.0);
-            //NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
-            CurrDateTime = CurrDateTime.AddMinutes(-10);
-        }
-
-        FileNames.Reverse();
-    }
-
-    //public static async Task DownloadFiles(StorageFolder ImageFolder, List<string> Filenames, int NoOfFiles)
+    //public static void GetWeatherDataURLs(List<string> FileNames, int NoOfFiles)
     //{
-    //    //string URLPath = "http://weather.gc.ca/data/lightning_images/";
-    //    //string URLPath = "http://www.ssd.noaa.gov/goes/" + HomeWeatherStation + "/img/";
+    //    DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
     //    int i;
-    //    int RetCode; //Error code to check whether file was downloaded successfully
-    //    //Task<int>[] TaskArray = new Task<int>[Filenames.Count];
-        
-    //    if(ImageFolder == null)
-    //        ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-        
-    //    //Get list of files currently in the local data folder
-    //    //var FileList = await ImageFolder.GetFilesAsync();
+
+    //    //No need to save previous files as that is done in the function GetLatestFiles()
+
+    //    CurrDateTime = CurrDateTime.AddMinutes(-CurrDateTime.Minute % 10);
+
 
     //    for (i = 0; i < NoOfFiles; i++)
     //    {
-    //        //Check whether the file already exists
-    //        //if (FileExists(FileList, Filenames[i]) && IsHomeStationChanged == false)
-    //        //    continue;
-
-    //        if (ExistingFiles.Contains(Filenames[i].ToString()) && IsHomeStationChanged == false)
-    //            continue;
-
-    //        RetCode = await GetFileUsingHttp(HomeStationURL + Filenames[i], ImageFolder, Filenames[i]);
-    //        //TaskArray[i] = GetFileUsingHttp(URLPath + Filenames[i], ImageFolder, Filenames[i]);
-
-    //        if (RetCode == -1)
-    //        {
-    //            Filenames[i] = "Error.jpg";
-    //        }
+    //        FileNames.Add("PAC_" + CurrDateTime.Year.ToString() + CurrDateTime.Month.ToString("D2") + CurrDateTime.Day.ToString("D2") + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + ".png");
+    //        CurrDateTime = CurrDateTime.AddMinutes(-10);
     //    }
 
-    //    //for (i = 0; i < NoOfFiles; i++)
-    //    //{
-    //    //    if(TaskArray[i] != null)
-    //    //    {
-    //    //        RetCode = await TaskArray[i];
-
-    //    //        if (RetCode == -1)
-    //    //        {
-    //    //            Filenames[i] = "Error.jpg";
-    //    //        }
-    //    //    }            
-    //    //}
-        
-    //    Filenames.RemoveAll(IsError);
-    //    IsHomeStationChanged = false;
+    //    FileNames.Reverse();
     //}
 
     public static async Task<int> GetFileUsingHttp(string URL, StorageFolder Folder, string FileName)
@@ -302,8 +246,6 @@ static class GenericCodeClass
         if (Client == null)
             Client = new HttpClient();
 
-        //var DownloadFileTask = (System.Threading.Tasks.Task<Windows.Web.Http.HttpResponseMessage>)Client.GetAsync(URI); //Make this call asynchronous and crreate disk file in the mean time?
-        //Message = await DownloadFileTask;
         Message = await Client.GetAsync(URI);
 
         if (Message.IsSuccessStatusCode)
@@ -356,38 +298,34 @@ static class GenericCodeClass
 
     }
 
-    public static async Task<WriteableBitmap> GetWriteableBitmap(StorageFolder ImageFolder, string FileName)
-    {
-        StorageFile ImageFile;
-        WriteableBitmap ImageBitmap;
-        //BitmapImage Image = new BitmapImage();
+    //public static async Task<WriteableBitmap> GetWriteableBitmap(StorageFolder ImageFolder, string FileName)
+    //{
+    //    StorageFile ImageFile;
+    //    WriteableBitmap ImageBitmap;
+    //    //BitmapImage Image = new BitmapImage();
 
-        if(ImageFolder == null)
-        {
-             ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-        }
+    //    if(ImageFolder == null)
+    //    {
+    //         ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+    //    }
 
-        ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
-        ImageBitmap = await LoadWriteableBitmap(ImageFile);
+    //    ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
+    //    ImageBitmap = await LoadWriteableBitmap(ImageFile);
                
-        return ImageBitmap;
-    }
+    //    return ImageBitmap;
+    //}
 
-    private static async Task<WriteableBitmap> LoadWriteableBitmap(StorageFile file)
-    {
-        WriteableBitmap ImageBitmap;
-        //BitmapImage Image = new BitmapImage();
-        FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
+    //private static async Task<WriteableBitmap> LoadWriteableBitmap(StorageFile file)
+    //{
+    //    WriteableBitmap ImageBitmap;
+    //    FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
 
-        //Image.SetSource(stream);
+    //    ImageBitmap = new WriteableBitmap(720, 480);//Image.PixelWidth,Image.PixelHeight);
+    //    ImageBitmap.SetSource(stream);
 
-        ImageBitmap = new WriteableBitmap(720, 480);//Image.PixelWidth,Image.PixelHeight);
-        //stream.Position = 0;
-        ImageBitmap.SetSource(stream);
+    //    return ImageBitmap;
 
-        return ImageBitmap;
-
-    }
+    //}
 
     public static async Task DeleteAllFiles(StorageFolder ImageFolder)
     {
@@ -406,121 +344,6 @@ static class GenericCodeClass
             await File.DeleteAsync();
         }
     }
-
-    //public static void GetFileUsingHttp(string URL, string StorePath)
-    //{
-    //    HttpWebRequest Client = (HttpWebRequest) WebRequest.CreateHttp(URL);
-    //    HttpWebResponse ClientResp = (HttpWebResponse) Client.GetResponse();
-    //    BinaryReader ClientRespStream = new BinaryReader(ClientResp.GetResponseStream());
-    //    MemoryStream Image = new MemoryStream();
-    //    byte[] buffer;
-    //    FileStream ImgFile = new FileStream(StorePath, FileMode.Create);
-
-    //    buffer = ClientRespStream.ReadBytes(1024);
-
-    //    while (buffer.Length > 0)
-    //    {
-    //        Image.Write(buffer, 0, buffer.Length);
-    //        buffer = ClientRespStream.ReadBytes(1024);
-    //    }
-
-    //    byte[] lnFile = new byte[(int)Image.Length];
-    //    Image.Position = 0;
-    //    Image.Read(lnFile, 0, lnFile.Length);
-    //    Image.Close();
-    //    Image.Close();
-
-    //    ImgFile.Write(lnFile, 0, lnFile.Length);
-    //    ImgFile.Close();
-    //}
-
-    //public static void Cleanup()
-    //{
-    //    DirectoryInfo di = new DirectoryInfo("../Images");
-        
-    //    foreach (FileInfo file in di.GetFiles())
-    //    {
-    //        file.Delete();
-    //    }
-    //}
-
-    //public static async void OverlayFiles(StorageFolder ImgFolder, string Basefile, string OverlayFile)
-    //{
-    //    //StorageFolder ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-    //    //if (ImageFolder == null)
-    //    //{
-    //    //    ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-    //    //}
-    //    StorageFolder ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-    //    StorageFile Base = await ImageFolder.CreateFileAsync(Basefile, CreationCollisionOption.OpenIfExists);
-    //    StorageFile Overlay = await ImageFolder.CreateFileAsync(OverlayFile, CreationCollisionOption.OpenIfExists);
-    //    var BaseImageStream = await Base.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-    //    var OverlayImageStream = await Overlay.OpenAsync(Windows.Storage.FileAccessMode.Read);
-    //    var BaseImageDecoder = await BitmapDecoder.CreateAsync(BaseImageStream);
-    //    var OverlayImageDecoder = await BitmapDecoder.CreateAsync(OverlayImageStream);
-    //    var BasePixelData = await BaseImageDecoder.GetPixelDataAsync();
-    //    var OverlayPixelData = await OverlayImageDecoder.GetPixelDataAsync();
-    //    var BasePixel = BasePixelData.DetachPixelData();
-    //    var OverlayPixel = OverlayPixelData.DetachPixelData();
-    //    int i, j;
-    //    uint height = BaseImageDecoder.PixelHeight, width = BaseImageDecoder.PixelWidth;
-
-    //    for (i = 0; i < height; i++)
-    //    {
-    //        for (j = 0; j < width; j++)
-    //        {
-    //            if (OverlayPixel[(i * width + j) * 4 + 0] > 250)
-    //            {
-    //                BasePixel[(i * width + j) * 4 + 0] = OverlayPixel[(i * width + j) * 4 + 0];
-    //                BasePixel[(i * width + j) * 4 + 1] = OverlayPixel[(i * width + j) * 4 + 1];
-    //                BasePixel[(i * width + j) * 4 + 2] = OverlayPixel[(i * width + j) * 4 + 2];
-    //                BasePixel[(i * width + j) * 4 + 3] = OverlayPixel[(i * width + j) * 4 + 3];
-    //            }
-    //        }
-    //    }
-
-    //    //InMemoryRandomAccessStream mem = new InMemoryRandomAccessStream();
-    //    var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, BaseImageStream);
-    //    encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Straight, width, height, BaseImageDecoder.DpiX, BaseImageDecoder.DpiY, BasePixel);
-    //    await encoder.FlushAsync();
-    //}
-
-    //public static async void OverlayFileInImage(StorageFolder ImageFolder, WriteableBitmap CurrentImage, string OverlayFile)
-    //{
-    //    if (ImageFolder == null)
-    //    {
-    //        ImageFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-    //    }
-
-    //    StorageFile Overlay = await ImageFolder.CreateFileAsync(OverlayFile, CreationCollisionOption.OpenIfExists);
-    //    var OverlayImageStream = await Overlay.OpenAsync(Windows.Storage.FileAccessMode.Read);
-    //    var OverlayImageDecoder = await BitmapDecoder.CreateAsync(OverlayImageStream);
-    //    var OverlayPixelData = await OverlayImageDecoder.GetPixelDataAsync();
-    //    var OverlayPixel = OverlayPixelData.DetachPixelData();
-    //    int i, j;
-    //    int height = CurrentImage.PixelHeight, width = CurrentImage.PixelWidth;
-    //    var BaseImageStream = CurrentImage.PixelBuffer.AsStream();  //Ashwin: this can be null if an image is not found/downloaded
-    //    Byte[] BasePixel = new Byte[4 * width * height];
-
-    //    BaseImageStream.Read(BasePixel, 0, BasePixel.Length);
-
-    //    for (i = 0; i < height; i++)
-    //    {
-    //        for (j = 0; j < width; j++)
-    //        {
-    //            if (OverlayPixel[(i * width + j) * 4 + 0] > 250)
-    //            {
-    //                BasePixel[(i * width + j) * 4 + 0] = OverlayPixel[(i * width + j) * 4 + 0];
-    //                BasePixel[(i * width + j) * 4 + 1] = OverlayPixel[(i * width + j) * 4 + 1];
-    //                BasePixel[(i * width + j) * 4 + 2] = OverlayPixel[(i * width + j) * 4 + 2];
-    //                BasePixel[(i * width + j) * 4 + 3] = OverlayPixel[(i * width + j) * 4 + 3];
-    //            }
-    //        }
-    //    }
-
-    //    BaseImageStream.Position = 0;
-    //    BaseImageStream.Write(BasePixel, 0, BasePixel.Length);
-    //}
 
     public static bool IsError(string s)
     {

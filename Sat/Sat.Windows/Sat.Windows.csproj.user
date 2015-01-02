@@ -4,6 +4,11 @@
     <RemoteDebugMachine>DANIEL-SURFACE</RemoteDebugMachine>
     <UseAuthentication>true</UseAuthentication>
     <RemoteDebugEnabled>false</RemoteDebugEnabled>
-    <UseSimulator>true</UseSimulator>
+    <UseSimulator>false</UseSimulator>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AppxPackageIsForStore>True</AppxPackageIsForStore>
+    <AppxShowAllApps>True</AppxShowAllApps>
+    <AppxBuildConfigurationSelection>neutral</AppxBuildConfigurationSelection>
   </PropertyGroup>
 </Project>
