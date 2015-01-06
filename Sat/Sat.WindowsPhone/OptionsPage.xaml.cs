@@ -96,7 +96,7 @@ namespace Sat
                     break;
             }
             CurrentCityName = GenericCodeClass.HomeStationName;
-            StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
+            ProvinceComboBox.SelectedItem = GenericCodeClass.HomeStationName;
             
             //Set up "checked" event handlers. Not setting them in the XAML file as they result in unnecessary function 
             //calls when values are set in the code above. 
@@ -145,12 +145,12 @@ namespace Sat
         }
 
         #endregion
-        private void StationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ProvinceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (StationComboBox != null)
+            if (ProvinceComboBox != null)
             {
                 //GenericCodeClass.LightningDataSelected = false;
-                switch (StationComboBox.SelectedIndex)
+                switch (ProvinceComboBox.SelectedIndex)
                 {
                     case 0://Billings
                         GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/west/wfo/byz/img/";

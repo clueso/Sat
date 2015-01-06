@@ -18,7 +18,15 @@
         <!-- Content Section 1-->
         <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Station" />
-            <ComboBox x:Name="StationComboBox" Margin="0,12,0,0" Padding="10,0,27,0" SelectionChanged="StationComboBox_SelectionChanged" SelectedIndex="0">
+            <Grid Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <RadioButton x:Name="CountryRadioButton1" Grid.Column="0" Content="Canada" GroupName="CountryBoxes" />
+                <RadioButton x:Name="CountryRadioButton2" Grid.Column="1" Content="USA" GroupName="CountryBoxes" />
+            </Grid>
+            <ComboBox x:Name="ProvinceComboBox" Margin="0,12,0,0" Padding="10,0,27,0" SelectionChanged="ProvinceComboBox_SelectionChanged" SelectedIndex="0">
                 <x:String>Billings</x:String>
                 <x:String>Boise</x:String>
                 <x:String>Elko</x:String>
@@ -46,14 +54,31 @@
                 <x:String>Tucson</x:String>
                 <x:String>Vancouver</x:String>
             </ComboBox>
+            <ComboBox x:Name="StationComboBox" Margin="0,12,0,0" Padding="10,0,27,0" />
 
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" x:Name="ProductName" Text="Satellite Product" Margin="0,24,0,0"/>
+            <Grid Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <RadioButton x:Name="InfraredCheckBox" Grid.Column="0" Grid.Row="0" Content="Infrared" GroupName="ImageBoxes"/>
+                <RadioButton x:Name="RainbowCheckBox" Grid.Column="1" Grid.Row="0" Content="Rainbow"  GroupName="ImageBoxes"/>
+                <RadioButton x:Name="RGBCheckBox" Grid.Column="0" Grid.Row="1" Content="RGB" GroupName="ImageBoxes"/>
+                <RadioButton x:Name="VisibleCheckBox" Grid.Column="1" Grid.Row="1" Content="Visible" GroupName="ImageBoxes" />
+            </Grid>
+            
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Duration" Margin="0,24,0,0"/>
             <Grid Margin="0,12,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr" IsChecked="True" GroupName="DurationBoxes"/>
+                <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr" GroupName="DurationBoxes"/>
                 <RadioButton x:Name="DurationRadioButton2" Grid.Column="1" Content="6 hr" GroupName="DurationBoxes"/>
             </Grid>
 
@@ -65,7 +90,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <RadioButton x:Name="LoopTimerRadioButton1" Grid.Column="0" Content="0.1 sec" GroupName="LoopTimerBoxes"/>
-                <RadioButton x:Name="LoopTimerRadioButton2" Grid.Column="1" Content="0.5 sec" IsChecked="True" GroupName="LoopTimerBoxes"/>
+                <RadioButton x:Name="LoopTimerRadioButton2" Grid.Column="1" Content="0.5 sec" GroupName="LoopTimerBoxes"/>
                 <RadioButton x:Name="LoopTimerRadioButton3" Grid.Column="2" Content="1 sec" GroupName="LoopTimerBoxes"/>
             </Grid>
         </StackPanel>

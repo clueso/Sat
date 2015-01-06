@@ -28,12 +28,12 @@ namespace Sat
             this.InitializeComponent();            
         }
 
-        private void StationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ProvinceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (StationComboBox != null)
+            if (ProvinceComboBox != null)
             {
                 //GenericCodeClass.LightningDataSelected = false;
-                switch (StationComboBox.SelectedIndex)
+                switch (ProvinceComboBox.SelectedIndex)
                 {
                     case 0://Billings
                         ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/byz/img/";
@@ -226,7 +226,7 @@ namespace Sat
                     break;
             }
 
-            StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
+            ProvinceComboBox.SelectedItem = GenericCodeClass.HomeStationName;
         }
     }
 }
