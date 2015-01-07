@@ -16,5 +16,12 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)GenericFunctions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XMLParserClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)CityCodes.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)ProvinceCities.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)USCityCodes.xml" />
+    <Content Include="$(MSBuildThisFileDirectory)USStateCities.xml" />
   </ItemGroup>
 </Project>

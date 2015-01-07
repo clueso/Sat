@@ -22,6 +22,9 @@ namespace Sat
         public event EventHandler SettingsChanged;
         private static String ChosenCityName;
         private static String ChosenCityURL;
+        private static String ChosenSatelliteType;
+        private static XMLParserClass ProvincialCityXML = new XMLParserClass("ProvinceCities.xml");
+        private static XMLParserClass CityCodeXML = new XMLParserClass("CityCodes.xml");
 
         public OptionsPage()
         {
@@ -32,120 +35,19 @@ namespace Sat
         {
             if (ProvinceComboBox != null)
             {
-                //GenericCodeClass.LightningDataSelected = false;
-                switch (ProvinceComboBox.SelectedIndex)
-                {
-                    case 0://Billings
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/byz/img/";
-                        ChosenCityName = "Billings";
-                        break;
-                    case 1://Boise
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/boi/img/";
-                        ChosenCityName = "Boise";
-                        break;
-                    case 2://Elko
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/lkn/img/";
-                        ChosenCityName = "Elko";
-                        break;
-                    case 3://Eureka
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/eka/img/";
-                        ChosenCityName = "Eureka";
-                        break;
-                    case 4://FlagStaff
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/fgz/img/";
-                        ChosenCityName = "Flagstaff";
-                        break;
-                    case 5://Glasgow
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/ggw/img/";
-                        ChosenCityName = "Glasgow";
-                        break;
-                    case 6://Great Falls
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/tfx/img/";
-                        ChosenCityName = "Great Falls";
-                        break;
-                    case 7://Hanford/San Joaquin Valley
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/hnx/img/";
-                        ChosenCityName = "Hanford/San Joaquin Valley";
-                        break;
-                    case 8://Las Vegas
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/vef/img/";
-                        ChosenCityName = "Las Vegas";
-                        break;
-                    case 9://Los Angeles/Oxnard
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/lox/img/";
-                        ChosenCityName = "Los Angeles/Oxnard";
-                        break;
-                    case 10://Medford
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/mfr/img/";
-                        ChosenCityName = "Medford";
-                        break;
-                    case 11://Missoula
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/mso/img/";
-                        ChosenCityName = "Missoula";
-                        break;
-                    case 12://Pendleton
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/pdt/img/";
-                        ChosenCityName = "Pendleton";
-                        break;
-                    case 13://Phoenix
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/psr/img/";
-                        ChosenCityName = "Phoenix";
-                        break;
-                    case 14://Pocatello
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/pih/img/";
-                        ChosenCityName = "Pocatello";
-                        break;
-                    case 15://Portland
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/pqr/img/";
-                        ChosenCityName = "Portland";
-                        break;
-                    case 16:
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/flt/t7/img/";
-                        ChosenCityName = "Prince George";
-                        break;
-                    case 17://Reno
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/rev/img/";
-                        ChosenCityName = "Reno";
-                        break;
-                    case 18://Sacramento
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/sto/img/";
-                        ChosenCityName = "Sacramento";
-                        break;
-                    case 19://Salt Lake City
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/slc/img/";
-                        ChosenCityName = "Salt Lake City";
-                        break;
-                    case 20://San Diego
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/sgx/img/";
-                        ChosenCityName = "San Diego";
-                        break;
-                    case 21://San Francisco Bay/Monterey
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/mtr/img/";
-                        ChosenCityName = "San Francisco Bay/Monterey";
-                        break;
-                    case 22://Seattle
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
-                        ChosenCityName = "Seattle";
-                        break;
-                    case 23://Spokane
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/otx/img/";
-                        ChosenCityName = "Spokane";
-                        break;
-                    case 24://Tucson
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/wfo/twc/img/";
-                        ChosenCityName = "Tucson";
-                        break;
-                    case 25://Vancouver
-                        ChosenCityURL = "http://www.ssd.noaa.gov/goes/west/vanc/img/";
-                        ChosenCityName = "Vancouver";
-                        break;
-                }
+                PopulateStationBox(ProvinceComboBox.SelectedIndex, ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].ToString(), false);
+                SetOptions();
             }
+        }
+
+        private void SetOptions()
+        {
+
         }
 
         private void OptionsPage_BackClick(object sender, BackClickEventArgs e)
         {
-            if(ChosenCityName != null && ChosenCityName.Equals(GenericCodeClass.HomeStationName) == false)
+            if (ChosenCityName != null && ChosenCityName.Equals(GenericCodeClass.HomeStationName) == false)
             {
                 GenericCodeClass.HomeStationName = ChosenCityName;
                 GenericCodeClass.HomeStation = ChosenCityURL;   //check for null?
@@ -155,9 +57,9 @@ namespace Sat
             //Better to check for existing download intervals before setting new times?
             if (DurationRadioButton1.IsChecked == true)
                 GenericCodeClass.FileDownloadPeriod = 3;
-            else if(DurationRadioButton2.IsChecked == true)
+            else if (DurationRadioButton2.IsChecked == true)
                 GenericCodeClass.FileDownloadPeriod = 6;
-            
+
 
             if (LoopTimerRadioButton1.IsChecked == true)
                 GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 0, 100);
@@ -165,7 +67,7 @@ namespace Sat
                 GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 0, 500);
             else
                 GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 1, 0);
-            
+
 
             if (SettingsChanged != null)
                 SettingsChanged(this, EventArgs.Empty);
@@ -173,13 +75,32 @@ namespace Sat
 
         private void OptionsPage_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (ChosenCityName != null && ChosenCityName.Equals(GenericCodeClass.HomeStationName) == false)
-            {
-                GenericCodeClass.HomeStationName = ChosenCityName;
-                GenericCodeClass.HomeStation = ChosenCityURL;   //check for null?
-                GenericCodeClass.HomeStationChanged = true;
-            }
+            ChosenCityName = StationComboBox.Items[StationComboBox.SelectedIndex].ToString();
 
+            if (ProductRadioButton1.IsChecked == true)
+                ChosenSatelliteType = "ir4";
+            else if (ProductRadioButton2.IsChecked == true)
+                ChosenSatelliteType = "rb";
+            else if (ProductRadioButton3.IsChecked == true)
+                ChosenSatelliteType = "rgb";
+            else if (ProductRadioButton4.IsChecked == true)
+                ChosenSatelliteType = "vis";
+
+            GenericCodeClass.HomeStationChanged = !ChosenCityName.Equals(GenericCodeClass.HomeStationName)
+                                                    || !ChosenSatelliteType.Equals(GenericCodeClass.SatelliteTypeString);
+
+            if (GenericCodeClass.HomeStationChanged)
+            {
+                if (StationComboBox != null)
+                {
+                    GenericCodeClass.HomeStationCodeString = CityCodeXML.GetCityCode(StationComboBox.Items[StationComboBox.SelectedIndex].ToString()); //Change this to ChosenCityCode?
+                    GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/" + GenericCodeClass.HomeStationCodeString + "/img/"; //Change this to ChosenCityCode?
+                }
+
+                GenericCodeClass.HomeStationName = StationComboBox.Items[StationComboBox.SelectedIndex].ToString();
+                GenericCodeClass.HomeProvinceName = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].ToString();
+                GenericCodeClass.SatelliteTypeString = ChosenSatelliteType;
+            }
             //Better to check for existing download intervals before setting new times?
             if (DurationRadioButton1.IsChecked == true)
                 GenericCodeClass.FileDownloadPeriod = 3;
@@ -209,6 +130,7 @@ namespace Sat
                     break;
             }
 
+
             switch (GenericCodeClass.LoopInterval.Milliseconds)
             {
                 case 0:
@@ -226,7 +148,119 @@ namespace Sat
                     break;
             }
 
-            ProvinceComboBox.SelectedItem = GenericCodeClass.HomeStationName;
+            switch (GenericCodeClass.SatelliteTypeString)
+            {
+                case "ir4":
+                    ProductRadioButton1.IsChecked = true;
+                    break;
+                case "rb":
+                    ProductRadioButton2.IsChecked = true;
+                    break;
+                case "rgb":
+                    ProductRadioButton3.IsChecked = true;
+                    break;
+                case "vis":
+                    ProductRadioButton4.IsChecked = true;
+                    break;
+            }
+
+            CountryRadioButton1.IsChecked = GenericCodeClass.CanadaSelected;
+            CountryRadioButton2.IsChecked = !GenericCodeClass.CanadaSelected;
+
+            if (GenericCodeClass.CanadaSelected)
+            {
+                ProvincialCityXML.SetSourceFile("ProvinceCities.xml");
+                CityCodeXML.SetSourceFile("CityCodes.xml");
+            }
+            else
+            {
+                ProvincialCityXML.SetSourceFile("USStateCities.xml");
+                CityCodeXML.SetSourceFile("USCityCodes.xml");
+            }
+
+            PopulateProvinceBox(true);
+            //ProvinceComboBox.SelectedItem = GenericCodeClass.HomeProvinceName;
+            PopulateStationBox(ProvinceComboBox.SelectedIndex, ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].ToString(), true);
+            SetOptions();
+            //StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
+
+            CountryRadioButton1.Checked += CountryRadioButton_CheckedHandler;
+            CountryRadioButton2.Checked += CountryRadioButton_CheckedHandler;
+            //ProvinceComboBox.SelectionChanged += ProvinceComboBox_SelectionChanged;
+        }
+
+        private void PopulateStationBox(int ProvinceBoxIndex, string ProvinceName, bool UseHomeStationValue)
+        {
+
+            if (StationComboBox != null)
+            {
+                List<string> CityNames = new List<string>();
+
+                if (ProvinceName.Contains('&'))
+                    ProvinceName = ProvinceName.Substring(0, 12);
+
+                ProvincialCityXML.ReadCitiesInProvince(ProvinceName, CityNames);
+                if (StationComboBox != null)
+                {
+                    StationComboBox.Items.Clear();
+                    foreach (string City in CityNames)
+                    {
+                        StationComboBox.Items.Add(City);
+                    }
+                }
+
+                if (UseHomeStationValue)
+                    StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
+                else
+                    StationComboBox.SelectedIndex = 0;
+            }
+        }
+
+        private void CountryRadioButton_CheckedHandler(object sender, RoutedEventArgs e)
+        {
+            if (sender == CountryRadioButton1)
+            {
+                if (GenericCodeClass.CanadaSelected)
+                    return;
+                ProvincialCityXML.SetSourceFile("ProvinceCities.xml");
+                CityCodeXML.SetSourceFile("CityCodes.xml");
+                GenericCodeClass.CanadaSelected = true;
+            }
+            else if (sender == CountryRadioButton2)
+            {
+                if (!GenericCodeClass.CanadaSelected)
+                    return;
+                ProvincialCityXML.SetSourceFile("USStateCities.xml");
+                CityCodeXML.SetSourceFile("USCityCodes.xml");
+                GenericCodeClass.CanadaSelected = false;
+            }
+
+
+            PopulateProvinceBox(false);
+
+        }
+
+        private void PopulateProvinceBox(bool UseHomeStationVlaue)
+        {
+            List<string> ProvinceList = ProvincialCityXML.ReadProvinceList();
+
+            if (ProvinceComboBox != null)
+            {
+                ProvinceComboBox.SelectionChanged -= ProvinceComboBox_SelectionChanged;
+                ProvinceComboBox.Items.Clear();
+
+                foreach (string str in ProvinceList)
+                    ProvinceComboBox.Items.Add(str);
+
+                ProvinceComboBox.SelectionChanged += ProvinceComboBox_SelectionChanged;
+                if (UseHomeStationVlaue)
+                    ProvinceComboBox.SelectedItem = GenericCodeClass.HomeProvinceName;
+                else
+                    ProvinceComboBox.SelectedIndex = 0;
+
+                //PopulateStationBox(ProvinceComboBox.SelectedIndex, ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].ToString());
+            }
+
         }
     }
 }

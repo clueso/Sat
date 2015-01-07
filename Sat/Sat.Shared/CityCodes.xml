@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Cities>
+  <City Name ="Central British Columbia">flt/t7</City>
+  <City Name ="Eastern Canada/USA">east/eaus</City>
+  <City Name ="North East Pacific"></City>
+  <City Name ="Northern Great Lakes">east/ff2</City>
+  <City Name ="Prairies/Central Canada">east/ff1</City>
+  <City Name ="Southern Ontario">east/gl</City>
+  <City Name ="Southern Quebec">east/ne</City>
+  <City Name ="Western Canada/USA"></City>
+  <City Name ="Yukon">west/ak</City>
+  <City Name ="Vancouver">west/vanc</City>
+  <City Name ="St. John">east/wfo/car</City>
+  <City Name ="Sault Ste. Marie">east/wfo/apx</City>
+  <City Name ="Thunder Bay">east/wfo/dlh</City>
+  <City Name ="Toronto">east/wfo/buf</City>
+  <City Name ="Hudson Bay"></City>
+  <City Name ="Northwest Territories/Nunavut"></City>
+  <City Name ="Yukon"></City>
+</Cities>

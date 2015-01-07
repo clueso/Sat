@@ -14,8 +14,8 @@ static class GenericCodeClass
 {
     private static TimeSpan LoopTimerInterval = new TimeSpan(0,0,0,0,500); //Loop timer interval in seconds
     private static TimeSpan DownloadTimerInterval = new TimeSpan(0,15,0); //Download time interval in minutes
-    private static string HomeStationURL = "http://www.ssd.noaa.gov/goes/west/wfo/sew/img/";
-    private static string HomeStationString ="Seattle";
+    private static string HomeStationURL;
+    private static string HomeStationString;
     private static bool IsHomeStationChanged = false;
     //private static bool IsECLightningDataSelected = false;
     private static HttpClient Client;
@@ -24,6 +24,10 @@ static class GenericCodeClass
     public static List<string> ExistingFiles = new List<string>();
     public static bool IsLoopPaused = false;
     public static bool IsAppResuming = false;
+    private static string SatelliteType;
+    private static string HomeStationCode;
+    private static string HomeProvince;
+    private static bool IsCanadaSelected;
 
     //Provide access to private property specifying Loop timer Interval
     public static TimeSpan LoopInterval
@@ -71,6 +75,33 @@ static class GenericCodeClass
         set { HomeStationString = value;}
     }
 
+    //Provide access to private property specifying the type of satellite imagery
+    public static string SatelliteTypeString
+    {
+        get { return SatelliteType; }
+        set { SatelliteType = value; }
+    }
+
+    //Provide access to private property specifying the home station code
+    public static string HomeStationCodeString
+    {
+        get { return HomeStationCode; }
+        set { HomeStationCode = value; }
+    }
+
+    //Provide access to private property specifying the home province
+    public static string HomeProvinceName
+    {
+        get { return HomeProvince; }
+        set { HomeProvince = value; }
+    }
+
+    public static bool CanadaSelected
+    {
+        get { return IsCanadaSelected; }
+        set { IsCanadaSelected = value; }
+    }
+
     //Provide access to private property specifying whether home station has changed
     //public static bool LightningDataSelected
     //{
@@ -112,31 +143,23 @@ static class GenericCodeClass
     {
         var URI = new Uri(HomeStationURL);
         string StartDateTimeString;
-        int i;
         Regex RegExp;
+        string RegExpString;
 
         ExistingFiles.Clear();
 
-        if(IsHomeStationChanged == false)
+        if (IsHomeStationChanged == false)
         {
             foreach (string str in FileNames)
             {
                 ExistingFiles.Add(str);
             }
         }
-        
-        FileNames.Clear();
 
-        //if (LightningDataSelected == true)
-        //{
-        //    GenericCodeClass.GetWeatherDataURLs(FileNames, 6);
-        //    return;
-        //}
+        FileNames.Clear();
 
         if (Client == null)
             Client = new HttpClient();
-
-        var HttpClientTask = Client.GetAsync(URI);
 
         //string RegExpString = ">\\s*";
         DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
@@ -144,41 +167,16 @@ static class GenericCodeClass
         DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(DownloadPeriod, 0, 0));    //Subtract 3 hours from the Current Time
         TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
 
-        //if (StartDateTime.Year != CurrDateTime.Year)
-        //    RegExpString = RegExpString + "(" + CurrDateTime.Year.ToString() + "|" + StartDateTime.Year.ToString() + ")";
-        //else
-        //    RegExpString = RegExpString + CurrDateTime.Year.ToString();
-
-        //if (StartDateTime.Day != CurrDateTime.Day)
-        //{
-        //    RegExpString = RegExpString + "(" + NoOfDays.Days.ToString() + "|";
-        //    NoOfDays = StartDateTime.Subtract(StartOfYearDate);
-        //    RegExpString = RegExpString + NoOfDays.Days.ToString() + ")_(";
-        //}
-        //else
-        //    RegExpString = RegExpString + NoOfDays.Days.ToString() + "_(";
-
-        //if (StartDateTime.Hour > CurrDateTime.Hour)  //When the start and current time are on either side of midnight
-        //{
-        //    for (i = StartDateTime.Hour; i <= 23; i++)
-        //        RegExpString = RegExpString + i.ToString("D2") + "|";
-
-        //    for (i = 0; i < CurrDateTime.Hour; i++)
-        //        RegExpString = RegExpString + i.ToString("D2") + "|";
-        //}
-        //else
-        //{
-        //    for (i = StartDateTime.Hour; i < CurrDateTime.Hour; i++)
-        //        RegExpString = RegExpString + i.ToString("D2") + "|";
-        //}
-
-        //RegExpString = RegExpString + CurrDateTime.Hour.ToString("D2") + ")[0-9][0-9]vis.jpg\\s*<";
+        Client.DefaultRequestHeaders.IfModifiedSince = StartDateTime;
+        var HttpClientTask = Client.GetAsync(URI);
 
         StartDateTimeString = StartDateTime.Year.ToString() + StartDateTime.Subtract(StartOfYearDate).Days.ToString("D3")
-            + "_" + StartDateTime.Hour.ToString("D2") + StartDateTime.Minute.ToString("D2") + "vis.jpg";
-        
+            + "_" + StartDateTime.Hour.ToString("D2") + StartDateTime.Minute.ToString("D2") + SatelliteType + ".jpg";
+
+        RegExpString = ">[0-9]+_[0-9]+" + SatelliteType + ".jpg<";
+
         FileNames.Add(StartDateTimeString);
-        RegExp = new Regex(">[0-9]+_[0-9]+vis.jpg<");
+        RegExp = new Regex(RegExpString);
 
         try
         {
@@ -242,7 +240,7 @@ static class GenericCodeClass
     {
         var URI = new Uri(URL);
         StorageFile sampleFile;
-                
+
         if (Client == null)
             Client = new HttpClient();
 
@@ -283,7 +281,7 @@ static class GenericCodeClass
         BitmapImage Image;
 
         Image = await LoadBitmapImage(ImageFile);
-                
+
         return Image;
     }
 
@@ -298,50 +296,119 @@ static class GenericCodeClass
 
     }
 
-    //public static async Task<WriteableBitmap> GetWriteableBitmap(StorageFolder ImageFolder, string FileName)
-    //{
-    //    StorageFile ImageFile;
-    //    WriteableBitmap ImageBitmap;
-    //    //BitmapImage Image = new BitmapImage();
+    public static async Task<WriteableBitmap> GetWriteableBitmap(StorageFolder ImageFolder, string FileName)
+    {
+        StorageFile ImageFile;
+        WriteableBitmap ImageBitmap;
+        //BitmapImage Image = new BitmapImage();
 
-    //    if(ImageFolder == null)
-    //    {
-    //         ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-    //    }
+        if (ImageFolder == null)
+        {
+            ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+        }
 
-    //    ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
-    //    ImageBitmap = await LoadWriteableBitmap(ImageFile);
-               
-    //    return ImageBitmap;
-    //}
+        ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
+        ImageBitmap = await LoadWriteableBitmap(ImageFile);
 
-    //private static async Task<WriteableBitmap> LoadWriteableBitmap(StorageFile file)
-    //{
-    //    WriteableBitmap ImageBitmap;
-    //    FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
+        return ImageBitmap;
+    }
 
-    //    ImageBitmap = new WriteableBitmap(720, 480);//Image.PixelWidth,Image.PixelHeight);
-    //    ImageBitmap.SetSource(stream);
+    private static async Task<WriteableBitmap> LoadWriteableBitmap(StorageFile file)
+    {
+        WriteableBitmap ImageBitmap;
+        FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
 
-    //    return ImageBitmap;
+        ImageBitmap = new WriteableBitmap(720, 480);//Image.PixelWidth,Image.PixelHeight);
+        ImageBitmap.SetSource(stream);
 
-    //}
+        return ImageBitmap;
 
-    public static async Task DeleteAllFiles(StorageFolder ImageFolder)
+    }
+
+    public static async Task DeleteFiles(StorageFolder ImageFolder, List<string> FilesToDelete, bool DeleteAllFiles)
     {
         StorageFile File;
         int i;
-        
+
         if (ImageFolder == null)
             ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
 
-        //Get list of files currently in the local data folder
-        var FileList = await ImageFolder.GetFilesAsync();
-
-        for (i = 0; i < FileList.Count; i++)
+        if (DeleteAllFiles)
         {
-            File = await ImageFolder.GetFileAsync(FileList[i].Name);
-            await File.DeleteAsync();
+            //Get list of files currently in the local data folder
+            var FileList = await ImageFolder.GetFilesAsync();
+            for (i = 0; i < FileList.Count; i++)
+            {
+                File = await ImageFolder.GetFileAsync(FileList[i].Name);
+                await File.DeleteAsync();
+            }
+        }
+        else
+        {
+            for (i = 0; i < FilesToDelete.Count; i++)
+            {
+                File = await ImageFolder.GetFileAsync(FilesToDelete[i].ToString());
+                await File.DeleteAsync();
+            }
+        }
+
+
+    }
+
+    public static void SaveAppData(bool SettingsChanged)
+    {
+        Windows.Storage.ApplicationDataContainer RoamingSettings =
+                Windows.Storage.ApplicationData.Current.RoamingSettings;
+
+        if (RoamingSettings != null)
+        {
+            if (SettingsChanged == true)
+            {
+                RoamingSettings.Values["SatelliteType"] = SatelliteType;
+                RoamingSettings.Values["HomeStationCode"] = HomeStationCode;
+                RoamingSettings.Values["HomeStationURL"] = HomeStationURL;
+                RoamingSettings.Values["HomeStationString"] = HomeStationString;
+                RoamingSettings.Values["HomeProvince"] = HomeProvince;
+                RoamingSettings.Values["DownloadPeriod"] = DownloadPeriod;
+                RoamingSettings.Values["LoopTimerInterval"] = LoopTimerInterval.Milliseconds;
+                RoamingSettings.Values["IsCanadaSelected"] = IsCanadaSelected;
+            }
+
+            RoamingSettings.Values["IsLoopPaused"] = GenericCodeClass.IsLoopPaused;
+        }
+    }
+
+    public static void GetSavedAppData()
+    {
+        Windows.Storage.ApplicationDataContainer RoamingSettings =
+                Windows.Storage.ApplicationData.Current.RoamingSettings;
+
+        if (RoamingSettings != null)
+        {
+            try
+            {
+                HomeStationURL = RoamingSettings.Values["HomeStationURL"].ToString();
+                LoopTimerInterval = new TimeSpan(0, 0, 0, 0, (int)RoamingSettings.Values["LoopTimerInterval"]);
+                HomeStationString = RoamingSettings.Values["HomeStationString"].ToString();
+                DownloadPeriod = (int)RoamingSettings.Values["DownloadPeriod"];
+                SatelliteType = RoamingSettings.Values["SatelliteType"].ToString();
+                HomeStationCode = RoamingSettings.Values["HomeStationCode"].ToString();
+                HomeProvince = RoamingSettings.Values["HomeProvince"].ToString();
+                IsLoopPaused = (bool)RoamingSettings.Values["IsLoopPaused"];
+                IsCanadaSelected = (bool)RoamingSettings.Values["IsCanadaSelected"];
+
+            }
+            catch (Exception e)
+            {
+                HomeStationURL = "http://www.ssd.noaa.gov/goes/west/vanc/img/";
+                LoopTimerInterval = new TimeSpan(0, 0, 0, 0, 500);
+                HomeStationString = "Vancouver";
+                DownloadPeriod = 1;
+                SatelliteType = "vis";
+                HomeStationCode = "west/vanc";
+                HomeProvince = "British Columbia";
+                IsCanadaSelected = true;
+            }
         }
     }
 
@@ -349,4 +416,5 @@ static class GenericCodeClass
     {
         return s.Equals("Error.png");
     }
+
 }

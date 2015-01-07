@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProvinceCities>
+  <Province Name="Regional Imagery">
+    <City>Central British Columbia</City>
+    <City>Eastern Canada/USA</City>
+    <City>North East Pacific</City>
+    <City>Northern Great Lakes</City>
+    <City>Prairies/Central Canada</City>
+    <City>Southern Ontario</City>
+    <City>Southern Quebec</City>
+    <City>Western Canada/USA</City>
+    <City>Yukon</City>
+  </Province>
+  
+  <Province Name="British Columbia">
+    <City>Vancouver</City>
+  </Province>
+  <Province Name="New Brunswick">
+    <City>St. John</City>
+  </Province>
+  <Province Name="Ontario">
+    <City>Sault Ste. Marie</City>
+    <City>Thunder Bay</City>
+    <City>Toronto</City>
+  </Province>
+  <Province Name="Polar Imagery (no loop)">
+    <City>Hudson Bay</City>
+    <City>Northwest Territories/Nunavut</City>
+    <City>Yukon</City>
+  </Province>
+</ProvinceCities>

@@ -27,32 +27,7 @@
                 <RadioButton x:Name="CountryRadioButton2" Grid.Column="1" Content="USA" GroupName="CountryBoxes" />
             </Grid>
             <ComboBox x:Name="ProvinceComboBox" Margin="0,12,0,0" Padding="10,0,27,0" SelectionChanged="ProvinceComboBox_SelectionChanged" SelectedIndex="0">
-                <x:String>Billings</x:String>
-                <x:String>Boise</x:String>
-                <x:String>Elko</x:String>
-                <x:String>Eureka</x:String>
-                <x:String>Flagstaff</x:String>
-                <x:String>Glasgow</x:String>
-                <x:String>Great Falls</x:String>
-                <x:String>Hanford/San Joaquin Valley</x:String>
-                <x:String>Las Vegas</x:String>
-                <x:String>Los Angeles/Oxnard</x:String>
-                <x:String>Medford</x:String>
-                <x:String>Missoula</x:String>
-                <x:String>Pendleton</x:String>
-                <x:String>Phoenix</x:String>
-                <x:String>Pocatello</x:String>
-                <x:String>Portland</x:String>
-                <x:String>Prince George</x:String>
-                <x:String>Reno</x:String>
-                <x:String>Sacramento</x:String>
-                <x:String>Salt Lake City</x:String>
-                <x:String>San Diego</x:String>
-                <x:String>San Francisco Bay/Monterey</x:String>
-                <x:String>Seattle</x:String>
-                <x:String>Spokane</x:String>
-                <x:String>Tucson</x:String>
-                <x:String>Vancouver</x:String>
+                <x:String></x:String>
             </ComboBox>
             <ComboBox x:Name="StationComboBox" Margin="0,12,0,0" Padding="10,0,27,0" />
 
@@ -66,12 +41,12 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <RadioButton x:Name="InfraredCheckBox" Grid.Column="0" Grid.Row="0" Content="Infrared" GroupName="ImageBoxes"/>
-                <RadioButton x:Name="RainbowCheckBox" Grid.Column="1" Grid.Row="0" Content="Rainbow"  GroupName="ImageBoxes"/>
-                <RadioButton x:Name="RGBCheckBox" Grid.Column="0" Grid.Row="1" Content="RGB" GroupName="ImageBoxes"/>
-                <RadioButton x:Name="VisibleCheckBox" Grid.Column="1" Grid.Row="1" Content="Visible" GroupName="ImageBoxes" />
+                <RadioButton x:Name="ProductRadioButton1" Grid.Column="0" Grid.Row="0" Content="Infrared" GroupName="ProductBoxes"/>
+                <RadioButton x:Name="ProductRadioButton2" Grid.Column="1" Grid.Row="0" Content="Rainbow"  GroupName="ProductBoxes"/>
+                <RadioButton x:Name="ProductRadioButton3" Grid.Column="0" Grid.Row="1" Content="RGB" GroupName="ProductBoxes"/>
+                <RadioButton x:Name="ProductRadioButton4" Grid.Column="1" Grid.Row="1" Content="Visible" GroupName="ProductBoxes" />
             </Grid>
-            
+
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Duration" Margin="0,24,0,0"/>
             <Grid Margin="0,12,0,0">
                 <Grid.ColumnDefinitions>

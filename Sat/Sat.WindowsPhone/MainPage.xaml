@@ -55,8 +55,9 @@
     <!-- App Bar-->
     <Page.BottomAppBar>
         <CommandBar x:Name="AppBar" ClosedDisplayMode="Minimal" >
-            <AppBarButton x:Name="AboutButtons" Label="about" Icon="Help" Click="AboutButton_Click" />
-            <AppBarButton Label="options" Icon="Setting" x:Name="OptionsButton" Click="OptionsButton_Click"/>
+            <AppBarButton x:Name="AboutButtons" Label="about" Icon="ContactInfo" Click="AboutButton_Click" />
+            <AppBarButton x:Name="OptionsButton" Label="options" Icon="Setting"  Click="OptionsButton_Click"/>
+            <AppBarButton x:Name="HelpButton" Label="help" Icon="Help"  Click="HelpButton_Click" />
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

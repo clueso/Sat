@@ -82,27 +82,16 @@ namespace Sat
             Task GetFileNamesTask, DeleteFilesTask, DownloadFilesTask;
             var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.png");
             ImgBox.Source = new BitmapImage(LoadingimageUri);
+            GenericCodeClass.GetSavedAppData();
 
             GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
             SetNavigationButtonState(GenericCodeClass.IsLoopPaused, false);
-            //if (GenericCodeClass.IsLoopPaused == false)
-            //{
-            //    PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
-            //}
-            //else
-            //{
-            //    PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);
-            //}
-
-            //NextButton.IsEnabled = GenericCodeClass.IsLoopPaused;
-            //PrevButton.IsEnabled = GenericCodeClass.IsLoopPaused;
-
             StationBox.Text = GenericCodeClass.HomeStationName;
 
-            if(GenericCodeClass.HomeStationChanged == true)
+            if (GenericCodeClass.HomeStationChanged == true)
             {
-                DeleteFilesTask = GenericCodeClass.DeleteAllFiles(ImageFolder);
-                GenericCodeClass.HomeStationChanged = false;
+                DeleteFilesTask = GenericCodeClass.DeleteFiles(ImageFolder, null, true);
+                //GenericCodeClass.HomeStationChanged = false;
                 await DeleteFilesTask;
             }
 
@@ -113,7 +102,7 @@ namespace Sat
             LoopTimer.Interval = GenericCodeClass.LoopInterval; //Create a timer that trigger every 1 s
             DownloadTimer.Interval = GenericCodeClass.DownloadInterval; //Create a timer that triggers every 30 min
 
-            try 
+            try
             {
                 await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
             }
@@ -121,16 +110,17 @@ namespace Sat
             {
 
             }
-            
+
 
             if (!DownloadFilesTask.IsFaulted)
             {
                 if (GenericCodeClass.IsLoopPaused == false)
                 {
-                    LoopTimer.Start();                    
+                    LoopTimer.Start();
                 }
-                
-                SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);                   
+
+                SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
+                if (GenericCodeClass.HomeStationChanged == false)
                 DownloadTimer.Start();
             }
             else
@@ -141,7 +131,9 @@ namespace Sat
 
                 if (bitmap != null && bitmap.UriSource != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
                     ImgBox.Source = new BitmapImage(ImageUri);
-            }    
+            }
+
+            GenericCodeClass.HomeStationChanged = false;
         }
 
         /// <summary>
@@ -156,6 +148,7 @@ namespace Sat
         {
             LoopTimer.Stop();
             DownloadTimer.Stop();
+            GenericCodeClass.SaveAppData(false);
         }
 
         #region NavigationHelper registration
@@ -184,21 +177,13 @@ namespace Sat
         private void PlayPauseButton_Click(object sender, TappedRoutedEventArgs e)
         {
             if (GenericCodeClass.IsLoopPaused == false)
-            {
                 LoopTimer.Stop();
-                //PlayPauseButton.Icon = new SymbolIcon(Symbol.Play);                
-            }
             else
-            {
-                //PlayPauseButton.Icon = new SymbolIcon(Symbol.Pause);
                 LoopTimer.Start();
-            }
 
-            //NextButton.IsEnabled = !NextButton.IsEnabled;
-            //PrevButton.IsEnabled = !PrevButton.IsEnabled;
             GenericCodeClass.IsLoopPaused = !GenericCodeClass.IsLoopPaused;
             SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
-            
+
         }
 
         private async void NextButton_Click(object sender, TappedRoutedEventArgs e)
@@ -251,7 +236,7 @@ namespace Sat
                 StatusBox.Text = "Downloading image " + DownloadedFiles.ToString() + "/" + Files.Count.ToString(); ;
                 FileDownloadProgBar.Visibility = Visibility.Visible;
                 RetCode = await GenericCodeClass.GetFileUsingHttp(GenericCodeClass.HomeStation + Files[i], ImageFolder, Files[i]);
-                
+
                 if (RetCode == -1)
                 {
                     Files.Remove(Files[i].ToString());
@@ -287,8 +272,8 @@ namespace Sat
             if (Files.Count != 0 && ImageIndex >= 0 && ImageIndex <= Files.Count)
             {
                 DateTime LocalTime = GenericCodeClass.GetDateTimeFromFile(Files[ImageIndex]);
-                StatusBox.Text = LocalTime.ToString("MMM dd HH:mm") + "   " + (ImageIndex + 1).ToString() + "/" + Files.Count.ToString();
-                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[ImageIndex]);            
+                StatusBox.Text = LocalTime.ToString("MMM dd HH:mm") + "   " + (ImageIndex + 1).ToString() + "/" + Files.Count.ToString() + " " + GenericCodeClass.SatelliteTypeString;
+                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[ImageIndex]);
             }
             else
             {
@@ -335,6 +320,11 @@ namespace Sat
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(AboutPage));
+        }
+
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(HelpPage));
         }
 
         //Set the state for the navigation buttons. 
