@@ -28,35 +28,10 @@
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" ZoomMode="Disabled">
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <RichTextBlock Style="{StaticResource BodyRichTextBlockStyle}">
-                <Paragraph>
-                    The Satellite Imagery app is one of a series of weather apps created by Scirocco Software based out of Vancouver, Canada. 
-                    <LineBreak/>
-                </Paragraph>
-                    <Paragraph>
-                    Our goal is to create lightweight apps that provide a quick source of advanced weather information for mobile users on the go in North America.
-                    <LineBreak/>
-                    </Paragraph>
-                    <Paragraph>
-                    All data are from the National Oceanic and Atmospheric Administration (NOAA). The app makes no attempt to ensure the quality and accuracy of the data.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph>
-                    The internet connection of the device is used to access data. 
-                    No information about the user or the device is collected, stored, or shared.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph>
-                    We would love to hear your feedback on the app. If you have any questions, comments, or suggestions, please send an email to
-                    <Hyperlink Click="HyperLink_onClick">
-                        scirocco_sw@outlook.com
-                    </Hyperlink>.
-                    <LineBreak/>
-                </Paragraph>
-            </RichTextBlock>
-        </Grid>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" ZoomMode="Disabled" >
+            <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0" xmlns:src="using:Sat">
+                <src:AboutText/>
+            </Grid>
         </ScrollViewer>   
     </Grid>
 </Page>

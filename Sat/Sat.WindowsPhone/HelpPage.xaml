@@ -28,56 +28,10 @@
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" ZoomMode="Disabled">
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <RichTextBlock Style="{StaticResource BodyRichTextBlockStyle}">
-                <Paragraph>
-                    The images in the Satellite Imagery app are of either visible or infrared format.
-                    The National Oceanic and Atmospheric Administration (NOAA) provides multiple enhancements of infrared images.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph>
-                    Only a couple of enhancement options are provided in this app.
-                    A  description of each type of image follows below to help you choose which product is the most suitable.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph FontWeight="Bold">
-                    Infrared
-                </Paragraph>
-                <Paragraph>
-                    Unenhanced channel 4 infrared imagery.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph FontWeight="Bold">
-                    Rainbow
-                </Paragraph>
-                <Paragraph>
-                    Rainbow (colourful) enhancement curve.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph FontWeight="Bold">
-                    RGB
-                </Paragraph>
-                <Paragraph>
-                    Combination of visible and infrared using a three channel technique to form a red/green/blue false color image.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph FontWeight="Bold">
-                    Visible
-                </Paragraph>
-                <Paragraph>
-                    Unenhanced visible imagery that transitions to infrared overnight.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph>
-                    For more information, visit  
-                    <Hyperlink Click="NOAALink_onClick">
-                        NOAA
-                    </Hyperlink>.
-                    <LineBreak/>
-                </Paragraph>
-            </RichTextBlock>
-        </Grid>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" ZoomMode="Disabled" >
+            <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0" xmlns:src="using:Sat">
+                <src:HelpText/>
+            </Grid>
         </ScrollViewer>
     </Grid>
 </Page>

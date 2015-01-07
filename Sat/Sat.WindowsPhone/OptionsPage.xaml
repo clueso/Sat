@@ -28,7 +28,7 @@
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid-->
-        <ScrollViewer VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Hidden" Grid.Row="1">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" ZoomMode="Disabled" Grid.Row="1">
             <StackPanel Grid.Row="1" Margin="19,9.5,19,0">
                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Station" />
                 <Grid>
@@ -65,9 +65,11 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr" GroupName="DurationBoxes"/>
-                    <RadioButton x:Name="DurationRadioButton2" Grid.Column="1" Content="6 hr" GroupName="DurationBoxes"/>
+                    <RadioButton x:Name="DurationRadioButton3" Grid.Column="0" Content="Latest" GroupName="DurationBoxes" />
+                    <RadioButton x:Name="DurationRadioButton1" Grid.Column="1" Content="3 hr" GroupName="DurationBoxes"/>
+                    <RadioButton x:Name="DurationRadioButton2" Grid.Column="2" Content="6 hr" GroupName="DurationBoxes"/>
                 </Grid>
 
                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Loop Speed (time per image)" Margin="0,24,0,0"/>

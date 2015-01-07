@@ -52,9 +52,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <RadioButton x:Name="DurationRadioButton1" Grid.Column="0" Content="3 hr" GroupName="DurationBoxes"/>
-                <RadioButton x:Name="DurationRadioButton2" Grid.Column="1" Content="6 hr" GroupName="DurationBoxes"/>
+                <RadioButton x:Name="DurationRadioButton3" Grid.Column="0" Content="Latest" GroupName="DurationBoxes" />
+                <RadioButton x:Name="DurationRadioButton1" Grid.Column="1" Content="3 hr" GroupName="DurationBoxes"/>
+                <RadioButton x:Name="DurationRadioButton2" Grid.Column="2" Content="6 hr" GroupName="DurationBoxes"/>
             </Grid>
 
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Loop Speed (time per image)" Margin="0,24,0,0"/>

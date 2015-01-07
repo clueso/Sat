@@ -13,15 +13,20 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Settings Flyout item template is documented at http://go.microsoft.com/fwlink/?LinkId=273769
+// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Sat
 {
-    public sealed partial class AboutPage : SettingsFlyout
+    public sealed partial class AboutText : UserControl
     {
-        public AboutPage()
+        public AboutText()
         {
             this.InitializeComponent();
+        }
+
+        private async void HyperLink_onClick(object sender, RoutedEventArgs e)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("mailto:scirocco_sw@outlook.com"));
         }
     }
 }

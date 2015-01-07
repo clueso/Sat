@@ -16,56 +16,9 @@
         <!-- The StackPanel(s) below define individual content sections -->
 
         <!-- Content Section 1-->
-        <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
-
+        <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}" xmlns:src="using:Sat">
             <!-- Section 1 body -->
-            <RichTextBlock Style="{StaticResource BodyRichTextBlockStyle}">
-                <Paragraph>
-                    The images in the Satellite Imagery app are of either visible or infrared format.
-                        The National Oceanic and Atmospheric Administration (NOAA) provides multiple enhancements of infrared images.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph>
-                    Only a couple of enhancement options are provided in this app.
-                        A  description of each type of image follows below to help you choose which product is the most suitable.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph FontWeight="SemiBold">
-                    Infrared
-                </Paragraph>
-                <Paragraph>
-                    Unenhanced channel 4 infrared imagery.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph FontWeight="SemiBold">
-                    Rainbow
-                </Paragraph>
-                <Paragraph>
-                    Rainbow (colourful) enhancement curve.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph FontWeight="SemiBold">
-                    RGB
-                </Paragraph>
-                <Paragraph>
-                    Combination of visible and infrared using a three channel technique to form a red/green/blue false color image.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph FontWeight="SemiBold">
-                    Visible
-                </Paragraph>
-                <Paragraph>
-                    Unenhanced visible imagery that transitions to infrared overnight.
-                    <LineBreak/>
-                </Paragraph>
-                <Paragraph>
-                    For more information, visit
-                    <Hyperlink Click="NOAALink_onClick">
-                        NOAA
-                    </Hyperlink> .
-                    <LineBreak/>
-                </Paragraph>
-            </RichTextBlock>
+            <src:HelpText/>
         </StackPanel>
     </StackPanel>
 </SettingsFlyout>

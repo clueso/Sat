@@ -23,10 +23,5 @@ namespace Sat
         {
             this.InitializeComponent();
         }
-
-        private async void NOAALink_onClick(object sender, RoutedEventArgs e)
-        {
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("http://www.ssd.noaa.gov/enhancements.html"));
-        }
     }
 }
