@@ -106,6 +106,8 @@ namespace Sat
                 GenericCodeClass.FileDownloadPeriod = 3;
             else if (DurationRadioButton2.IsChecked == true)
                 GenericCodeClass.FileDownloadPeriod = 6;
+            else if (DurationRadioButton3.IsChecked == true)
+                GenericCodeClass.FileDownloadPeriod = 0;
             
             if (LoopTimerRadioButton1.IsChecked == true)
                 GenericCodeClass.LoopInterval = new TimeSpan(0, 0, 0, 0, 100);
@@ -122,6 +124,9 @@ namespace Sat
         {
             switch (GenericCodeClass.FileDownloadPeriod)
             {
+                case 0:
+                    DurationRadioButton3.IsChecked = true;
+                    break;
                 case 3:
                     DurationRadioButton1.IsChecked = true;
                     break;

@@ -164,7 +164,13 @@ static class GenericCodeClass
         //string RegExpString = ">\\s*";
         DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
         DateTime StartOfYearDate = new DateTime(CurrDateTime.Year - 1, 12, 31);
-        DateTime StartDateTime = CurrDateTime.Subtract(new TimeSpan(DownloadPeriod, 0, 0));    //Subtract 3 hours from the Current Time
+
+        DateTime StartDateTime;
+        if(DownloadPeriod != 0)
+            StartDateTime = CurrDateTime.Subtract(new TimeSpan(DownloadPeriod, 0, 0));    //Subtract 3 hours from the Current Time
+        else
+            StartDateTime = CurrDateTime.Subtract(new TimeSpan(1, 0, 0));    //Subtract 3 hours from the Current Time
+
         TimeSpan NoOfDays = CurrDateTime.Subtract(StartOfYearDate);
 
         Client.DefaultRequestHeaders.IfModifiedSince = StartDateTime;
@@ -175,7 +181,8 @@ static class GenericCodeClass
 
         RegExpString = ">[0-9]+_[0-9]+" + SatelliteType + ".jpg<";
 
-        FileNames.Add(StartDateTimeString);
+        if (DownloadPeriod != 0)
+            FileNames.Add(StartDateTimeString);
         RegExp = new Regex(RegExpString);
 
         try
@@ -185,7 +192,8 @@ static class GenericCodeClass
         }
         catch (Exception e)
         {
-            FileNames.Remove(StartDateTimeString);
+            if (DownloadPeriod != 0)
+                FileNames.Remove(StartDateTimeString);
             return;
         }
 
@@ -207,8 +215,15 @@ static class GenericCodeClass
                     }
                 }
                 FileNames.Sort();
-                Location = FileNames.IndexOf(StartDateTimeString);
-                FileNames.RemoveRange(0, Location + 1);
+
+                if(DownloadPeriod != 0)
+                {
+                    Location = FileNames.IndexOf(StartDateTimeString);
+                    FileNames.RemoveRange(0, Location + 1);
+                }
+                else
+                    FileNames.RemoveRange(0, FileNames.Count-1);
+                
             }
         }
         else
