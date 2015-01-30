@@ -119,7 +119,8 @@ namespace Sat
                     LoopTimer.Start();
                 }
 
-                SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
+                if (GenericCodeClass.FileDownloadPeriod != 0)
+                    SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
                 if (GenericCodeClass.HomeStationChanged == false)
                 DownloadTimer.Start();
             }
