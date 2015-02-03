@@ -71,7 +71,7 @@ namespace Sat
 
         public string GetCityCode(string CityName)
         {
-            XElement CityCode;
+            XElement City, CityCode;
             
             if (XMLDocElements != null)
             {
@@ -80,8 +80,30 @@ namespace Sat
                     where (string)EnumProv.Attribute("Name") == CityName
                     select EnumProv;
 
-                CityCode = CityNode.First();
+                City = CityNode.First();
+                CityCode = (XElement)City.FirstNode;
+                                                
                 return CityCode.Value.ToString();
+            }
+
+            return "Failed";
+        }
+
+        public string GetHomeURL(string CityName)
+        {
+            XElement City, BaseURL;
+
+            if (XMLDocElements != null)
+            {
+                IEnumerable<XElement> CityNode =
+                    from EnumProv in XMLDocElements.Elements("City")
+                    where (string)EnumProv.Attribute("Name") == CityName
+                    select EnumProv;
+
+                City = CityNode.First();
+                BaseURL = (XElement)City.LastNode;
+
+                return BaseURL.Value.ToString();
             }
 
             return "Failed";

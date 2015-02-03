@@ -73,7 +73,7 @@ namespace Sat
         {
             switch (GenericCodeClass.FileDownloadPeriod)
             {
-                case 0:
+                case 1:
                     DurationRadioButton3.IsChecked = true;
                     break;
                 case 3:
@@ -100,17 +100,24 @@ namespace Sat
             switch (GenericCodeClass.SatelliteTypeString)
             {
                 case "ir4":
-                     ProductRadioButton1.IsChecked = true;
-                     break;
+                case "alir":
+                case "1070":
+                case "03":
+                    ProductRadioButton1.IsChecked = true;
+                    break;
                 case "rb":
-                     ProductRadioButton2.IsChecked = true;
-                     break;
+                case "avn":
+                    ProductRadioButton2.IsChecked = true;
+                    break;
                 case "rgb":
-                     ProductRadioButton3.IsChecked = true;
-                     break;
+                    ProductRadioButton3.IsChecked = true;
+                    break;
                 case "vis":
-                     ProductRadioButton4.IsChecked = true;
-                     break;
+                case "alvs":
+                case "visible":
+                case "nir":
+                    ProductRadioButton4.IsChecked = true;
+                    break;
             }
 
             CountryRadioButton1.IsChecked = GenericCodeClass.CanadaSelected;
@@ -147,27 +154,59 @@ namespace Sat
         /// serializable state.</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            bool IsPolarSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Polar Imagery");
+            bool IsNEPacSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("North East Pacific");
+            bool IsNWTerritoriesSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("Northwest Territories/Nunavut");
+
             GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/" + GenericCodeClass.HomeStationCodeString + "/img/";
             ChosenCityName = StationComboBox.Items[StationComboBox.SelectedIndex].ToString();
 
             if (ProductRadioButton1.IsChecked == true)
-                ChosenSatelliteType = "ir4";
+            {
+                if (IsNEPacSelected)
+                    ChosenSatelliteType = "alir";
+                else if (IsPolarSelected && IsNWTerritoriesSelected)
+                    ChosenSatelliteType = "ir";
+                else if (IsPolarSelected && !IsNWTerritoriesSelected)
+                    ChosenSatelliteType = "03";
+                else
+                    ChosenSatelliteType = "ir4";
+            }
             else if (ProductRadioButton2.IsChecked == true)
-                ChosenSatelliteType = "rb";
+            {
+                if (GenericCodeClass.CanadaSelected)
+                    ChosenSatelliteType = "rb";
+                else
+                    ChosenSatelliteType = "avn";
+            }
             else if (ProductRadioButton3.IsChecked == true)
+            {
                 ChosenSatelliteType = "rgb";
+            }
             else if (ProductRadioButton4.IsChecked == true)
-                ChosenSatelliteType = "vis";
+            {
+                if (IsNEPacSelected)
+                    ChosenSatelliteType = "alvs";
+                else if (StationComboBox.Items[StationComboBox.SelectedIndex].Equals("Eastern Canada"))
+                    ChosenSatelliteType = "visible";
+                else if (IsPolarSelected)
+                    ChosenSatelliteType = "nir";
+                else
+                    ChosenSatelliteType = "vis";
+            }
 
             GenericCodeClass.HomeStationChanged = !ChosenCityName.Equals(GenericCodeClass.HomeStationName)
                                                     || !ChosenSatelliteType.Equals(GenericCodeClass.SatelliteTypeString);
 
             if (GenericCodeClass.HomeStationChanged)
             {
+                string HomeStation;
+
                 if (StationComboBox != null)
                 {
                     GenericCodeClass.HomeStationCodeString = CityCodeXML.GetCityCode(StationComboBox.Items[StationComboBox.SelectedIndex].ToString()); //Change this to ChosenCityCode?
-                    GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/" + GenericCodeClass.HomeStationCodeString + "/img/"; //Change this to ChosenCityCode?
+                    HomeStation = CityCodeXML.GetHomeURL(StationComboBox.Items[StationComboBox.SelectedIndex].ToString()); //Change this to ChosenCityCode?
+                    GenericCodeClass.HomeStation = HomeStation.Replace("{SC}", GenericCodeClass.HomeStationCodeString);
                 }
 
                 GenericCodeClass.HomeStationName = StationComboBox.Items[StationComboBox.SelectedIndex].ToString();
@@ -231,7 +270,34 @@ namespace Sat
 
         private void SetOptions()
         {
+            bool IsPolarSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Polar Imagery (no loop)");
+            bool AreProvincesSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("British Columbia") ||
+                                        ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Ontario") ||
+                                        ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("New Brunswick");
+            bool IsRegionalSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Regional Imagery");
+            bool IsNEPacSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("North East Pacific");
 
+            //RGB
+            ProductRadioButton3.IsEnabled = !GenericCodeClass.CanadaSelected || AreProvincesSelected;
+
+            //Rainbow
+            ProductRadioButton2.IsEnabled = !GenericCodeClass.CanadaSelected || AreProvincesSelected;
+            //Aviation = !GenericCodeClass.CanadaSelected;
+            ProductRadioButton1.IsChecked = (bool)ProductRadioButton1.IsChecked || (!(bool)ProductRadioButton4.IsChecked && !ProductRadioButton2.IsEnabled);
+
+            DurationRadioButton1.IsEnabled = !IsPolarSelected;  //3h
+            DurationRadioButton2.IsEnabled = !IsPolarSelected && !IsNEPacSelected;  //6h
+            DurationRadioButton3.IsEnabled = !IsPolarSelected;  //Latest
+            DurationRadioButton3.IsChecked = (bool)DurationRadioButton3.IsChecked || !DurationRadioButton1.IsEnabled;
+
+            LoopTimerRadioButton1.IsEnabled = !IsPolarSelected;
+            LoopTimerRadioButton2.IsEnabled = !IsPolarSelected;
+            LoopTimerRadioButton3.IsEnabled = !IsPolarSelected;
+
+            if (GenericCodeClass.CanadaSelected)
+                ProductRadioButton2.Content = "Rainbow";
+            else
+                ProductRadioButton2.Content = "Aviation";
         }
 
         private void PopulateStationBox(int ProvinceBoxIndex, string ProvinceName, bool UseHomeStationValue)

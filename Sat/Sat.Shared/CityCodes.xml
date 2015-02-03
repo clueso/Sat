@@ -1,20 +1,71 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Cities>
-  <City Name ="Central British Columbia">flt/t7</City>
-  <City Name ="Eastern Canada/USA">east/eaus</City>
-  <City Name ="North East Pacific"></City>
-  <City Name ="Northern Great Lakes">east/ff2</City>
-  <City Name ="Prairies/Central Canada">east/ff1</City>
-  <City Name ="Southern Ontario">east/gl</City>
-  <City Name ="Southern Quebec">east/ne</City>
-  <City Name ="Western Canada/USA"></City>
-  <City Name ="Yukon">west/ak</City>
-  <City Name ="Vancouver">west/vanc</City>
-  <City Name ="St. John">east/wfo/car</City>
-  <City Name ="Sault Ste. Marie">east/wfo/apx</City>
-  <City Name ="Thunder Bay">east/wfo/dlh</City>
-  <City Name ="Toronto">east/wfo/buf</City>
-  <City Name ="Hudson Bay"></City>
-  <City Name ="Northwest Territories/Nunavut"></City>
-  <City Name ="Yukon"></City>
+  <City Name ="Central British Columbia">
+    <CityCode>flt/t7</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Eastern Canada/USA">
+    <CityCode>east/eaus</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="North East Pacific">
+    <CityCode>NEPAC</CityCode>
+    <BaseURL>http://www.goes.noaa.gov/GSSLOOPS/</BaseURL>
+  </City>
+  <City Name ="Northern Great Lakes">
+    <CityCode>east/ff2</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Prairies/Central Canada">
+    <CityCode>east/ff1</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Southern Ontario">
+    <CityCode>east/gl</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Southern Quebec">
+    <CityCode>east/ne</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Western Canada/USA">
+    <CityCode>WEST_CAN_USA</CityCode>
+    <BaseURL>http://weather.gc.ca/data/satellite/</BaseURL>
+  </City>
+  <City Name ="Yukon">
+    <CityCode>west/ak</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Vancouver">
+    <CityCode>west/vanc</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="St. John">
+    <CityCode>east/wfo/car</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Sault Ste. Marie">
+    <CityCode>east/wfo/apx</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Thunder Bay">
+    <CityCode>east/wfo/dlh</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Toronto">
+    <CityCode>east/wfo/buf</CityCode>
+    <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
+  </City>
+  <City Name ="Hudson Bay">
+    <CityCode>HUDSON_BAY</CityCode>
+    <BaseURL>http://weather.gc.ca/data/satellite/</BaseURL>
+  </City>
+  <City Name ="Northwest Territories/Nunavut">
+    <CityCode>NW_TERRITORIES</CityCode>
+    <BaseURL>http://weather.gc.ca/data/satellite/</BaseURL>
+  </City>
+  <City Name ="Yukon">
+    <CityCode>YUKON</CityCode>
+    <BaseURL>http://weather.gc.ca/data/satellite/</BaseURL>
+  </City>
 </Cities>
