@@ -74,8 +74,8 @@
                 <ColumnDefinition Width="120" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ScrollViewer Grid.Column="1" x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" MaxZoomFactor="3" >
-                <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left" Stretch="UniformToFill"/>
+            <ScrollViewer Grid.Column="1" x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="1" MaxZoomFactor="3">
+                <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left" Stretch="UniformToFill" Source="Assets/Loading.png"/>
             </ScrollViewer>
         </Grid>
     </Grid>

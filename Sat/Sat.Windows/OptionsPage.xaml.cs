@@ -42,7 +42,7 @@ namespace Sat
 
         private void SetOptions()
         {
-            bool IsPolarSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Polar Imagery (no loop)");
+            bool IsPolarSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Polar Imagery");
             bool AreProvincesSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("British Columbia") ||
                                         ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Ontario") ||
                                         ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("New Brunswick");
@@ -154,7 +154,8 @@ namespace Sat
                 {
                     GenericCodeClass.HomeStationCodeString = CityCodeXML.GetCityCode(StationComboBox.Items[StationComboBox.SelectedIndex].ToString()); //Change this to ChosenCityCode?
                     HomeStation = CityCodeXML.GetHomeURL(StationComboBox.Items[StationComboBox.SelectedIndex].ToString()); //Change this to ChosenCityCode?
-                    GenericCodeClass.HomeStation = HomeStation.Replace("{SC}", GenericCodeClass.HomeStationCodeString);
+                    HomeStation = HomeStation.Replace("{SC}", GenericCodeClass.HomeStationCodeString);
+                    GenericCodeClass.HomeStation = HomeStation.Replace("{OPTION}", ChosenSatelliteType);
                 }
 
                 GenericCodeClass.HomeStationName = StationComboBox.Items[StationComboBox.SelectedIndex].ToString();

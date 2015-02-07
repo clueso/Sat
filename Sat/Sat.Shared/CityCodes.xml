@@ -10,7 +10,7 @@
   </City>
   <City Name ="North East Pacific">
     <CityCode>NEPAC</CityCode>
-    <BaseURL>http://www.goes.noaa.gov/GSSLOOPS/</BaseURL>
+    <BaseURL>http://www.goes.noaa.gov/GSSLOOPS/{OPTION}/</BaseURL>
   </City>
   <City Name ="Northern Great Lakes">
     <CityCode>east/ff2</CityCode>
@@ -30,7 +30,7 @@
   </City>
   <City Name ="Western Canada/USA">
     <CityCode>WEST_CAN_USA</CityCode>
-    <BaseURL>http://weather.gc.ca/data/satellite/</BaseURL>
+    <BaseURL>http://www.atmos.washington.edu/images/ir4km/</BaseURL>
   </City>
   <City Name ="Yukon">
     <CityCode>west/ak</CityCode>
@@ -64,8 +64,8 @@
     <CityCode>NW_TERRITORIES</CityCode>
     <BaseURL>http://weather.gc.ca/data/satellite/</BaseURL>
   </City>
-  <City Name ="Yukon">
-    <CityCode>YUKON</CityCode>
+  <City Name ="Yukon ">
+    <CityCode>YUKON </CityCode>
     <BaseURL>http://weather.gc.ca/data/satellite/</BaseURL>
   </City>
 </Cities>

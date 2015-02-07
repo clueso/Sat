@@ -38,6 +38,7 @@ namespace Sat
         private OptionsPage OptionsPageFlyout = null;
         private AboutPage AboutPageFlyout = null;
         private HelpPage HelpPageFlyout = null;
+        private string SatelliteProduct;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -106,6 +107,31 @@ namespace Sat
             await GetFileNamesTask;
 
             DownloadFilesTask = DownloadFiles();
+
+            switch (GenericCodeClass.SatelliteTypeString)
+            {
+                case "ir4":
+                case "alir":
+                case "1070":
+                case "03":
+                    SatelliteProduct = "Infra Red";
+                    break;
+                case "rb":
+                    SatelliteProduct = "Rainbow";
+                    break;
+                case "avn":
+                    SatelliteProduct = "Aviation";
+                    break;
+                case "rgb":
+                    SatelliteProduct = "RGB";
+                    break;
+                case "vis":
+                case "alvs":
+                case "visible":
+                case "nir":
+                    SatelliteProduct = "Visible";
+                    break;
+            }
 
             LoopTimer.Interval = GenericCodeClass.LoopInterval; //Create a timer that trigger every 1 s
             DownloadTimer.Interval = GenericCodeClass.DownloadInterval; //Create a timer that triggers every 30 min
@@ -279,7 +305,7 @@ namespace Sat
             if (Files.Count != 0 && ImageIndex >= 0 && ImageIndex <= Files.Count)
             {
                 DateTime LocalTime = GenericCodeClass.GetDateTimeFromFile(Files[ImageIndex]);
-                StatusBox.Text = LocalTime.ToString("MMM dd HH:mm") + "   " + (ImageIndex + 1).ToString() + "/" + Files.Count.ToString() + " " + GenericCodeClass.SatelliteTypeString;
+                StatusBox.Text = LocalTime.ToString("MMM dd HH:mm") + "   " + (ImageIndex + 1).ToString() + "/" + Files.Count.ToString() + " " + SatelliteProduct;
                 ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[ImageIndex]);               
             }
             else
@@ -364,6 +390,30 @@ namespace Sat
             if (GenericCodeClass.IsLoopPaused == false)
                 LoopTimer.Stop();
 
+            switch (GenericCodeClass.SatelliteTypeString)
+            {
+                case "ir4":
+                case "alir":
+                case "1070":
+                case "03":
+                    SatelliteProduct = "Infra Red";
+                    break;
+                case "rb":
+                    SatelliteProduct = "Rainbow";
+                    break;
+                case "avn":
+                    SatelliteProduct = "Aviation";
+                    break;
+                case "rgb":
+                    SatelliteProduct = "RGB";
+                    break;
+                case "vis":
+                case "alvs":
+                case "visible":
+                case "nir":
+                    SatelliteProduct = "Visible";
+                    break;
+            }
 
             ImgBox.Source = new BitmapImage(LoadingimageUri);
 

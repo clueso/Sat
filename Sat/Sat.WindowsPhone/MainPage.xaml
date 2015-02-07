@@ -47,7 +47,7 @@
         <!--TODO: Content should be placed within the following grid-->
         <Grid Grid.Row="2" Margin="19,0,0,0">
             <ScrollViewer x:Name="ImgScrollViewer" ZoomMode="Enabled" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" MinZoomFactor="0.6" MaxZoomFactor="3" Margin="0">
-                <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                <Image x:Name="ImgBox" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             </ScrollViewer>
         </Grid>
     </Grid>

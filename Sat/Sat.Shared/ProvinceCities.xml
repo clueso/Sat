@@ -23,9 +23,9 @@
     <City>Thunder Bay</City>
     <City>Toronto</City>
   </Province>
-  <Province Name="Polar Imagery (no loop)">
+  <Province Name="Polar Imagery">
     <City>Hudson Bay</City>
     <City>Northwest Territories/Nunavut</City>
-    <City>Yukon</City>
+    <City>Yukon </City>
   </Province>
 </ProvinceCities>
