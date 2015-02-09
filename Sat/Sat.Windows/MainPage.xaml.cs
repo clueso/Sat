@@ -93,8 +93,7 @@ namespace Sat
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             Task GetFileNamesTask, DownloadFilesTask;
-            var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.png");
-            ImgBox.Source = new BitmapImage(LoadingimageUri);
+            //SetSystemImage("ms-appx:///Assets/Loading.png");
 
             GenericCodeClass.GetSavedAppData();
             SetNavigationButtonState(GenericCodeClass.IsLoopPaused, false);
@@ -139,28 +138,20 @@ namespace Sat
             try
             {
                 await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
+                if (!DownloadFilesTask.IsFaulted)
+                {
+                    if (!GenericCodeClass.IsLoopPaused && Files.Count > 1)  //single file
+                        LoopTimer.Start();
+                    DownloadTimer.Start();
+                    if (GenericCodeClass.FileDownloadPeriod != 0)
+                        SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
+                }
             }
             catch
             {
-
-            }
-
-            if (!DownloadFilesTask.IsFaulted)
-            {
-                if (!GenericCodeClass.IsLoopPaused)
-                    LoopTimer.Start();
-                DownloadTimer.Start();
-                if (GenericCodeClass.FileDownloadPeriod != 0)
-                    SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
-            }
-            else
-            {
                 //Show Error Message
-                Uri ImageUri = new Uri("ms-appx:///Assets/Error.png");
-                BitmapImage bitmap = ImgBox.Source as BitmapImage;
-
-                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
-                    ImgBox.Source = new BitmapImage(ImageUri);
+                //SetSystemImage("ms-appx:///Assets/Error.png");                
+                StatusBox.Text = "Error Downloading Images";
             }
         }
         /// <summary>
@@ -283,14 +274,28 @@ namespace Sat
 
             FileDownloadProgBar.Visibility = Visibility.Collapsed;
 
-            if (Files.Count > 1)
+            if (Files.Count >= 1)   //single file
             {
+                bool tmp = GenericCodeClass.IsLoopPaused;
                 CurrImgIndex = 0;
+                
+                if(Files.Count == 1)                    
+                    GenericCodeClass.IsLoopPaused = true;
+                
                 await ChangeImage(CurrImgIndex);
+                
+                if (Files.Count == 1)
+                {
+                    GenericCodeClass.IsLoopPaused = tmp;
+                    SetNavigationButtonState(GenericCodeClass.IsLoopPaused, false);
+                }
+                    
             }
             else
+            {
                 CurrImgIndex = -1;
-
+            }
+                
             await GenericCodeClass.DeleteFiles(ImageFolder, GenericCodeClass.ExistingFiles, false);
         }
 
@@ -310,11 +315,7 @@ namespace Sat
             }
             else
             {
-                Uri ImageUri = new Uri("ms-appx:///Assets/Error.png");
-                BitmapImage bitmap = ImgBox.Source as BitmapImage;
-
-                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
-                    ImgBox.Source = new BitmapImage(ImageUri);
+                //SetSystemImage("ms-appx:///Assets/Error.png");
                 StatusBox.Text = "Error Downloading Images";
             }
 
@@ -382,8 +383,7 @@ namespace Sat
         private async void MainPage_SettingsChanged(object sender, EventArgs e)
         {
             Task GetFileNamesTask, DeleteFilesTask, DownloadFilesTask;
-            var LoadingimageUri = new Uri("ms-appx:///Assets/Loading.png");
-
+            //SetSystemImage("ms-appx:///Assets/Loading.png");
 
             SetNavigationButtonState(GenericCodeClass.IsLoopPaused, false);
 
@@ -415,8 +415,6 @@ namespace Sat
                     break;
             }
 
-            ImgBox.Source = new BitmapImage(LoadingimageUri);
-
             GetFileNamesTask = GenericCodeClass.GetListOfLatestFiles(Files);
 
             if (GenericCodeClass.HomeStationChanged == true)
@@ -438,28 +436,43 @@ namespace Sat
             try
             {
                 await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
+                if (!DownloadFilesTask.IsFaulted)
+                {
+                    if (!GenericCodeClass.IsLoopPaused && Files.Count > 1)  //single file
+                        LoopTimer.Start();
+                    DownloadTimer.Start();
+                    if (GenericCodeClass.FileDownloadPeriod != 0 && Files.Count > 1)
+                        SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
+                }
             }
             catch
             {
-
-            }
-
-            if (DownloadFilesTask.IsFaulted)
-            {
                 //Show Error Message
-                Uri ImageUri = new Uri("ms-appx:///Assets/Error.png");
-                BitmapImage bitmap = ImgBox.Source as BitmapImage;
+                //SetSystemImage("ms-appx:///Assets/Error.png");
+                StatusBox.Text = "Error Downloading Images";
+            }
 
-                if (bitmap != null && bitmap.UriSource.AbsoluteUri != "ms-appx:/Assets/Error.png")
-                    ImgBox.Source = new BitmapImage(ImageUri);
-            }
-            else
-            {
-                if (GenericCodeClass.FileDownloadPeriod != 0)
-                    SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
-                if (GenericCodeClass.IsLoopPaused == false)
-                    LoopTimer.Start();
-            }
+            //try
+            //{
+            //    await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
+            //}
+            //catch
+            //{
+
+            //}
+
+            //if (DownloadFilesTask.IsFaulted)
+            //{
+            //    //Show Error Message
+            //    SetSystemImage("ms-appx:///Assets/Error.png");
+            //}
+            //else
+            //{
+            //    if (GenericCodeClass.FileDownloadPeriod != 0 && Files.Count > 1)    // single file
+            //        SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
+            //    if (GenericCodeClass.IsLoopPaused == false && Files.Count > 1)  //single file
+            //        LoopTimer.Start();
+            //}
 
             GenericCodeClass.HomeStationChanged = false;
 
@@ -484,6 +497,22 @@ namespace Sat
             PrevButton.IsEnabled = EnableAll && LoopPaused;
 
         }
+
+        //private void SetSystemImage(string URI)
+        //{
+        //    Uri ImageUri = new Uri(URI);
+        //    BitmapImage bitmap = ImgBox.Source as BitmapImage;
+
+        //    try
+        //    {
+        //        if (bitmap != null && !bitmap.UriSource.AbsoluteUri.Equals(URI))
+        //            ImgBox.Source = new BitmapImage(ImageUri);
+        //    }
+        //    catch
+        //    {
+        //        ImgBox.Source = new BitmapImage(ImageUri);
+        //    }
+        //}
 
         //private void AdBox_ErrorOccurred(object sender, Microsoft.Advertising.WinRT.UI.AdErrorEventArgs e)
         //{

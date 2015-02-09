@@ -128,17 +128,19 @@ static class GenericCodeClass
         //}
         //else	//Extract date from NOAA satellite data image file name
         //{
-        Time = Filename.Substring(8, 4);
-        Year = Filename.Substring(0, 4);
-
+        
             if (!HomeProvinceName.Equals("Polar Imagery") && !HomeStationCodeString.Equals("NEPAC") && !HomeStationCodeString.Equals("WEST_CAN_USA"))
             {
+                Time = Filename.Substring(8, 4);
+                Year = Filename.Substring(0, 4);
                 Day = Filename.Substring(4, 3);
                 LocalDateTime = new DateTime(Convert.ToInt32(Year) - 1, 12, 31, Convert.ToInt32(Time.Substring(0, 2)), Convert.ToInt32(Time.Substring(2, 2)), 0);
                 LocalDateTime = LocalDateTime.AddDays(Convert.ToDouble(Day));
             }
             else if(HomeStationCodeString.Equals("WEST_CAN_USA"))
             {
+                Time = Filename.Substring(8, 4);
+                Year = Filename.Substring(0, 4);
                 Day = Filename.Substring(6,2);
                 Month = Filename.Substring(4,2);
                 LocalDateTime = new DateTime(Convert.ToInt32(Year), Convert.ToInt32(Month), Convert.ToInt32(Day), Convert.ToInt32(Time.Substring(0, 2)), Convert.ToInt32(Time.Substring(2, 2)), 0);
@@ -148,7 +150,7 @@ static class GenericCodeClass
                 Year = DateTime.Now.Year.ToString();
                 Day = DateTime.Now.Day.ToString();
                 Month = DateTime.Now.Month.ToString();
-                Time = DateTime.Now.Hour.ToString() + DateTime.UtcNow.Minute.ToString();
+                Time = DateTime.Now.Hour.ToString("D2") + DateTime.UtcNow.Minute.ToString("D2");
                 LocalDateTime = new DateTime(Convert.ToInt32(Year), Convert.ToInt32(Month), Convert.ToInt32(Day), Convert.ToInt32(Time.Substring(0, 2)), Convert.ToInt32(Time.Substring(2, 2)), 0);
             }
 

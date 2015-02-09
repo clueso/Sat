@@ -308,6 +308,8 @@ namespace Sat
             {
                 List<string> CityNames = new List<string>();
 
+                StationComboBox.SelectionChanged -= StationComboBox_SelectionChanged;
+
                 if (ProvinceName.Contains('&'))
                     ProvinceName = ProvinceName.Substring(0, 12);
 
@@ -325,6 +327,8 @@ namespace Sat
                     StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
                 else
                     StationComboBox.SelectedIndex = 0;
+
+                StationComboBox.SelectionChanged -= StationComboBox_SelectionChanged;
             }
         }
 
@@ -373,7 +377,12 @@ namespace Sat
                 //PopulateStationBox(ProvinceComboBox.SelectedIndex, ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].ToString());
             }
 
-        } 
+        }
+
+        private void StationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetOptions();
+        }
 
     }
 }

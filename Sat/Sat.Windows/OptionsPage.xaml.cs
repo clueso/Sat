@@ -48,23 +48,27 @@ namespace Sat
                                         ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("New Brunswick");
             bool IsRegionalSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Regional Imagery");
 		    bool IsNEPacSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("North East Pacific");
+            bool IsWestCanSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("Western Canada/USA");
 
-            //RGB
-            ProductRadioButton3.IsEnabled = !GenericCodeClass.CanadaSelected || AreProvincesSelected;
-
+            //IR
+            ProductRadioButton1.IsEnabled = true;
             //Rainbow
-            ProductRadioButton2.IsEnabled = !GenericCodeClass.CanadaSelected || AreProvincesSelected;
+            ProductRadioButton2.IsEnabled = !GenericCodeClass.CanadaSelected || (GenericCodeClass.CanadaSelected && AreProvincesSelected);
+            //RGB
+            ProductRadioButton3.IsEnabled = !GenericCodeClass.CanadaSelected || (GenericCodeClass.CanadaSelected && AreProvincesSelected);
+            //visible
+            ProductRadioButton4.IsEnabled = !GenericCodeClass.CanadaSelected || (GenericCodeClass.CanadaSelected && (IsPolarSelected || AreProvincesSelected)) || (GenericCodeClass.CanadaSelected && IsRegionalSelected && !IsWestCanSelected);
             //Aviation = !GenericCodeClass.CanadaSelected;
             ProductRadioButton1.IsChecked = (bool)ProductRadioButton1.IsChecked || (!(bool)ProductRadioButton4.IsChecked && !ProductRadioButton2.IsEnabled);
 
-            DurationRadioButton1.IsEnabled = !IsPolarSelected;  //3h
-            DurationRadioButton2.IsEnabled = !IsPolarSelected && !IsNEPacSelected;  //6h
-            DurationRadioButton3.IsEnabled = !IsPolarSelected;  //Latest
+            DurationRadioButton1.IsEnabled = !GenericCodeClass.CanadaSelected || (IsRegionalSelected || !IsPolarSelected || AreProvincesSelected);  //3h
+            DurationRadioButton2.IsEnabled = !GenericCodeClass.CanadaSelected || (IsRegionalSelected || !IsPolarSelected || AreProvincesSelected);  //6h
+            DurationRadioButton3.IsEnabled = true;  //Latest
             DurationRadioButton3.IsChecked = (bool)DurationRadioButton3.IsChecked || !DurationRadioButton1.IsEnabled;
-            
-            LoopTimerRadioButton1.IsEnabled = !IsPolarSelected;
-            LoopTimerRadioButton2.IsEnabled = !IsPolarSelected;
-            LoopTimerRadioButton3.IsEnabled = !IsPolarSelected;
+
+            LoopTimerRadioButton1.IsEnabled = DurationRadioButton1.IsEnabled || DurationRadioButton2.IsEnabled;
+            LoopTimerRadioButton2.IsEnabled = DurationRadioButton1.IsEnabled || DurationRadioButton2.IsEnabled;
+            LoopTimerRadioButton3.IsEnabled = DurationRadioButton1.IsEnabled || DurationRadioButton2.IsEnabled;
 
             if (GenericCodeClass.CanadaSelected)
                 ProductRadioButton2.Content = "Rainbow";
@@ -259,7 +263,6 @@ namespace Sat
 
             CountryRadioButton1.Checked += CountryRadioButton_CheckedHandler;
             CountryRadioButton2.Checked += CountryRadioButton_CheckedHandler;
-            //ProvinceComboBox.SelectionChanged += ProvinceComboBox_SelectionChanged;
         }
 
         private void PopulateStationBox(int ProvinceBoxIndex, string ProvinceName, bool UseHomeStationValue)
@@ -268,6 +271,8 @@ namespace Sat
             if (StationComboBox != null)
             {
                 List<string> CityNames = new List<string>();
+
+                StationComboBox.SelectionChanged -= StationComboBox_SelectionChanged;
 
                 if (ProvinceName.Contains('&'))
                     ProvinceName = ProvinceName.Substring(0, 12);
@@ -286,6 +291,7 @@ namespace Sat
                     StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
                 else
                     StationComboBox.SelectedIndex = 0;
+                StationComboBox.SelectionChanged += StationComboBox_SelectionChanged;
             }
         }
 
@@ -334,6 +340,11 @@ namespace Sat
                 //PopulateStationBox(ProvinceComboBox.SelectedIndex, ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].ToString());
             }
 
+        }
+
+        private void StationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetOptions();
         }
     }
 }
