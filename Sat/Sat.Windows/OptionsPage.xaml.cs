@@ -58,8 +58,8 @@ namespace Sat
             ProductRadioButton3.IsEnabled = !GenericCodeClass.CanadaSelected || (GenericCodeClass.CanadaSelected && AreProvincesSelected);
             //visible
             ProductRadioButton4.IsEnabled = !GenericCodeClass.CanadaSelected || (GenericCodeClass.CanadaSelected && (IsPolarSelected || AreProvincesSelected)) || (GenericCodeClass.CanadaSelected && IsRegionalSelected && !IsWestCanSelected);
-            //Aviation = !GenericCodeClass.CanadaSelected;
-            ProductRadioButton1.IsChecked = (bool)ProductRadioButton1.IsChecked || (!(bool)ProductRadioButton4.IsChecked && !ProductRadioButton2.IsEnabled);
+            
+            ProductRadioButton1.IsChecked = (bool)ProductRadioButton1.IsChecked || (!(bool)ProductRadioButton4.IsChecked && !ProductRadioButton2.IsEnabled) || ((bool)ProductRadioButton4.IsChecked && !ProductRadioButton4.IsEnabled);
 
             DurationRadioButton1.IsEnabled = !GenericCodeClass.CanadaSelected || (IsRegionalSelected || !IsPolarSelected || AreProvincesSelected);  //3h
             DurationRadioButton2.IsEnabled = !GenericCodeClass.CanadaSelected || (IsRegionalSelected || !IsPolarSelected || AreProvincesSelected);  //6h
@@ -256,11 +256,9 @@ namespace Sat
             }
 
             PopulateProvinceBox(true);
-            //ProvinceComboBox.SelectedItem = GenericCodeClass.HomeProvinceName;
             PopulateStationBox(ProvinceComboBox.SelectedIndex, ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].ToString(), true);
             SetOptions();
-            //StationComboBox.SelectedItem = GenericCodeClass.HomeStationName;
-
+            
             CountryRadioButton1.Checked += CountryRadioButton_CheckedHandler;
             CountryRadioButton2.Checked += CountryRadioButton_CheckedHandler;
         }
@@ -336,8 +334,6 @@ namespace Sat
                     ProvinceComboBox.SelectedItem = GenericCodeClass.HomeProvinceName;
                 else
                     ProvinceComboBox.SelectedIndex = 0;
-
-                //PopulateStationBox(ProvinceComboBox.SelectedIndex, ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].ToString());
             }
 
         }

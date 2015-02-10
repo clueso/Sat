@@ -17,7 +17,6 @@ static class GenericCodeClass
     private static string HomeStationURL;
     private static string HomeStationString;
     private static bool IsHomeStationChanged = false;
-    //private static bool IsECLightningDataSelected = false;
     private static HttpClient Client;
     private static HttpResponseMessage Message;
     private static int DownloadPeriod = 3;
@@ -102,13 +101,6 @@ static class GenericCodeClass
         set { IsCanadaSelected = value; }
     }
 
-    //Provide access to private property specifying whether home station has changed
-    //public static bool LightningDataSelected
-    //{
-    //    get { return IsECLightningDataSelected; }
-    //    set { IsECLightningDataSelected = value; }
-    //}
-
     public static DateTime GetDateTimeFromFile(string Filename)
     {
         DateTime LocalDateTime;
@@ -118,17 +110,6 @@ static class GenericCodeClass
         string Day;
         string Month;
 
-        //if(Filename.EndsWith(".png"))	//Extract date from Env. Canada lightning data image file name
-        //{
-        //    Time = Filename.Substring(12, 4);
-        //    Year = Filename.Substring(4,4);
-        //    Day =  Filename.Substring(10,2);
-        //    Month = Filename.Substring(8,2);
-        //    LocalDateTime = new DateTime(Convert.ToInt32(Year), Convert.ToInt32(Month), Convert.ToInt32(Day), Convert.ToInt32(Time.Substring(0, 2)), Convert.ToInt32(Time.Substring(2, 2)), 0);
-        //}
-        //else	//Extract date from NOAA satellite data image file name
-        //{
-        
             if (!HomeProvinceName.Equals("Polar Imagery") && !HomeStationCodeString.Equals("NEPAC") && !HomeStationCodeString.Equals("WEST_CAN_USA"))
             {
                 Time = Filename.Substring(8, 4);
@@ -155,9 +136,7 @@ static class GenericCodeClass
             }
 
             LocalDateTime = LocalDateTime.ToLocalTime();
-        //}
-        
-        
+     
         return LocalDateTime;
     }
 
@@ -222,7 +201,6 @@ static class GenericCodeClass
 
             try
             {
-                //Message = await Client.GetAsync(URI);
                 Message = await HttpClientTask;
             }
             catch (Exception e)
@@ -250,10 +228,23 @@ static class GenericCodeClass
                     }
                     FileNames.Sort();
 
-                    if (DownloadPeriod != 1)
+                    if (DownloadPeriod != 1)    //"Latest" option not selected
                     {
+                        int MaxFiles = 6;
                         Location = FileNames.IndexOf(StartDateTimeString);
                         FileNames.RemoveRange(0, Location + 1);
+
+                        if (DownloadPeriod == 6)
+                            MaxFiles = 12;
+                        if (FileNames.Count > MaxFiles) //Limit the maximum number of files displayed in the loop.
+                        {
+                            //Remove every other file starting from the second oldest
+                            int Index;
+                            int NoOfFilesToRemove = FileNames.Count - MaxFiles;
+
+                            for (Index = 1; Index <= FileNames.Count && NoOfFilesToRemove > 0; Index += 1, NoOfFilesToRemove--)
+                                FileNames.RemoveAt(Index);
+                        }
                     }
                     else
                         FileNames.RemoveRange(0, FileNames.Count - 1);
@@ -303,26 +294,7 @@ static class GenericCodeClass
             }
         }
         //Handle special cases end
-    }
-
-    //public static void GetWeatherDataURLs(List<string> FileNames, int NoOfFiles)
-    //{
-    //    DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
-    //    int i;
-
-    //    //No need to save previous files as that is done in the function GetLatestFiles()
-
-    //    CurrDateTime = CurrDateTime.AddMinutes(-CurrDateTime.Minute % 10);
-
-
-    //    for (i = 0; i < NoOfFiles; i++)
-    //    {
-    //        FileNames.Add("PAC_" + CurrDateTime.Year.ToString() + CurrDateTime.Month.ToString("D2") + CurrDateTime.Day.ToString("D2") + CurrDateTime.Hour.ToString("D2") + CurrDateTime.Minute.ToString("D2") + ".png");
-    //        CurrDateTime = CurrDateTime.AddMinutes(-10);
-    //    }
-
-    //    FileNames.Reverse();
-    //}
+    }    
 
     public static async Task<int> GetFileUsingHttp(string URL, StorageFolder Folder, string FileName)
     {
@@ -385,34 +357,34 @@ static class GenericCodeClass
 
     }
 
-    public static async Task<WriteableBitmap> GetWriteableBitmap(StorageFolder ImageFolder, string FileName)
-    {
-        StorageFile ImageFile;
-        WriteableBitmap ImageBitmap;
-        //BitmapImage Image = new BitmapImage();
+    //do not delete
+    //public static async Task<WriteableBitmap> GetWriteableBitmap(StorageFolder ImageFolder, string FileName)
+    //{
+    //    StorageFile ImageFile;
+    //    WriteableBitmap ImageBitmap;
+     
+    //    if (ImageFolder == null)
+    //    {
+    //        ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+    //    }
 
-        if (ImageFolder == null)
-        {
-            ImageFolder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-        }
+    //    ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
+    //    ImageBitmap = await LoadWriteableBitmap(ImageFile);
 
-        ImageFile = await ImageFolder.CreateFileAsync(FileName, CreationCollisionOption.OpenIfExists);
-        ImageBitmap = await LoadWriteableBitmap(ImageFile);
+    //    return ImageBitmap;
+    //}
 
-        return ImageBitmap;
-    }
+    //private static async Task<WriteableBitmap> LoadWriteableBitmap(StorageFile file)
+    //{
+    //    WriteableBitmap ImageBitmap;
+    //    FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
 
-    private static async Task<WriteableBitmap> LoadWriteableBitmap(StorageFile file)
-    {
-        WriteableBitmap ImageBitmap;
-        FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
+    //    ImageBitmap = new WriteableBitmap(720, 480);//Image.PixelWidth,Image.PixelHeight);
+    //    ImageBitmap.SetSource(stream);
 
-        ImageBitmap = new WriteableBitmap(720, 480);//Image.PixelWidth,Image.PixelHeight);
-        ImageBitmap.SetSource(stream);
+    //    return ImageBitmap;
 
-        return ImageBitmap;
-
-    }
+    //}
 
     public static async Task DeleteFiles(StorageFolder ImageFolder, List<string> FilesToDelete, bool DeleteAllFiles)
     {

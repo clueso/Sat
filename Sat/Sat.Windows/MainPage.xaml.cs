@@ -113,7 +113,7 @@ namespace Sat
                 case "alir":
                 case "1070":
                 case "03":
-                    SatelliteProduct = "Infra Red";
+                    SatelliteProduct = "Infrared";
                     break;
                 case "rb":
                     SatelliteProduct = "Rainbow";
@@ -225,14 +225,6 @@ namespace Sat
             await ChangeImage(CurrImgIndex);
         }
 
-//        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
-//        {
-//            await GenericCodeClass.GetListOfLatestFiles(Files);
-//            await DownloadFiles();
-//            if(NextButton.IsEnabled == true)
-//                await ChangeImage(CurrImgIndex);
-//        }
-
         private async Task DownloadFiles()
         {
             int i;
@@ -262,6 +254,7 @@ namespace Sat
                 if (RetCode == -1)
                 {
                     Files.Remove(Files[i].ToString());
+                    StatusBox.Text = "Error downloading files";
                 }
                 else
                 {
@@ -423,7 +416,6 @@ namespace Sat
                 StationBox.Text = GenericCodeClass.HomeStationName;
 
                 await DeleteFilesTask;
-                //GenericCodeClass.HomeStationChanged = false;
             }
 
             await GetFileNamesTask;
@@ -452,28 +444,6 @@ namespace Sat
                 StatusBox.Text = "Error Downloading Images";
             }
 
-            //try
-            //{
-            //    await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
-            //}
-            //catch
-            //{
-
-            //}
-
-            //if (DownloadFilesTask.IsFaulted)
-            //{
-            //    //Show Error Message
-            //    SetSystemImage("ms-appx:///Assets/Error.png");
-            //}
-            //else
-            //{
-            //    if (GenericCodeClass.FileDownloadPeriod != 0 && Files.Count > 1)    // single file
-            //        SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
-            //    if (GenericCodeClass.IsLoopPaused == false && Files.Count > 1)  //single file
-            //        LoopTimer.Start();
-            //}
-
             GenericCodeClass.HomeStationChanged = false;
 
 
@@ -498,6 +468,7 @@ namespace Sat
 
         }
 
+        //Do not delete
         //private void SetSystemImage(string URI)
         //{
         //    Uri ImageUri = new Uri(URI);

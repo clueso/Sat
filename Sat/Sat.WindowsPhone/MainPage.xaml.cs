@@ -80,7 +80,7 @@ namespace Sat
         /// session. The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            Task GetFileNamesTask, DeleteFilesTask, DownloadFilesTask;
+            Task GetFileNamesTask, DownloadFilesTask;
             //SetSystemImage("ms-appx:///Assets/Loading.png");
             GenericCodeClass.GetSavedAppData();
 
@@ -89,11 +89,7 @@ namespace Sat
             StationBox.Text = GenericCodeClass.HomeStationName;
 
             if (GenericCodeClass.HomeStationChanged == true)
-            {
-                DeleteFilesTask = GenericCodeClass.DeleteFiles(ImageFolder, null, true);
-                //GenericCodeClass.HomeStationChanged = false;
-                await DeleteFilesTask;
-            }
+                await GenericCodeClass.DeleteFiles(ImageFolder, null, true);
 
             await GetFileNamesTask;
 
@@ -105,7 +101,7 @@ namespace Sat
                 case "alir":
                 case "1070":
                 case "03":
-                    SatelliteProduct = "Infra Red";
+                    SatelliteProduct = "Infrared";
                     break;
                 case "rb":
                     SatelliteProduct = "Rainbow";
@@ -148,35 +144,7 @@ namespace Sat
                 //Show Error Message
                 //SetSystemImage("ms-appx:///Assets/Error.png");
                 StatusBox.Text = "Error Downloading Images";
-            }
-
-            //try
-            //{
-            //    await DownloadFilesTask; //maybe used the status field to check whether the task is worth waiting for
-            //}
-            //catch
-            //{
-            //    //Show Error Message
-            //    SetSystemImage("ms-appx:///Assets/Error.png");
-            //}
-
-
-            //if (!DownloadFilesTask.IsFaulted)
-            //{
-            //    if (!GenericCodeClass.IsLoopPaused && Files.Count > 1 && Files.Count > 1)  //single file
-            //        LoopTimer.Start();
-
-            //    if (GenericCodeClass.FileDownloadPeriod != 0)
-            //        SetNavigationButtonState(GenericCodeClass.IsLoopPaused, true);
-
-            //    if (GenericCodeClass.HomeStationChanged == false)
-            //    DownloadTimer.Start();
-            //}
-            //else
-            //{
-            //    //Show Error Message
-            //    SetSystemImage("ms-appx:///Assets/Error.png");
-            //}
+            }           
 
             GenericCodeClass.HomeStationChanged = false;
         }
@@ -285,6 +253,7 @@ namespace Sat
                 if (RetCode == -1)
                 {
                     Files.Remove(Files[i].ToString());
+                    StatusBox.Text = "Error downloading files";
                 }
                 else
                 {
