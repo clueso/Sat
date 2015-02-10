@@ -144,6 +144,7 @@ namespace Sat
                 //Show Error Message
                 //SetSystemImage("ms-appx:///Assets/Error.png");
                 StatusBox.Text = "Error Downloading Images";
+                ImgBox.Source = null;
             }           
 
             GenericCodeClass.HomeStationChanged = false;
@@ -254,6 +255,7 @@ namespace Sat
                 {
                     Files.Remove(Files[i].ToString());
                     StatusBox.Text = "Error downloading files";
+                    ImgBox.Source = null;
                 }
                 else
                 {
@@ -305,6 +307,7 @@ namespace Sat
             {
                 //SetSystemImage("ms-appx:///Assets/Error.png");
                 StatusBox.Text = "Error Downloading Images";
+                ImgBox.Source = null;
             }
 
             if (GenericCodeClass.IsLoopPaused == false)
