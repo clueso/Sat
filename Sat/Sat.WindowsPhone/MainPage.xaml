@@ -41,7 +41,7 @@
             <AppBarButton Grid.Column="1" Icon="Pause" x:Name="PlayPauseButton" Tapped="PlayPauseButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <AppBarButton Grid.Column="2" Icon="Next" x:Name="NextButton" Tapped="NextButton_Click" IsEnabled="False" />
             <TextBlock Grid.Column="3" x:Name="StatusBox" HorizontalAlignment="Left" FontSize="14" Margin="25,15,0,0" TextWrapping="Wrap" Width="150"/>
-            <ProgressBar Grid.Column="3" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="4" Width="150" Margin="25,36,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
+            <ProgressBar Grid.Column="3" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="4" Width="150" Margin="25,50,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
         </Grid>
 
         <!--TODO: Content should be placed within the following grid-->

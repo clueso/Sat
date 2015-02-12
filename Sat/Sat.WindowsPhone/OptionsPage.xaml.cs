@@ -155,7 +155,6 @@ namespace Sat
             bool IsNEPacSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("North East Pacific");
             bool IsNWTerritoriesSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("Northwest Territories/Nunavut");
 
-            GenericCodeClass.HomeStation = "http://www.ssd.noaa.gov/goes/" + GenericCodeClass.HomeStationCodeString + "/img/";
             ChosenCityName = StationComboBox.Items[StationComboBox.SelectedIndex].ToString();
 
             if (ProductRadioButton1.IsChecked == true)

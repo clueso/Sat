@@ -242,7 +242,7 @@ static class GenericCodeClass
                             int Index;
                             int NoOfFilesToRemove = FileNames.Count - MaxFiles;
 
-                            for (Index = 1; Index <= FileNames.Count && NoOfFilesToRemove > 0; Index += 1, NoOfFilesToRemove--)
+                            for (Index = 1; Index < FileNames.Count && NoOfFilesToRemove > 0; Index += 1, NoOfFilesToRemove--)
                                 FileNames.RemoveAt(Index);
                         }
                     }
