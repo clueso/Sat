@@ -260,7 +260,15 @@ namespace Sat
                 }
                 else
                 {
-                    ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[i]);
+                    BitmapImage img = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[i]);
+
+                    if (GenericCodeClass.HomeStationCodeString.Equals("WEST_CAN_USA") || GenericCodeClass.HomeProvinceName.Equals("Polar Imagery"))
+                        ImgBox.Height = 0.7 * img.PixelHeight; //Change the factor to scale the sizes of the western Canada and polar images.
+                                                                //Currently set to 70% of the image height.
+                    else
+                        ImgBox.Height = img.PixelHeight;
+
+                    ImgBox.Source = img; 
                     DownloadedFiles += 1;
                     FileDownloadProgBar.Value += 1;
                     StatusBox.Text += " Finished.";
@@ -304,9 +312,19 @@ namespace Sat
 
             if (Files.Count != 0 && ImageIndex >= 0 && ImageIndex <= Files.Count)
             {
+                BitmapImage img;
                 DateTime LocalTime = GenericCodeClass.GetDateTimeFromFile(Files[ImageIndex]);
                 StatusBox.Text = LocalTime.ToString("MMM dd HH:mm") + "   " + (ImageIndex + 1).ToString() + "/" + Files.Count.ToString() + " " + SatelliteProduct;
-                ImgBox.Source = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[ImageIndex]);               
+
+                img = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[ImageIndex]);
+
+                if (GenericCodeClass.HomeStationCodeString.Equals("WEST_CAN_USA") || GenericCodeClass.HomeProvinceName.Equals("Polar Imagery"))
+                    ImgBox.Height = 0.7 * img.PixelHeight; //Change the factor to scale the sizes of the western Canada and polar images.
+                                                           //Currently set to 70% of the image height.
+                else
+                    ImgBox.Height = img.PixelHeight;
+
+                ImgBox.Source = img;
             }
             else
             {

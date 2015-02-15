@@ -166,7 +166,7 @@ static class GenericCodeClass
         if (Client == null)
             Client = new HttpClient();
                 
-        StartDateTime = CurrDateTime.Subtract(new TimeSpan(DownloadPeriod, 0, 0));    //Subtract 3 hours from the Current Time
+        StartDateTime = CurrDateTime.Subtract(new TimeSpan(DownloadPeriod, 0, 0));    //Subtract a time span equal to the download period from the Current Time
         
         if(HomeStationCodeString.Equals("WEST_CAN_USA"))
         {
@@ -300,9 +300,17 @@ static class GenericCodeClass
     {
         var URI = new Uri(URL);
         StorageFile sampleFile;
+        DateTime CurrDateTime = DateTime.Now.ToUniversalTime();
 
         if (Client == null)
             Client = new HttpClient();
+
+        //Set appropriate download periods for polar and non-polar imagery. Files that have been modified/added during this period will be
+        //downloaded.
+        if (HomeProvinceName.Equals("Polar Imagery"))
+            Client.DefaultRequestHeaders.IfModifiedSince = CurrDateTime.Subtract(new TimeSpan(6, 0, 0));
+        else
+            Client.DefaultRequestHeaders.IfModifiedSince = CurrDateTime.Subtract(new TimeSpan(DownloadPeriod, 0, 0));
 
         Message = await Client.GetAsync(URI);
 
@@ -350,7 +358,6 @@ static class GenericCodeClass
         BitmapImage Image = new BitmapImage();
         FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
 
-        Image.DecodePixelHeight = 480; //Height of ImgBox control
         Image.SetSource(stream);
 
         return Image;
