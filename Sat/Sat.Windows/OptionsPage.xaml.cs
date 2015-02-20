@@ -47,7 +47,7 @@ namespace Sat
                                         ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Ontario") ||
                                         ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("New Brunswick");
             bool IsRegionalSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Regional Imagery");
-		    bool IsNEPacSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("North East Pacific");
+		    bool IsNEPacSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("Northeast Pacific");
             bool IsWestCanSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("Western Canada/USA");
 
             //IR
@@ -108,7 +108,7 @@ namespace Sat
         private void OptionsPage_Unloaded(object sender, RoutedEventArgs e)
         {
             bool IsPolarSelected = ProvinceComboBox.Items[ProvinceComboBox.SelectedIndex].Equals("Polar Imagery");
-            bool IsNEPacSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("North East Pacific");
+            bool IsNEPacSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("Northeast Pacific");
             bool IsNWTerritoriesSelected = StationComboBox.Items[StationComboBox.SelectedIndex].Equals("Northwest Territories/Nunavut");
             ChosenCityName = StationComboBox.Items[StationComboBox.SelectedIndex].ToString();
 

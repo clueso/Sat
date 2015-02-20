@@ -8,7 +8,7 @@
     <CityCode>east/eaus</CityCode>
     <BaseURL>http://www.ssd.noaa.gov/goes/{SC}/img/</BaseURL>
   </City>
-  <City Name ="North East Pacific">
+  <City Name ="Northeast Pacific">
     <CityCode>NEPAC</CityCode>
     <BaseURL>http://www.goes.noaa.gov/GSSLOOPS/{OPTION}/</BaseURL>
   </City>

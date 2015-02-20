@@ -319,7 +319,7 @@ namespace Sat
                 img = await GenericCodeClass.GetBitmapImage(ImageFolder, Files[ImageIndex]);
 
                 if (GenericCodeClass.HomeStationCodeString.Equals("WEST_CAN_USA") || GenericCodeClass.HomeProvinceName.Equals("Polar Imagery"))
-                    ImgBox.Height = 0.7 * img.PixelHeight; //Change the factor to scale the sizes of the western Canada and polar images.
+                    ImgBox.Height = 0.7* img.PixelHeight; //Change the factor to scale the sizes of the western Canada and polar images.
                                                            //Currently set to 70% of the image height.
                 else
                     ImgBox.Height = img.PixelHeight;
@@ -410,7 +410,7 @@ namespace Sat
                 case "alir":
                 case "1070":
                 case "03":
-                    SatelliteProduct = "Infra Red";
+                    SatelliteProduct = "Infrared";
                     break;
                 case "rb":
                     SatelliteProduct = "Rainbow";

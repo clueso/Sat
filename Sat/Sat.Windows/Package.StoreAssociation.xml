@@ -354,6 +354,8 @@
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames>
+    <MainPackageIdentityName>9241SciroccoSoftware.CanadaAviationWeather</MainPackageIdentityName>
+    <MainPackageIdentityName>9241SciroccoSoftware.CanadaCityWeather</MainPackageIdentityName>
     <MainPackageIdentityName>9241SciroccoSoftware.RadarImagery</MainPackageIdentityName>
   </AccountPackageIdentityNames>
   <PackageInfoList LandingUrl="https://appdev.microsoft.com:443/StorePortals/Developer/Catalog/ReleaseAnchor/f4c14d48-8cc0-45d3-9495-db831407e240">
@@ -361,17 +363,17 @@
       <PackageInfo>
         <OsMinVersion>6.3.0.0</OsMinVersion>
         <PackageArchitecture>Neutral</PackageArchitecture>
-        <PackageMaxArchitectureVersion>1.1.0.2</PackageMaxArchitectureVersion>
+        <PackageMaxArchitectureVersion>1.1.0.3</PackageMaxArchitectureVersion>
       </PackageInfo>
       <PackageInfo>
         <OsMinVersion>6.3.0.0</OsMinVersion>
         <PackageArchitecture>Neutral</PackageArchitecture>
-        <PackageMaxArchitectureVersion>1.1.0.2</PackageMaxArchitectureVersion>
+        <PackageMaxArchitectureVersion>1.1.0.3</PackageMaxArchitectureVersion>
       </PackageInfo>
       <PackageInfo>
         <OsMinVersion>6.3.0.0</OsMinVersion>
         <PackageArchitecture>Neutral</PackageArchitecture>
-        <PackageMaxArchitectureVersion>1.1.0.2</PackageMaxArchitectureVersion>
+        <PackageMaxArchitectureVersion>1.1.0.3</PackageMaxArchitectureVersion>
       </PackageInfo>
     </BundleInfo>
   </PackageInfoList>
