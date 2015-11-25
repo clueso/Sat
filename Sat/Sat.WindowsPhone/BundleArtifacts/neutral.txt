@@ -1,4 +1,4 @@
-MainPackage=C:\Users\Daniel\SkyDrive\Ashwin\Visual Studio\Sat\Sat\Sat.WindowsPhone\bin\Release\Sat.WindowsPhone_2.1.0.1_Bundle\Sat.WindowsPhone_2.1.0.1_AnyCPU.appx
-SymbolPackage=C:\Users\Daniel\SkyDrive\Ashwin\Visual Studio\Sat\Sat\Sat.WindowsPhone\AppPackages\Sat.WindowsPhone_2.1.0.1_Test\Sat.WindowsPhone_2.1.0.1_AnyCPU.appxsym
-ResourcePack=C:\Users\Daniel\SkyDrive\Ashwin\Visual Studio\Sat\Sat\Sat.WindowsPhone\bin\Release\Sat.WindowsPhone_2.1.0.1_Bundle\Sat.WindowsPhone_2.1.0.1_scale-100.appx
-ResourcePack=C:\Users\Daniel\SkyDrive\Ashwin\Visual Studio\Sat\Sat\Sat.WindowsPhone\bin\Release\Sat.WindowsPhone_2.1.0.1_Bundle\Sat.WindowsPhone_2.1.0.1_scale-140.appx
+MainPackage=C:\Users\Daniel\OneDrive\Ashwin\Visual Studio\Sat\Sat\Sat.WindowsPhone\bin\Release\Sat.WindowsPhone_2.2.0.1_Bundle\Sat.WindowsPhone_2.2.0.1_AnyCPU.appx
+SymbolPackage=C:\Users\Daniel\OneDrive\Ashwin\Visual Studio\Sat\Sat\Sat.WindowsPhone\AppPackages\Sat.WindowsPhone_2.2.0.1_Test\Sat.WindowsPhone_2.2.0.1_AnyCPU.appxsym
+ResourcePack=C:\Users\Daniel\OneDrive\Ashwin\Visual Studio\Sat\Sat\Sat.WindowsPhone\bin\Release\Sat.WindowsPhone_2.2.0.1_Bundle\Sat.WindowsPhone_2.2.0.1_scale-100.appx
+ResourcePack=C:\Users\Daniel\OneDrive\Ashwin\Visual Studio\Sat\Sat\Sat.WindowsPhone\bin\Release\Sat.WindowsPhone_2.2.0.1_Bundle\Sat.WindowsPhone_2.2.0.1_scale-140.appx

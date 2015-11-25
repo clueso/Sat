@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="9241SciroccoSoftware.SatelliteImagery" Publisher="CN=B0C3EE66-7C4D-418C-B4FE-1B15D5CAFF9C" Version="2.1.0.1" />
+  <Identity Name="9241SciroccoSoftware.SatelliteImagery" Publisher="CN=B0C3EE66-7C4D-418C-B4FE-1B15D5CAFF9C" Version="2.2.0.1" />
   <Properties>
     <DisplayName>Satellite Imagery</DisplayName>
     <PublisherDisplayName>Scirocco Software</PublisherDisplayName>

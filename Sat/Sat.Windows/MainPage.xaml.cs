@@ -226,6 +226,11 @@ namespace Sat
             await ChangeImage(CurrImgIndex);
         }
 
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.UI.ApplicationSettings.SettingsPane.Show();
+        }
+
         private async Task DownloadFiles()
         {
             int i;

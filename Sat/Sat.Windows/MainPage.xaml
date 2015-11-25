@@ -59,13 +59,15 @@
                 <ColumnDefinition Width="75" />
                 <ColumnDefinition Width="75" />
                 <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="75" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <AppBarButton Grid.Column="1" Icon="Previous" x:Name="PrevButton" Tapped="PrevButton_Click" IsEnabled="False"/>
             <AppBarButton Grid.Column="2" Icon="Pause" x:Name="PlayPauseButton" Tapped="PlayPauseButton_Click"/>
             <AppBarButton Grid.Column="3" Icon="Next" x:Name="NextButton" Tapped="NextButton_Click" IsEnabled="False" />
-            <TextBlock Grid.Column="4" x:Name="StatusBox" Margin="40,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="14"/>
-            <ProgressBar Grid.Column="4" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="4" Width="200" Margin="40,40,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
+            <AppBarButton Grid.Column="4" Icon="Setting" x:Name="SettingsButton" Tapped="SettingsButton_Click" IsEnabled="True" />
+            <TextBlock Grid.Column="5" x:Name="StatusBox" Margin="40,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="14"/>
+            <ProgressBar Grid.Column="5" x:Name="FileDownloadProgBar" HorizontalAlignment="Left" Height="4" Width="200" Margin="40,40,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
         </Grid>
         
         <!-- Image -->
